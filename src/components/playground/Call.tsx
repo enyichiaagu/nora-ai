@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConversationData } from '@/types/conversation';
+import { ConversationData } from './types/conversation';
 
 interface CallProps {
   data: ConversationData | null;
