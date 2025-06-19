@@ -18,7 +18,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     <div className="w-full h-96 bg-muted rounded-lg border overflow-hidden">
       <iframe
         {/* src={data.conversation_url} */}
-      src=""
+      src="https://tavus.daily.co/c123456"
         allow="camera; microphone; fullscreen; display-capture"
         style={{ width: '100%', height: '500px', border: 'none' }}
         title="Tavus CVI"
