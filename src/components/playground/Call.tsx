@@ -88,7 +88,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
         <span className="font-semibold">Meeting Room</span>
       </header>
       <main className="flex-1 p-4">
-        {Object.entries(remoteParticipants).map(([id, p]) => (
+        {Object.entries(participants).map(([id, p]) => (
           <div
             key={id}
             className="relative bg-card border rounded-lg overflow-hidden aspect-video w-1/2"
