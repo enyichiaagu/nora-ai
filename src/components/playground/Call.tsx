@@ -76,7 +76,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
         {Object.entries(participants).map(([id, p]) => (
           <div
             key={id}
-            className="relative bg-gray-800 rounded-lg overflow-hidden aspect-video w-1/2"
+            className="relative bg-gray-800 rounded-lg overflow-hidden w-1/2"
           >
             <video
               id={`remote-video-${id}`}
