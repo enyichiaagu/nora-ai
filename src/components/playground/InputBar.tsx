@@ -1,11 +1,19 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 
-const InputBar: React.FC = () => {
+interface InputBarProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+const InputBar: React.FC<InputBarProps> = ({ value, onChange }) => {
   return (
     <Input 
-      placeholder="Type something..." 
+      placeholder="Enter your API key..." 
       className="w-full"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      type="password"
     />
   );
 };
