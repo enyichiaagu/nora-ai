@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 interface CallProps {
   data: ConversationData | null;
+  onCallEnd?: () => void;
 }
 
 declare global {
@@ -22,10 +23,11 @@ const getOrCreateCallObject = () => {
   return window._dailyCallObject;
 };
 
-const Call: React.FC<CallProps> = ({ data }) => {
+const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callRef = useRef(null);
   const [participants, setParticipants] = useState({});
   const [isHovered, setIsHovered] = useState(false);
+  const [callActive, setCallActive] = useState(false);
 
   useEffect(() => {
     if (!data?.conversation_url) return;
@@ -34,6 +36,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     callRef.current = call;
 
     call.join({ url: data.conversation_url });
+    setCallActive(true);
 
     const updateParticipants = () => {
       const participants = call.participants();
@@ -44,14 +47,23 @@ const Call: React.FC<CallProps> = ({ data }) => {
       setParticipants(meeting);
     };
 
+    const handleCallLeft = () => {
+      setCallActive(false);
+      setParticipants({});
+      if (onCallEnd) {
+        onCallEnd();
+      }
+    };
+
     call.on('participant-joined', updateParticipants);
     call.on('participant-updated', updateParticipants);
     call.on('participant-left', updateParticipants);
+    call.on('left-meeting', handleCallLeft);
 
     return () => {
       call.leave();
     };
-  }, [data?.conversation_url]);
+  }, [data?.conversation_url, onCallEnd]);
 
   useEffect(() => {
     Object.keys(participants).length > 0 && Object.entries(participants).forEach(([id, p]) => {
@@ -74,7 +86,11 @@ const Call: React.FC<CallProps> = ({ data }) => {
       callRef.current.leave();
       callRef.current.destroy();
       window._dailyCallObject = null;
+      setCallActive(false);
       setParticipants({});
+      if (onCallEnd) {
+        onCallEnd();
+      }
     }
   };
 
@@ -82,7 +98,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
   const remoteParticipants = Object.entries(participants).filter(([id]) => id !== 'local');
   const mainRemoteParticipant = remoteParticipants[0];
 
-  if (!data) {
+  if (!data || !callActive) {
     return (
       <div 
         className="w-full h-96 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg border border-blue-200 p-8 flex flex-col items-center justify-center shadow-lg"
@@ -92,7 +108,6 @@ const Call: React.FC<CallProps> = ({ data }) => {
         </div>
         <h3 className="text-xl font-semibold text-gray-800 mb-2">Ready to Connect</h3>
         <p className="text-gray-600 text-center max-w-md">
-          Enter your API key and click Start to begin your video conversation. 
           Your call interface will appear here once connected.
         </p>
         <div className="flex items-center gap-2 mt-4 text-sm text-gray-500">
