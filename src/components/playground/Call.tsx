@@ -1,11 +1,68 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import DailyIframe from '@daily-co/daily-js';
 import { ConversationData } from './types/conversation';
 
 interface CallProps {
   data: ConversationData | null;
 }
 
+declare global {
+  interface Window {
+    _dailyCallObject?: any;
+  }
+}
+
+const getOrCreateCallObject = () => {
+  if (!window._dailyCallObject) {
+    window._dailyCallObject = DailyIframe.createCallObject();
+  }
+  return window._dailyCallObject;
+};
+
 const Call: React.FC<CallProps> = ({ data }) => {
+  const callRef = useRef(null);
+  const [remoteParticipants, setRemoteParticipants] = useState({});
+
+  useEffect(() => {
+    if (!data?.conversation_url) return;
+
+    const call = getOrCreateCallObject();
+    callRef.current = call;
+
+    call.join({ url: data.conversation_url });
+
+    const updateRemoteParticipants = () => {
+      const participants = call.participants();
+      const remotes = {};
+      Object.entries(participants).forEach(([id, p]) => {
+        if (id !== 'local') remotes[id] = p;
+      });
+      setRemoteParticipants(remotes);
+    };
+
+    call.on('participant-joined', updateRemoteParticipants);
+    call.on('participant-updated', updateRemoteParticipants);
+    call.on('participant-left', updateRemoteParticipants);
+
+    return () => {
+      call.leave();
+    };
+  }, [data?.conversation_url]);
+
+  useEffect(() => {
+    Object.entries(remoteParticipants).forEach(([id, p]) => {
+      const videoEl = document.getElementById(`remote-video-${id}`);
+      if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
+        videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
+      }
+      
+      const audioEl = document.getElementById(`remote-audio-${id}`);
+      if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
+        audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
+      }
+    });
+  }, [remoteParticipants]);
+
   if (!data) {
     return (
       <div className="w-full h-64 bg-muted rounded-lg border p-4 flex items-center justify-center">
@@ -15,13 +72,29 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }
 
   return (
-    <div className="w-full h-96 bg-muted rounded-lg border overflow-hidden">
-      <iframe
-        src={data?.conversation_url}
-        allow="camera; microphone; fullscreen; display-capture"
-        style={{ width: '100%', height: '500px', border: 'none' }}
-        title="Tavus CVI"
-      />
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+      <header className="bg-gray-800 p-4 flex justify-between items-center">
+        <span className="font-semibold">Meeting Room (daily-js custom UI)</span>
+      </header>
+      <main className="flex-1 p-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+        {Object.entries(remoteParticipants).map(([id, p]) => (
+          <div
+            key={id}
+            className="relative bg-gray-800 rounded-lg overflow-hidden aspect-video w-48"
+          >
+            <video
+              id={`remote-video-${id}`}
+              autoPlay
+              playsInline
+              className="w-1/3 h-1/3 object-contain mx-auto"
+            />
+            <audio id={`remote-audio-${id}`} autoPlay playsInline />
+            <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
+              {p.user_name || id.slice(-4)}
+            </div>
+          </div>
+        ))}
+      </main>
     </div>
   );
 };
