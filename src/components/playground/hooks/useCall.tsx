@@ -29,8 +29,8 @@ const useCall = (): UseCallReturn => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        replica_id: '<REPLICA_ID>',
-        persona_id: '<PERSONA_ID>'
+        replica_id: 'r79e1c033f',
+        persona_id: 'p9a95912'
       })
     };
 
