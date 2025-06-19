@@ -47,12 +47,12 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
   useEffect(() => {
     Object.entries(participants).forEach(([id, p]) => {
-      const videoEl = document.getElementById(`remote-video-${id}`);
+      const videoEl = document.getElementById(`video-${id}`);
       if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
         videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
       }
       
-      const audioEl = document.getElementById(`remote-audio-${id}`);
+      const audioEl = document.getElementById(`audio-${id}`);
       if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
         audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
       }
@@ -68,25 +68,22 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
-      <header className="bg-gray-800 p-4 flex justify-between items-center">
-        <span className="font-semibold">Meeting Room (daily-js custom UI)</span>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <header className="bg-gray-800 p-4">
+        <span className="font-semibold">Meeting Room</span>
       </header>
-      <main className="flex-1 p-4">
+      <main className="p-4 flex gap-4">
         {Object.entries(participants).map(([id, p]) => (
-          <div
-            key={id}
-            className="relative bg-gray-800 rounded-lg overflow-hidden w-1/2"
-          >
+          <div key={id} className="relative bg-gray-800 rounded-lg overflow-hidden flex-1">
             <video
-              id={`remote-video-${id}`}
+              id={`video-${id}`}
               autoPlay
               playsInline
-              className="w-1/2 h-1/2 object-contain mx-auto"
+              className="w-full h-full object-cover"
             />
-            <audio id={`remote-audio-${id}`} autoPlay playsInline />
+            <audio id={`audio-${id}`} autoPlay playsInline />
             <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
-              {p.user_name || id.slice(-4)}
+              {id === 'local' ? 'You' : (p.user_name || 'Remote')}
             </div>
           </div>
         ))}
