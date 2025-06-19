@@ -70,7 +70,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
       callRef.current.leave();
       callRef.current.destroy();
       window._dailyCallObject = null;
-      setRemoteParticipants({});
+      setParticipants({});
     }
   };
 
