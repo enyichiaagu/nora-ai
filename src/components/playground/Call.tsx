@@ -106,7 +106,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
           </div>
         ))}
       </main>
-      {Object.keys(remoteParticipants).length > 0 && (
+      {Object.keys(articipants).length > 0 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
           <Button 
             onClick={endCall}
