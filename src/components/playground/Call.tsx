@@ -58,10 +58,10 @@ const Call: React.FC<CallProps> = ({ data }) => {
         videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
       }
       
-      const audioEl = document.getElementById(`remote-audio-${id}`);
+      if (id !== 'local'){const audioEl = document.getElementById(`remote-audio-${id}`);
       if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
         audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
-      }
+      }}
     });
   }, [participants]);
 
