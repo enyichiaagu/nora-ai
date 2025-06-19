@@ -1,4 +1,4 @@
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase.utils";
 import showToast from "@/utils/toast.utils";
 import { useState } from "react";
 
