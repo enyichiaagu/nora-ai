@@ -35,6 +35,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
     const updateParticipants = () => {
       const fetchedParticipants = call.participants();
+      console.log('All participants:', fetchedParticipants);
       setParticipants(fetchedParticipants);
     };
 
@@ -48,15 +49,41 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }, [data?.conversation_url]);
 
   useEffect(() => {
+    console.log('Processing participants for video/audio attachment:', participants);
+    
     Object.entries(participants).forEach(([id, p]) => {
+      console.log(`Participant ${id}:`, {
+        isLocal: id === 'local',
+        videoState: p.tracks?.video?.state,
+        audioState: p.tracks?.audio?.state,
+        hasVideoPersistentTrack: !!p.tracks?.video?.persistentTrack,
+        hasAudioPersistentTrack: !!p.tracks?.audio?.persistentTrack
+      });
+
       const videoEl = document.getElementById(`video-${id}`);
       if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
+        console.log(`Attaching video for ${id}`);
         videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
+      } else {
+        console.log(`Not attaching video for ${id}:`, {
+          hasVideoEl: !!videoEl,
+          hasVideoTrack: !!p.tracks?.video,
+          videoState: p.tracks?.video?.state,
+          hasPersistentTrack: !!p.tracks?.video?.persistentTrack
+        });
       }
       
       const audioEl = document.getElementById(`audio-${id}`);
       if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
+        console.log(`Attaching audio for ${id}`);
         audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
+      } else {
+        console.log(`Not attaching audio for ${id}:`, {
+          hasAudioEl: !!audioEl,
+          hasAudioTrack: !!p.tracks?.audio,
+          audioState: p.tracks?.audio?.state,
+          hasPersistentTrack: !!p.tracks?.audio?.persistentTrack
+        });
       }
     });
   }, [participants]);
