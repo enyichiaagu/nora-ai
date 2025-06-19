@@ -21,7 +21,7 @@ const getOrCreateCallObject = () => {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const callRef = useRef(null);
-  const [remoteParticipants, setRemoteParticipants] = useState({});
+  const [participants, setParticipants] = useState({});
 
   useEffect(() => {
     if (!data?.conversation_url) return;
