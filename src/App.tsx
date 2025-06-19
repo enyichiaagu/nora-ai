@@ -1,14 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Waitlist from '@/pages/Waitlist';
+import "./app.css";
+import Waitlist from "./pages/Waitlist";
+import { Toaster } from "react-hot-toast";
+import { createBrowserRouter, RouterProvider } from "react-router";
 
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <Waitlist />,
+	},
+]);
 export default function App() {
-  return (
-    <Router>
-      <div className="min-h-screen bg-background">
-        <Routes>
-          <Route path="/" element={<Waitlist />} />
-        </Routes>
-      </div>
-    </Router>
-  );
+	return (
+		<>
+			<Toaster />
+			<RouterProvider router={router} />
+		</>
+	);
 }
