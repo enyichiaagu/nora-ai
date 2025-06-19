@@ -1,12 +1,14 @@
-import Header from '@/components/layout/Header';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Waitlist from '@/pages/Waitlist';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto px-4 py-8">
-        {/* Main content area - ready for your components */}
-      </main>
-    </div>
+    <Router>
+      <div className="min-h-screen bg-background">
+        <Routes>
+          <Route path="/" element={<Waitlist />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
