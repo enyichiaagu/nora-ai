@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 const addEmail = async (email: string) => {
 	const { data, error } = await supabase
-		.from("Waitlist")
+		.from("waitlist")
 		.insert([{ email: email }])
 		.select()
 		.single();
