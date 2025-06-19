@@ -23,8 +23,6 @@ const getOrCreateCallObject = () => {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const callRef = useRef(null);
-  const videoRefs = useRef({});
-  const audioRefs = useRef({});
   const [participants, setParticipants] = useState({});
 
   useEffect(() => {
@@ -49,20 +47,6 @@ const Call: React.FC<CallProps> = ({ data }) => {
     };
   }, [data?.conversation_url]);
 
-  useEffect(() => {
-    Object.entries(participants).forEach(([id, p]) => {
-      const videoEl = videoRefs.current[id];
-      if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
-        videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
-      }
-      
-      const audioEl = audioRefs.current[id];
-      if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
-        audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
-      }
-    });
-  }, [participants]);
-
   const endCall = () => {
     if (callRef.current) {
       callRef.current.leave();
@@ -86,26 +70,39 @@ const Call: React.FC<CallProps> = ({ data }) => {
         <span className="font-semibold">Meeting Room</span>
       </header>
       <main className="p-4 flex gap-4">
-        {Object.entries(participants).map(([id, p]) => (
-          <div key={id} className="relative bg-gray-800 rounded-lg overflow-hidden flex-1">
-            <video
-              ref={(el) => { videoRefs.current[id] = el; }}
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover"
-            />
-            {id !== 'local' && (
-              <audio 
-                ref={(el) => { audioRefs.current[id] = el; }}
-                autoPlay 
-                playsInline 
+        {Object.entries(participants).map(([id, p]) => {
+          const videoTrack = p.tracks?.video?.persistentTrack;
+          const audioTrack = p.tracks?.audio?.persistentTrack;
+          const videoStream = videoTrack && p.tracks.video.state === 'playable' 
+            ? new MediaStream([videoTrack]) 
+            : null;
+          const audioStream = audioTrack && p.tracks.audio.state === 'playable' 
+            ? new MediaStream([audioTrack]) 
+            : null;
+
+          return (
+            <div key={id} className="relative bg-gray-800 rounded-lg overflow-hidden flex-1">
+              <video
+                key={videoTrack?.id || `${id}-video`}
+                srcObject={videoStream}
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
               />
-            )}
-            <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
-              {id === 'local' ? 'You' : (p.user_name || 'Remote')}
+              {id !== 'local' && (
+                <audio 
+                  key={audioTrack?.id || `${id}-audio`}
+                  srcObject={audioStream}
+                  autoPlay 
+                  playsInline 
+                />
+              )}
+              <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
+                {id === 'local' ? 'You' : (p.user_name || 'Remote')}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </main>
       {Object.keys(participants).length > 0 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
