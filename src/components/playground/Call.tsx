@@ -31,9 +31,8 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
     call.join({ url: data.conversation_url });
 
-    const updateRemoteParticipants = () => {
+    const updateParticipants = () => {
       const participants = call.participants();
-      const remotes = {};
       Object.entries(participants).forEach(([id, p]) => {
         if (id !== 'local') remotes[id] = p;
       });
