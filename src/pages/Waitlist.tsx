@@ -65,7 +65,7 @@ function Waitlist() {
 						placeholder='Enter Your Email'
 						className='flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-white text-gray-800 placeholder-gray-500 text-base sm:text-lg focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-30 transition-all duration-200'
 					/>
-					<button className='px-6 sm:px-8 py-3 sm:py-4 text-gray-800 bg-gray-100 font-montserrat font-semibold rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-100/45 transition-all duration-200 text-base sm:text-lg whitespace-nowrap flex items-center justify-center gap-2'>
+					<button className='px-6 sm:px-8 py-3 sm:py-4 text-gray-800 bg-gray-50 font-montserrat font-semibold rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-100/45 transition-all duration-200 text-base sm:text-lg whitespace-nowrap flex items-center justify-center gap-2'>
 						{isLoading ? "Joining..." : "Join"}
 						{!isLoading && (
 							<img
