@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import DailyIframe from '@daily-co/daily-js';
 import { ConversationData } from './types/conversation';
+import { Button } from '@/components/ui/button';
+import { PhoneOff } from 'lucide-react';
 
 interface CallProps {
   data: ConversationData | null;
@@ -59,6 +61,15 @@ const Call: React.FC<CallProps> = ({ data }) => {
     });
   }, [participants]);
 
+  const endCall = () => {
+    if (callRef.current) {
+      callRef.current.leave();
+      callRef.current.destroy();
+      window._dailyCallObject = null;
+      setParticipants({});
+    }
+  };
+
   if (!data) {
     return (
       <div className="w-full h-64 bg-muted rounded-lg border p-4 flex items-center justify-center">
@@ -68,7 +79,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gray-900 text-white relative">
       <header className="bg-gray-800 p-4">
         <span className="font-semibold">Meeting Room</span>
       </header>
@@ -88,6 +99,19 @@ const Call: React.FC<CallProps> = ({ data }) => {
           </div>
         ))}
       </main>
+      {Object.keys(participants).length > 0 && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+          <Button 
+            onClick={endCall}
+            variant="destructive"
+            size="lg"
+            className="bg-red-600 hover:bg-red-700"
+          >
+            <PhoneOff className="h-5 w-5" />
+            End Call
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
