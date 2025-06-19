@@ -23,7 +23,7 @@ const getOrCreateCallObject = () => {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const callRef = useRef(null);
-  const [remoteParticipants, setRemoteParticipants] = useState({});
+  const [participants, setParticipants] = useState({});
 
   useEffect(() => {
     if (!data?.conversation_url) return;
@@ -33,13 +33,13 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
     call.join({ url: data.conversation_url });
 
-    const updateRemoteParticipants = () => {
+    const updateParticipants = () => {
       const participants = call.participants();
-      const remotes = {};
+      const meeting = {}
       Object.entries(participants).forEach(([id, p]) => {
-        if (id !== 'local') remotes[id] = p;
+        meeting[id] = p;
       });
-      setRemoteParticipants(remotes);
+      setParticipants(meeting);
     };
 
     call.on('participant-joined', updateRemoteParticipants);
