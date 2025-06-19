@@ -1,0 +1,9 @@
+* {
+	img {
+		transform-origin: center center;
+	}
+}
+
+.noice {
+	background-image: url(./noise-light.png);
+}
