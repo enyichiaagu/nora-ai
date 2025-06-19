@@ -39,7 +39,7 @@ const useCall = (): UseCallReturn => {
       const result = await response.json();
       
       if (!response.ok) {
-        throw new Error(result.message || 'API call failed');
+        throw new Error(result.message);
       }
       
       setData(result);
