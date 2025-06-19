@@ -99,7 +99,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
               playsInline
               className="w-1/2 h-1/2 object-contain mx-auto"
             />
-            <audio id={`remote-audio-${id}`} autoPlay playsInline />
+            <audio id={`remote-audio-${id}`} autoPlay playpsInline />
             <div className="absolute bottom-2 left-2 bg-background/80 px-2 py-1 rounded text-sm">
               {p.usname || id.slice(-4)}
             </div>
