@@ -1,14 +1,15 @@
 import { useState } from 'react';
+import { ConversationData } from '@/types/conversation';
 
 interface UseCallReturn {
-  data: any;
+  data: ConversationData | null;
   loading: boolean;
   error: string | null;
   makeCall: (apiKey: string) => Promise<void>;
 }
 
 const useCall = (): UseCallReturn => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<ConversationData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
