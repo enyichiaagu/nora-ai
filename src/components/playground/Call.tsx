@@ -73,7 +73,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
         <span className="font-semibold">Meeting Room (daily-js custom UI)</span>
       </header>
       <main className="flex-1 p-4">
-        {Object.entries(remoteParticipants).map(([id, p]) => (
+        {Object.entries(participants).map(([id, p]) => (
           <div
             key={id}
             className="relative bg-gray-800 rounded-lg overflow-hidden aspect-video w-1/2"
