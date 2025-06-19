@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import DailyIframe from '@daily-co/daily-js';
 import { ConversationData } from './types/conversation';
 import { Button } from '@/components/ui/button';
-import { PhoneOff, Video, Users } from 'lucide-react';
+import { PhoneOff, Video, Users, Maximize, Minimize } from 'lucide-react';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 interface CallProps {
@@ -28,6 +28,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const [participants, setParticipants] = useState({});
   const [isHovered, setIsHovered] = useState(false);
   const [callActive, setCallActive] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (!data?.conversation_url) return;
@@ -94,6 +95,10 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     }
   };
 
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
   const localParticipant = participants['local'];
   const remoteParticipants = Object.entries(participants).filter(([id]) => id !== 'local');
   const mainRemoteParticipant = remoteParticipants[0];
@@ -120,7 +125,9 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
   return (
     <div 
-      className="w-full h-96 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border shadow-xl overflow-hidden relative"
+      className={`w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border shadow-xl overflow-hidden relative transition-all duration-300 ${
+        isFullscreen ? 'fixed inset-4 z-50 h-[calc(100vh-2rem)]' : 'h-96'
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -147,19 +154,41 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
         )}
       </div>
 
-      {/* Local video corner */}
+      {/* Local video corner - bottom right */}
       {localParticipant && (
-        <div className="absolute top-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white">
+        <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white">
           <video
             id="video-local"
             autoPlay
             playsInline
             muted
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover scale-x-[-1]"
           />
           <div className="absolute bottom-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
             You
           </div>
+        </div>
+      )}
+
+      {/* Fullscreen toggle button */}
+      {Object.keys(participants).length > 0 && (
+        <div 
+          className={`absolute top-4 right-4 transition-all duration-300 ease-in-out ${
+            isHovered ? 'translate-y-0 opacity-100' : '-translate-y-16 opacity-0'
+          }`}
+        >
+          <Button 
+            onClick={toggleFullscreen}
+            variant="secondary"
+            size="sm"
+            className="shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white/90 hover:bg-white"
+          >
+            {isFullscreen ? (
+              <Minimize className="h-4 w-4" />
+            ) : (
+              <Maximize className="h-4 w-4" />
+            )}
+          </Button>
         </div>
       )}
 
