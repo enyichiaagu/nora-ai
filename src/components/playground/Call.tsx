@@ -76,11 +76,11 @@ const Call: React.FC<CallProps> = ({ data }) => {
       <header className="bg-gray-800 p-4 flex justify-between items-center">
         <span className="font-semibold">Meeting Room (daily-js custom UI)</span>
       </header>
-      <main className="flex-1 p-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+      <main className="flex-1 p-4">
         {Object.entries(remoteParticipants).map(([id, p]) => (
           <div
             key={id}
-            className="relative bg-gray-800 rounded-lg overflow-hidden aspect-video w-48"
+            className="relative bg-gray-800 rounded-lg overflow-hidden aspect-video w-1/2"
           >
             <video
               id={`remote-video-${id}`}
