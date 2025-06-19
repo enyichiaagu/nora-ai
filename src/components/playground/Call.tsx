@@ -2,12 +2,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import DailyIframe from '@daily-co/daily-js';
 import { ConversationData } from './types/conversation';
 import { Button } from '@/components/ui/button';
-import { PhoneOff, Video } from 'lucide-react';
+import { PhoneOff, Video, Users } from 'lucide-react';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 interface CallProps {
   data: ConversationData | null;
-  onCallEnd?: () => void;
 }
 
 declare global {
@@ -23,7 +22,7 @@ const getOrCreateCallObject = () => {
   return window._dailyCallObject;
 };
 
-const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
+const Call: React.FC<CallProps> = ({ data }) => {
   const callRef = useRef(null);
   const [participants, setParticipants] = useState({});
   const [isHovered, setIsHovered] = useState(false);
@@ -77,9 +76,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       window._dailyCallObject = null;
       setParticipants({});
     }
-    if (onCallEnd) {
-      onCallEnd();
-    }
   };
 
   const localParticipant = participants['local'];
@@ -99,6 +95,10 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
           Enter your API key and click Start to begin your video conversation. 
           Your call interface will appear here once connected.
         </p>
+        <div className="flex items-center gap-2 mt-4 text-sm text-gray-500">
+          <Users className="h-4 w-4" />
+          <span>Waiting for participants...</span>
+        </div>
       </div>
     );
   }
@@ -127,7 +127,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100">
             <LoadingSpinner size="60px" color="#6366f1" />
-            <p className="text-gray-600 mt-4 text-lg">Connecting...</p>
+            <p className="text-gray-600 mt-4 text-lg">Waiting for participant to join...</p>
           </div>
         )}
       </div>

@@ -12,11 +12,6 @@ const Playground: React.FC = () => {
     makeCall(apiKey);
   };
 
-  const handleCallEnd = () => {
-    // Reset the call data to return to starting screen
-    window.location.reload();
-  };
-
   return (
     <div className="w-full space-y-4">
       <div className="flex gap-2">
@@ -30,7 +25,7 @@ const Playground: React.FC = () => {
         </div>
       )}
       
-      <Call data={data} onCallEnd={handleCallEnd} />
+      <Call data={data} />
     </div>
   );
 };
