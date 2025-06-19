@@ -46,7 +46,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }, [data?.conversation_url]);
 
   useEffect(() => {
-    Object.entries(remoteParticipants).forEach(([id, p]) => {
+    Object.entries(participants).forEach(([id, p]) => {
       const videoEl = document.getElementById(`remote-video-${id}`);
       if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
         videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
