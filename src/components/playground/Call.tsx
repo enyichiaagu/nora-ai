@@ -42,9 +42,9 @@ const Call: React.FC<CallProps> = ({ data }) => {
       setParticipants(meeting);
     };
 
-    call.on('participant-joined', updateRemoteParticipants);
-    call.on('participant-updated', updateRemoteParticipants);
-    call.on('participant-left', updateRemoteParticipants);
+    call.on('participant-joined', updateParticipants);
+    call.on('participant-updated', updateParticipants);
+    call.on('participant-left', updateParticipants);
 
     return () => {
       call.leave();
