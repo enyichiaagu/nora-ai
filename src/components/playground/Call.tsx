@@ -83,15 +83,15 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col relative">
-      <header className="bg-gray-800 p-4 flex justify-between items-center">
-        <span className="font-semibold">Meeting Room (daily-js custom UI)</span>
+    <div className="min-h-screen bg-background text-foreground flex flex-col relative">
+      <header className="bg-card border-b p-4 flex justify-between items-center">
+        <span className="font-semibold">Meeting Room</span>
       </header>
       <main className="flex-1 p-4">
         {Object.entries(remoteParticipants).map(([id, p]) => (
           <div
             key={id}
-            className="relative bg-gray-800 rounded-lg overflow-hidden aspect-video w-1/2"
+            className="relative bg-card border rounded-lg overflow-hidden aspect-video w-1/2"
           >
             <video
               id={`remote-video-${id}`}
@@ -100,7 +100,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
               className="w-1/2 h-1/2 object-contain mx-auto"
             />
             <audio id={`remote-audio-${id}`} autoPlay playsInline />
-            <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
+            <div className="absolute bottom-2 left-2 bg-background/80 px-2 py-1 rounded text-sm">
               {p.user_name || id.slice(-4)}
             </div>
           </div>
@@ -112,7 +112,6 @@ const Call: React.FC<CallProps> = ({ data }) => {
             onClick={endCall}
             variant="destructive"
             size="lg"
-            className="bg-red-600 hover:bg-red-700"
           >
             <PhoneOff className="h-5 w-5" />
             End Call
