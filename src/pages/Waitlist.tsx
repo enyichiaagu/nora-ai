@@ -5,7 +5,7 @@ import { useState } from "react";
 const addEmail = async (email: string) => {
 	// Fix: Insert as an object with the correct column name
 	const { data, error } = await supabase
-		.from("Waitlist")
+		.from("waitlist")
 		.insert([{ email: email }]) // Changed from .insert([email]) to .insert([{ email: email }])
 		.select()
 		.single();
