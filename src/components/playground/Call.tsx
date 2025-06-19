@@ -23,7 +23,7 @@ const getOrCreateCallObject = () => {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const callRef = useRef(null);
-  const [participants, setParticipants] = useState({});
+  const [remoteParticipants, setRemoteParticipants] = useState({});
 
   useEffect(() => {
     if (!data?.conversation_url) return;
@@ -33,26 +33,44 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
     call.join({ url: data.conversation_url });
 
-    const updateParticipants = () => {
-      const fetchedParticipants = call.participants();
-      setParticipants(fetchedParticipants);
+    const updateRemoteParticipants = () => {
+      const participants = call.participants();
+      const remotes = {};
+      Object.entries(participants).forEach(([id, p]) => {
+        if (id !== 'local') remotes[id] = p;
+      });
+      setRemoteParticipants(remotes);
     };
 
-    call.on('participant-joined', updateParticipants);
-    call.on('participant-updated', updateParticipants);
-    call.on('participant-left', updateParticipants);
+    call.on('participant-joined', updateRemoteParticipants);
+    call.on('participant-updated', updateRemoteParticipants);
+    call.on('participant-left', updateRemoteParticipants);
 
     return () => {
       call.leave();
     };
   }, [data?.conversation_url]);
 
+  useEffect(() => {
+    Object.entries(remoteParticipants).forEach(([id, p]) => {
+      const videoEl = document.getElementById(`remote-video-${id}`);
+      if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
+        videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
+      }
+      
+      const audioEl = document.getElementById(`remote-audio-${id}`);
+      if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
+        audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
+      }
+    });
+  }, [remoteParticipants]);
+
   const endCall = () => {
     if (callRef.current) {
       callRef.current.leave();
       callRef.current.destroy();
       window._dailyCallObject = null;
-      setParticipants({});
+      setRemoteParticipants({});
     }
   };
 
@@ -65,46 +83,30 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white relative">
-      <header className="bg-gray-800 p-4">
-        <span className="font-semibold">Meeting Room</span>
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col relative">
+      <header className="bg-gray-800 p-4 flex justify-between items-center">
+        <span className="font-semibold">Meeting Room (daily-js custom UI)</span>
       </header>
-      <main className="p-4 flex gap-4">
-        {Object.entries(participants).map(([id, p]) => {
-          const videoTrack = p.tracks?.video?.persistentTrack;
-          const audioTrack = p.tracks?.audio?.persistentTrack;
-          const videoStream = videoTrack && p.tracks.video.state === 'playable' 
-            ? new MediaStream([videoTrack]) 
-            : null;
-          const audioStream = audioTrack && p.tracks.audio.state === 'playable' 
-            ? new MediaStream([audioTrack]) 
-            : null;
-
-          return (
-            <div key={id} className="relative bg-gray-800 rounded-lg overflow-hidden flex-1">
-              <video
-                key={videoTrack?.id || `${id}-video`}
-                srcObject={videoStream}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              {id !== 'local' && (
-                <audio 
-                  key={audioTrack?.id || `${id}-audio`}
-                  srcObject={audioStream}
-                  autoPlay 
-                  playsInline 
-                />
-              )}
-              <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
-                {id === 'local' ? 'You' : (p.user_name || 'Remote')}
-              </div>
+      <main className="flex-1 p-4">
+        {Object.entries(remoteParticipants).map(([id, p]) => (
+          <div
+            key={id}
+            className="relative bg-gray-800 rounded-lg overflow-hidden aspect-video w-1/2"
+          >
+            <video
+              id={`remote-video-${id}`}
+              autoPlay
+              playsInline
+              className="w-1/2 h-1/2 object-contain mx-auto"
+            />
+            <audio id={`remote-audio-${id}`} autoPlay playsInline />
+            <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
+              {p.user_name || id.slice(-4)}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </main>
-      {Object.keys(participants).length > 0 && (
+      {Object.keys(remoteParticipants).length > 0 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
           <Button 
             onClick={endCall}
