@@ -57,7 +57,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
         audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
       }
     });
-  }, [remoteParticipants]);
+  }, [participants]);
 
   if (!data) {
     return (
