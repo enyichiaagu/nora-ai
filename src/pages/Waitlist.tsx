@@ -41,7 +41,7 @@ function Waitlist() {
 		<div className='min-h-screen'>
 			<div className='min-h-screen flex flex-col items-center justify-center noice bg-[#1a46c9] overflow-hidden relative bottom-[40%]'>
 				<img
-					src='/new.svg'
+					src='/icons/logo.svg'
 					alt=''
 					className='md:w-[3.7rem] w-[3rem] mb-2'
 				/>
