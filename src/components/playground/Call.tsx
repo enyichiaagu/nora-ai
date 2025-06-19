@@ -23,6 +23,8 @@ const getOrCreateCallObject = () => {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const callRef = useRef(null);
+  const videoRefs = useRef({});
+  const audioRefs = useRef({});
   const [participants, setParticipants] = useState({});
 
   useEffect(() => {
@@ -35,7 +37,6 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
     const updateParticipants = () => {
       const fetchedParticipants = call.participants();
-      console.log('All participants:', fetchedParticipants);
       setParticipants(fetchedParticipants);
     };
 
@@ -49,41 +50,15 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }, [data?.conversation_url]);
 
   useEffect(() => {
-    console.log('Processing participants for video/audio attachment:', participants);
-    
     Object.entries(participants).forEach(([id, p]) => {
-      console.log(`Participant ${id}:`, {
-        isLocal: id === 'local',
-        videoState: p.tracks?.video?.state,
-        audioState: p.tracks?.audio?.state,
-        hasVideoPersistentTrack: !!p.tracks?.video?.persistentTrack,
-        hasAudioPersistentTrack: !!p.tracks?.audio?.persistentTrack
-      });
-
-      const videoEl = document.getElementById(`video-${id}`);
+      const videoEl = videoRefs.current[id];
       if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
-        console.log(`Attaching video for ${id}`);
         videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
-      } else {
-        console.log(`Not attaching video for ${id}:`, {
-          hasVideoEl: !!videoEl,
-          hasVideoTrack: !!p.tracks?.video,
-          videoState: p.tracks?.video?.state,
-          hasPersistentTrack: !!p.tracks?.video?.persistentTrack
-        });
       }
       
-      const audioEl = document.getElementById(`audio-${id}`);
+      const audioEl = audioRefs.current[id];
       if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
-        console.log(`Attaching audio for ${id}`);
         audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
-      } else {
-        console.log(`Not attaching audio for ${id}:`, {
-          hasAudioEl: !!audioEl,
-          hasAudioTrack: !!p.tracks?.audio,
-          audioState: p.tracks?.audio?.state,
-          hasPersistentTrack: !!p.tracks?.audio?.persistentTrack
-        });
       }
     });
   }, [participants]);
@@ -114,12 +89,18 @@ const Call: React.FC<CallProps> = ({ data }) => {
         {Object.entries(participants).map(([id, p]) => (
           <div key={id} className="relative bg-gray-800 rounded-lg overflow-hidden flex-1">
             <video
-              id={`video-${id}`}
+              ref={(el) => { videoRefs.current[id] = el; }}
               autoPlay
               playsInline
               className="w-full h-full object-cover"
             />
-            {id !== 'local' && <audio id={`audio-${id}`} autoPlay playsInline />}
+            {id !== 'local' && (
+              <audio 
+                ref={(el) => { audioRefs.current[id] = el; }}
+                autoPlay 
+                playsInline 
+              />
+            )}
             <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm">
               {id === 'local' ? 'You' : (p.user_name || 'Remote')}
             </div>
