@@ -10,12 +10,11 @@ interface StartButtonProps {
 const StartButton: React.FC<StartButtonProps> = ({ onClick, loading = false }) => {
   return (
     <Button onClick={onClick} disabled={loading}>
-      {loading ? (
+      Start {loading ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : (
         <Play className="h-4 w-4" />
       )}
-      Start
     </Button>
   );
 };
