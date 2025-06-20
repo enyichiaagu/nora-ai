@@ -8,6 +8,10 @@ const router = createBrowserRouter([
     path: '/',
     element: <Waitlist />,
   },
+  {
+    path: '/demo',
+    element: <Demo/>
+  }
 ]);
 export default function App() {
   return (
