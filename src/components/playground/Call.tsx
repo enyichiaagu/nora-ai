@@ -39,6 +39,7 @@ const getOrCreateCallObject = () => {
 
 const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callRef = useRef<any>(null);
+  const localVideoRef = useRef<HTMLVideoElement>(null);
   const [participants, setParticipants] = useState<Record<string, Participant>>({});
   const [isHovered, setIsHovered] = useState(false);
   const [callActive, setCallActive] = useState(false);
@@ -96,6 +97,16 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     });
   }, [participants]);
 
+  useEffect(() => {
+    if (localVideoRef.current && participants['local']) {
+      const localParticipant = participants['local'];
+      if (localParticipant.tracks.video && localParticipant.tracks.video.state === 'playable' && localParticipant.tracks.video.persistentTrack) {
+        localVideoRef.current.srcObject = new MediaStream([localParticipant.tracks.video.persistentTrack]);
+      } else {
+        localVideoRef.current.srcObject = null;
+      }
+    }
+  }, [participants]);
   const endCall = () => {
     if (callRef.current) {
       callRef.current.leave();
@@ -172,11 +183,11 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       {localParticipant && (
         <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white">
           <video
-            id="video-local"
+            ref={localVideoRef}
             autoPlay
             playsInline
             muted
-            className="w-full h-full object-cover scale-x-[-1]"
+            className="w-full h-full object-cover"
           />
           <div className="absolute bottom-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
             You
