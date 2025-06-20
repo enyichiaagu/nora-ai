@@ -11,31 +11,20 @@ function Demo() {
 				/>
 
 				<h1 className='mt-5 text-gray-200 font-marlin text-2xl sm:text-3xl md:text-3xl lg:text-[2.7rem] text-center mb-8'>
-					Nora AI Demo
+					Nora AI <span className='text-yellow-400'>Demo</span>
 				</h1>
 				
-				<div className='w-full max-w-4xl px-4 md:px-8'>
+				<div className='w-full max-w-4xl px-4 md:px-8 relative'>
+					<div className='absolute -top-2 -left-2 w-4 h-4 bg-yellow-400 rounded-full opacity-60'></div>
+					<div className='absolute -top-1 -right-1 w-2 h-2 bg-yellow-300 rounded-full opacity-80'></div>
 					<Playground />
 				</div>
 
-				<div className='flex items-center space-x-4 mt-8 absolute left-1/2 -translate-x-1/2 bottom-10'>
-					<a
-						href='https://x.com/noratutor'
-						target="_blank"
-						className='p-3 bg-white bg-opacity-20 backdrop-blur-sm rounded-full hover:bg-opacity-30 transition-all duration-200 group'>
-						<img
-							src='/icons/x.svg'
-							className='w-5 h-5 text-white group-hover:scale-110 transition-transform duration-200'
-							alt=''
-						/>
-					</a>
+				<div className='mt-8 text-center'>
+					<p className='text-white text-opacity-60 text-lg'>
+						Experience the future of <span className='text-yellow-300'>AI tutoring</span>
+					</p>
 				</div>
-				
-				<img
-					src='/icons/bolt.svg'
-					alt=''
-					className='w-[70%] max-w-[21rem] md:w-[37%] absolute right-0 translate-x-[29%] md:translate-x-[37%] bottom-0 sm:translate-y-[10%] translate-y-[30%] md:translate-y-[50%]'
-				/>
 			</div>
 		</div>
 	);
