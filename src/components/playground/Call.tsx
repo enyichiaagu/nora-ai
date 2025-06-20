@@ -167,93 +167,100 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   }
 
   return (
-    <div 
-      className={`w-full bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative transition-all duration-300 ${
-        isFullscreen ? 'fixed inset-8 z-50 h-[calc(100vh-4rem)]' : 'h-[600px]'
-      }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Main video area */}
-      <div className="w-full h-full relative">
-        {mainRemoteParticipant ? (
-          <div className="w-full h-full relative bg-gray-900 rounded-lg overflow-hidden">
+    <>
+      {/* Fullscreen overlay */}
+      {isFullscreen && (
+        <div className="fixed inset-0 bg-black/80 z-40" onClick={toggleFullscreen} />
+      )}
+      
+      <div 
+        className={`w-full bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative transition-all duration-300 ${
+          isFullscreen ? 'fixed inset-4 z-50 h-[calc(100vh-2rem)] w-[calc(100vw-2rem)]' : 'h-[600px]'
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Main video area */}
+        <div className="w-full h-full relative">
+          {mainRemoteParticipant ? (
+            <div className="w-full h-full relative bg-gray-900 rounded-lg overflow-hidden">
+              <video
+                id={`video-${mainRemoteParticipant[0]}`}
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
+              />
+              <audio id={`audio-${mainRemoteParticipant[0]}`} autoPlay playsInline />
+              <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                {mainRemoteParticipant[1].user_name || 'Participant'}
+              </div>
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-white/5">
+              <LoadingSpinner size="60px" color="#ffffff" />
+              <p className="text-white mt-4 text-lg">Waiting for participant to join...</p>
+            </div>
+          )}
+        </div>
+
+        {/* Local video corner - bottom right */}
+        {localParticipant && (
+          <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white/30">
             <video
-              id={`video-${mainRemoteParticipant[0]}`}
+              ref={localVideoRef}
               autoPlay
               playsInline
+              muted
               className="w-full h-full object-cover"
             />
-            <audio id={`audio-${mainRemoteParticipant[0]}`} autoPlay playsInline />
-            <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-              {mainRemoteParticipant[1].user_name || 'Participant'}
+            <div className="absolute bottom-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
+              You
             </div>
           </div>
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-white/5">
-            <LoadingSpinner size="60px" color="#ffffff" />
-            <p className="text-white mt-4 text-lg">Waiting for participant to join...</p>
+        )}
+
+        {/* Fullscreen toggle button */}
+        {Object.keys(participants).length > 0 && (
+          <div 
+            className={`absolute top-4 right-4 transition-all duration-300 ease-in-out ${
+              isHovered ? 'translate-y-0 opacity-100' : '-translate-y-16 opacity-0'
+            }`}
+          >
+            <Button 
+              onClick={toggleFullscreen}
+              variant="secondary"
+              size="sm"
+              className="shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white/20 hover:bg-white/30 text-white border-white/30"
+            >
+              {isFullscreen ? (
+                <Minimize className="h-4 w-4" />
+              ) : (
+                <Maximize className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+        )}
+
+        {/* Animated end call button */}
+        {Object.keys(participants).length > 0 && (
+          <div 
+            className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out ${
+              isHovered ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
+            }`}
+          >
+            <Button 
+              onClick={endCall}
+              variant="destructive"
+              size="lg"
+              className="shadow-lg hover:shadow-xl transition-shadow duration-200"
+            >
+              <PhoneOff className="h-5 w-5" />
+              End Call
+            </Button>
           </div>
         )}
       </div>
-
-      {/* Local video corner - bottom right */}
-      {localParticipant && (
-        <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white/30">
-          <video
-            ref={localVideoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute bottom-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
-            You
-          </div>
-        </div>
-      )}
-
-      {/* Fullscreen toggle button */}
-      {Object.keys(participants).length > 0 && (
-        <div 
-          className={`absolute top-4 right-4 transition-all duration-300 ease-in-out ${
-            isHovered ? 'translate-y-0 opacity-100' : '-translate-y-16 opacity-0'
-          }`}
-        >
-          <Button 
-            onClick={toggleFullscreen}
-            variant="secondary"
-            size="sm"
-            className="shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white/20 hover:bg-white/30 text-white border-white/30"
-          >
-            {isFullscreen ? (
-              <Minimize className="h-4 w-4" />
-            ) : (
-              <Maximize className="h-4 w-4" />
-            )}
-          </Button>
-        </div>
-      )}
-
-      {/* Animated end call button */}
-      {Object.keys(participants).length > 0 && (
-        <div 
-          className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out ${
-            isHovered ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
-          }`}
-        >
-          <Button 
-            onClick={endCall}
-            variant="destructive"
-            size="lg"
-            className="shadow-lg hover:shadow-xl transition-shadow duration-200"
-          >
-            <PhoneOff className="h-5 w-5" />
-            End Call
-          </Button>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 
