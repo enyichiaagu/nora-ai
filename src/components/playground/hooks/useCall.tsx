@@ -31,7 +31,7 @@ const useCall = (): UseCallReturn => {
       },
       body: JSON.stringify({
         replica_id: 'r9d30b0e55ac',
-        persona_id: 'r9d30b0e55ac'
+        persona_id: 'pe13ed370726'
       })
     };
 
