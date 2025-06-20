@@ -2,9 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import DailyIframe from '@daily-co/daily-js';
 import { ConversationData } from './types/conversation';
 import { Button } from '@/components/ui/button';
-import { PhoneOff, Video, Users, Maximize, Minimize } from 'lucide-react';
+import { PhoneOff, Video, Users } from 'lucide-react';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface CallProps {
   data: ConversationData | null;
@@ -41,13 +40,9 @@ const getOrCreateCallObject = () => {
 const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callRef = useRef<any>(null);
   const localVideoRef = useRef<HTMLVideoElement>(null);
-  const fullscreenLocalVideoRef = useRef<HTMLVideoElement>(null);
   const [participants, setParticipants] = useState<Record<string, Participant>>({});
   const [isHovered, setIsHovered] = useState(false);
   const [callActive, setCallActive] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-  const [remoteStreams, setRemoteStreams] = useState<Record<string, MediaStream>>({});
 
   useEffect(() => {
     if (!data?.conversation_url) return;
@@ -70,8 +65,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     const handleCallLeft = () => {
       setCallActive(false);
       setParticipants({});
-      setLocalStream(null);
-      setRemoteStreams({});
       if (onCallEnd) {
         onCallEnd();
       }
@@ -87,67 +80,40 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     };
   }, [data?.conversation_url, onCallEnd]);
 
-  // Update streams when participants change
+  // Handle local video stream
   useEffect(() => {
     const localParticipant = participants['local'];
-    if (localParticipant?.tracks.video?.state === 'playable' && localParticipant.tracks.video.persistentTrack) {
-      const stream = new MediaStream([localParticipant.tracks.video.persistentTrack]);
-      setLocalStream(stream);
-    } else {
-      setLocalStream(null);
-    }
-
-    const newRemoteStreams: Record<string, MediaStream> = {};
-    Object.entries(participants).forEach(([id, p]) => {
-      if (id === 'local') return;
-      
-      if (p.tracks.video?.state === 'playable' && p.tracks.video.persistentTrack) {
-        const videoStream = new MediaStream([p.tracks.video.persistentTrack]);
-        newRemoteStreams[id] = videoStream;
+    if (localVideoRef.current && localParticipant?.tracks.video) {
+      if (localParticipant.tracks.video.state === 'playable' && localParticipant.tracks.video.persistentTrack) {
+        localVideoRef.current.srcObject = new MediaStream([localParticipant.tracks.video.persistentTrack]);
+      } else {
+        localVideoRef.current.srcObject = null;
       }
-    });
-    setRemoteStreams(newRemoteStreams);
+    }
   }, [participants]);
 
-  // Apply streams to video elements
   useEffect(() => {
-    if (localVideoRef.current && localStream) {
-      localVideoRef.current.srcObject = localStream;
-    }
-    if (fullscreenLocalVideoRef.current && localStream) {
-      fullscreenLocalVideoRef.current.srcObject = localStream;
-    }
-  }, [localStream]);
-
-  useEffect(() => {
-    Object.entries(remoteStreams).forEach(([id, stream]) => {
+    Object.keys(participants).length > 0 && Object.entries(participants).forEach(([id, p]) => {
+      if (id === 'local') return; // Skip local participant, handled separately
+      
       const videoEl = document.getElementById(`video-${id}`) as HTMLVideoElement;
-      const fullscreenVideoEl = document.getElementById(`fullscreen-video-${id}`) as HTMLVideoElement;
+      if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
+        videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
+      }
       
-      if (videoEl) videoEl.srcObject = stream;
-      if (fullscreenVideoEl) fullscreenVideoEl.srcObject = stream;
-    });
-
-    // Handle audio separately
-    Object.entries(participants).forEach(([id, p]) => {
-      if (id === 'local') return;
-      
-      if (p.tracks.audio?.state === 'playable' && p.tracks.audio.persistentTrack) {
-        const audioStream = new MediaStream([p.tracks.audio.persistentTrack]);
-        const audioEl = document.getElementById(`audio-${id}`) as HTMLAudioElement;
-        const fullscreenAudioEl = document.getElementById(`fullscreen-audio-${id}`) as HTMLAudioElement;
-        
-        if (audioEl) audioEl.srcObject = audioStream;
-        if (fullscreenAudioEl) fullscreenAudioEl.srcObject = audioStream;
+      const audioEl = document.getElementById(`audio-${id}`) as HTMLAudioElement;
+      if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
+        audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
       }
     });
-  }, [remoteStreams, participants]);
+  }, [participants]);
 
   const leaveCall = async () => {
     try {
       if (callRef.current) {
         await callRef.current.leave();
         
+        // Clean up all video and audio elements
         document.querySelectorAll('video, audio').forEach((el) => {
           if (el instanceof HTMLVideoElement || el instanceof HTMLAudioElement) {
             el.srcObject = null;
@@ -166,108 +132,14 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     await leaveCall();
     setCallActive(false);
     setParticipants({});
-    setLocalStream(null);
-    setRemoteStreams({});
     if (onCallEnd) {
       onCallEnd();
     }
   };
 
-  const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
-
   const localParticipant = participants['local'];
   const remoteParticipants = Object.entries(participants).filter(([id]) => id !== 'local');
   const mainRemoteParticipant = remoteParticipants[0];
-
-  const CallContent = ({ isFullscreenMode = false }) => (
-    <div 
-      className="w-full h-full bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="w-full h-full relative">
-        {mainRemoteParticipant ? (
-          <div className="w-full h-full relative bg-gray-900 rounded-lg overflow-hidden">
-            <video
-              id={isFullscreenMode ? `fullscreen-video-${mainRemoteParticipant[0]}` : `video-${mainRemoteParticipant[0]}`}
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover"
-            />
-            <audio 
-              id={isFullscreenMode ? `fullscreen-audio-${mainRemoteParticipant[0]}` : `audio-${mainRemoteParticipant[0]}`} 
-              autoPlay 
-              playsInline 
-            />
-            <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-              {mainRemoteParticipant[1].user_name || 'Participant'}
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-white/5">
-            <LoadingSpinner size="60px" color="#ffffff" />
-            <p className="text-white mt-4 text-lg">Waiting for participant to join...</p>
-          </div>
-        )}
-      </div>
-
-      {localParticipant && (
-        <div className="absolute bottom-4 right-4 w-24 h-18 sm:w-32 sm:h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white/30">
-          <video
-            ref={isFullscreenMode ? fullscreenLocalVideoRef : localVideoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-full h-full object-cover scale-x-[-1]"
-          />
-          <div className="absolute bottom-1 left-1 bg-black/50 text-white px-1 py-0.5 rounded text-xs">
-            You
-          </div>
-        </div>
-      )}
-
-      {Object.keys(participants).length > 0 && (
-        <div 
-          className={`absolute top-4 right-4 transition-all duration-300 ease-in-out ${
-            isHovered ? 'translate-y-0 opacity-100' : '-translate-y-16 opacity-0'
-          }`}
-        >
-          <Button 
-            onClick={toggleFullscreen}
-            variant="secondary"
-            size="sm"
-            className="shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white/20 hover:bg-white/30 text-white border-white/30"
-          >
-            {isFullscreen ? (
-              <Minimize className="h-4 w-4" />
-            ) : (
-              <Maximize className="h-4 w-4" />
-            )}
-          </Button>
-        </div>
-      )}
-
-      {Object.keys(participants).length > 0 && (
-        <div 
-          className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out ${
-            isHovered ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
-          }`}
-        >
-          <Button 
-            onClick={endCall}
-            variant="destructive"
-            size="lg"
-            className="shadow-lg hover:shadow-xl transition-shadow duration-200"
-          >
-            <PhoneOff className="h-5 w-5" />
-            End Call
-          </Button>
-        </div>
-      )}
-    </div>
-  );
 
   if (!data || !callActive) {
     return (
@@ -290,17 +162,69 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   }
 
   return (
-    <>
-      <div className="w-full h-[600px]">
-        <CallContent />
+    <div 
+      className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Main video area */}
+      <div className="w-full h-full relative">
+        {mainRemoteParticipant ? (
+          <div className="w-full h-full relative bg-gray-900 rounded-lg overflow-hidden">
+            <video
+              id={`video-${mainRemoteParticipant[0]}`}
+              autoPlay
+              playsInline
+              className="w-full h-full object-cover"
+            />
+            <audio id={`audio-${mainRemoteParticipant[0]}`} autoPlay playsInline />
+            <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+              {mainRemoteParticipant[1].user_name || 'Participant'}
+            </div>
+          </div>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-white/5">
+            <LoadingSpinner size="60px" color="#ffffff" />
+            <p className="text-white mt-4 text-lg">Waiting for participant to join...</p>
+          </div>
+        )}
       </div>
 
-      <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[100vw] max-h-[100vh] w-[100vw] h-[100vh] p-0 border-0 bg-black">
-          <CallContent isFullscreenMode={true} />
-        </DialogContent>
-      </Dialog>
-    </>
+      {/* Local video corner - bottom right */}
+      {localParticipant && (
+        <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white/30">
+          <video
+            ref={localVideoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
+            You
+          </div>
+        </div>
+      )}
+
+      {/* Animated end call button */}
+      {Object.keys(participants).length > 0 && (
+        <div 
+          className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out ${
+            isHovered ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
+          }`}
+        >
+          <Button 
+            onClick={endCall}
+            variant="destructive"
+            size="lg"
+            className="shadow-lg hover:shadow-xl transition-shadow duration-200"
+          >
+            <PhoneOff className="h-5 w-5" />
+            End Call
+          </Button>
+        </div>
+      )}
+    </div>
   );
 };
 
