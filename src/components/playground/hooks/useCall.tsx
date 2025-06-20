@@ -30,8 +30,8 @@ const useCall = (): UseCallReturn => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        replica_id: 'r79e1c033f',
-        persona_id: 'p9a95912'
+        replica_id: 'r9d30b0e55ac',
+        persona_id: 'r9d30b0e55ac'
       })
     };
 
