@@ -116,7 +116,7 @@ function Waitlist() {
 				<img
 					src='/icons/bolt.svg'
 					alt=''
-					className='.hidden w-[70%] md:max-w-[12rem] md:w-[37%] absolute right-0 translate-x-[29%]  md:translate-x-[37%] bottom-0 sm:translate-y-[10%] translate-y-[30%] md:translate-y-[50%]  '
+					className='.hidden w-[70%]max-w-[12rem] md:w-[37%] absolute right-0 translate-x-[29%]  md:translate-x-[37%] bottom-0 sm:translate-y-[10%] translate-y-[30%] md:translate-y-[50%]  '
 				/>
 			</div>
 		</div>
