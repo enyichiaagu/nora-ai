@@ -46,6 +46,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [callActive, setCallActive] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  const [remoteStreams, setRemoteStreams] = useState<Record<string, MediaStream>>({});
 
   useEffect(() => {
     if (!data?.conversation_url) return;
@@ -68,6 +70,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     const handleCallLeft = () => {
       setCallActive(false);
       setParticipants({});
+      setLocalStream(null);
+      setRemoteStreams({});
       if (onCallEnd) {
         onCallEnd();
       }
@@ -83,46 +87,61 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     };
   }, [data?.conversation_url, onCallEnd]);
 
-  // Handle local video stream for both regular and fullscreen
+  // Update streams when participants change
   useEffect(() => {
     const localParticipant = participants['local'];
-    if (localParticipant?.tracks.video) {
-      const stream = localParticipant.tracks.video.state === 'playable' && localParticipant.tracks.video.persistentTrack
-        ? new MediaStream([localParticipant.tracks.video.persistentTrack])
-        : null;
-
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
-      if (fullscreenLocalVideoRef.current) {
-        fullscreenLocalVideoRef.current.srcObject = stream;
-      }
+    if (localParticipant?.tracks.video?.state === 'playable' && localParticipant.tracks.video.persistentTrack) {
+      const stream = new MediaStream([localParticipant.tracks.video.persistentTrack]);
+      setLocalStream(stream);
+    } else {
+      setLocalStream(null);
     }
-  }, [participants]);
 
-  useEffect(() => {
-    Object.keys(participants).length > 0 && Object.entries(participants).forEach(([id, p]) => {
+    const newRemoteStreams: Record<string, MediaStream> = {};
+    Object.entries(participants).forEach(([id, p]) => {
       if (id === 'local') return;
       
+      if (p.tracks.video?.state === 'playable' && p.tracks.video.persistentTrack) {
+        const videoStream = new MediaStream([p.tracks.video.persistentTrack]);
+        newRemoteStreams[id] = videoStream;
+      }
+    });
+    setRemoteStreams(newRemoteStreams);
+  }, [participants]);
+
+  // Apply streams to video elements
+  useEffect(() => {
+    if (localVideoRef.current && localStream) {
+      localVideoRef.current.srcObject = localStream;
+    }
+    if (fullscreenLocalVideoRef.current && localStream) {
+      fullscreenLocalVideoRef.current.srcObject = localStream;
+    }
+  }, [localStream]);
+
+  useEffect(() => {
+    Object.entries(remoteStreams).forEach(([id, stream]) => {
       const videoEl = document.getElementById(`video-${id}`) as HTMLVideoElement;
       const fullscreenVideoEl = document.getElementById(`fullscreen-video-${id}`) as HTMLVideoElement;
       
-      if (p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
-        const stream = new MediaStream([p.tracks.video.persistentTrack]);
-        if (videoEl) videoEl.srcObject = stream;
-        if (fullscreenVideoEl) fullscreenVideoEl.srcObject = stream;
-      }
+      if (videoEl) videoEl.srcObject = stream;
+      if (fullscreenVideoEl) fullscreenVideoEl.srcObject = stream;
+    });
+
+    // Handle audio separately
+    Object.entries(participants).forEach(([id, p]) => {
+      if (id === 'local') return;
       
-      const audioEl = document.getElementById(`audio-${id}`) as HTMLAudioElement;
-      const fullscreenAudioEl = document.getElementById(`fullscreen-audio-${id}`) as HTMLAudioElement;
-      
-      if (p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
-        const stream = new MediaStream([p.tracks.audio.persistentTrack]);
-        if (audioEl) audioEl.srcObject = stream;
-        if (fullscreenAudioEl) fullscreenAudioEl.srcObject = stream;
+      if (p.tracks.audio?.state === 'playable' && p.tracks.audio.persistentTrack) {
+        const audioStream = new MediaStream([p.tracks.audio.persistentTrack]);
+        const audioEl = document.getElementById(`audio-${id}`) as HTMLAudioElement;
+        const fullscreenAudioEl = document.getElementById(`fullscreen-audio-${id}`) as HTMLAudioElement;
+        
+        if (audioEl) audioEl.srcObject = audioStream;
+        if (fullscreenAudioEl) fullscreenAudioEl.srcObject = audioStream;
       }
     });
-  }, [participants]);
+  }, [remoteStreams, participants]);
 
   const leaveCall = async () => {
     try {
@@ -147,6 +166,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     await leaveCall();
     setCallActive(false);
     setParticipants({});
+    setLocalStream(null);
+    setRemoteStreams({});
     if (onCallEnd) {
       onCallEnd();
     }
@@ -193,7 +214,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       </div>
 
       {localParticipant && (
-        <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white/30">
+        <div className="absolute bottom-4 right-4 w-24 h-18 sm:w-32 sm:h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white/30">
           <video
             ref={isFullscreenMode ? fullscreenLocalVideoRef : localVideoRef}
             autoPlay
@@ -201,7 +222,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
             muted
             className="w-full h-full object-cover scale-x-[-1]"
           />
-          <div className="absolute bottom-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
+          <div className="absolute bottom-1 left-1 bg-black/50 text-white px-1 py-0.5 rounded text-xs">
             You
           </div>
         </div>
