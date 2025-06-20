@@ -149,16 +149,16 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   if (!data || !callActive) {
     return (
       <div 
-        className="w-full h-96 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg border border-blue-200 p-8 flex flex-col items-center justify-center shadow-lg"
+        className="w-full h-96 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8 flex flex-col items-center justify-center shadow-lg"
       >
-        <div className="bg-white rounded-full p-6 shadow-md mb-4">
-          <Video className="h-12 w-12 text-blue-500" />
+        <div className="bg-white/20 backdrop-blur-sm rounded-full p-6 shadow-md mb-4">
+          <Video className="h-12 w-12 text-white" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Ready to Connect</h3>
-        <p className="text-gray-600 text-center max-w-md">
+        <h3 className="text-xl font-semibold text-white mb-2">Ready to Connect</h3>
+        <p className="text-white/80 text-center max-w-md">
           Your call interface will appear here once connected.
         </p>
-        <div className="flex items-center gap-2 mt-4 text-sm text-gray-500">
+        <div className="flex items-center gap-2 mt-4 text-sm text-white/70">
           <Users className="h-4 w-4" />
           <span>Waiting for participants...</span>
         </div>
@@ -168,7 +168,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
   return (
     <div 
-      className={`w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border shadow-xl overflow-hidden relative transition-all duration-300 ${
+      className={`w-full bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative transition-all duration-300 ${
         isFullscreen ? 'fixed inset-4 z-50 h-[calc(100vh-2rem)]' : 'h-96'
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -190,16 +190,16 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
             </div>
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100">
-            <LoadingSpinner size="60px" color="#6366f1" />
-            <p className="text-gray-600 mt-4 text-lg">Waiting for participant to join...</p>
+          <div className="w-full h-full flex flex-col items-center justify-center bg-white/5">
+            <LoadingSpinner size="60px" color="#ffffff" />
+            <p className="text-white mt-4 text-lg">Waiting for participant to join...</p>
           </div>
         )}
       </div>
 
       {/* Local video corner - bottom right */}
       {localParticipant && (
-        <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white">
+        <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-900 rounded-lg overflow-hidden shadow-lg border-2 border-white/30">
           <video
             ref={localVideoRef}
             autoPlay
@@ -224,7 +224,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
             onClick={toggleFullscreen}
             variant="secondary"
             size="sm"
-            className="shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white/90 hover:bg-white"
+            className="shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white/20 hover:bg-white/30 text-white border-white/30"
           >
             {isFullscreen ? (
               <Minimize className="h-4 w-4" />
