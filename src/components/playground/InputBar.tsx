@@ -18,7 +18,7 @@ const InputBar: React.FC<InputBarProps> = ({ value, onChange }) => {
     <div className="relative w-full">
       <Input 
         placeholder="Enter your API key..." 
-        className="w-full pr-10"
+        className="w-full pr-10 bg-white/20 backdrop-blur-sm border-white/30 text-white placeholder:text-white/70 focus:border-white/50 focus:ring-white/30"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         type={showPassword ? "text" : "password"}
@@ -26,7 +26,7 @@ const InputBar: React.FC<InputBarProps> = ({ value, onChange }) => {
       <button
         type="button"
         onClick={togglePasswordVisibility}
-        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors"
       >
         {showPassword ? (
           <EyeOff className="h-4 w-4" />

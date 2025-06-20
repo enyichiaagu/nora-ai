@@ -149,7 +149,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   if (!data || !callActive) {
     return (
       <div 
-        className="w-full h-96 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8 flex flex-col items-center justify-center shadow-lg"
+        className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8 flex flex-col items-center justify-center shadow-lg"
       >
         <div className="bg-white/20 backdrop-blur-sm rounded-full p-6 shadow-md mb-4">
           <Video className="h-12 w-12 text-white" />
@@ -169,7 +169,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   return (
     <div 
       className={`w-full bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative transition-all duration-300 ${
-        isFullscreen ? 'fixed inset-4 z-50 h-[calc(100vh-2rem)]' : 'h-96'
+        isFullscreen ? 'fixed inset-8 z-50 h-[calc(100vh-4rem)]' : 'h-[600px]'
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
