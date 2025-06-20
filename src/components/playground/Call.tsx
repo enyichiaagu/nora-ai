@@ -10,6 +10,20 @@ interface CallProps {
   onCallEnd?: () => void;
 }
 
+interface Participant {
+  user_name?: string;
+  tracks: {
+    video?: {
+      state: string;
+      persistentTrack?: MediaStreamTrack;
+    };
+    audio?: {
+      state: string;
+      persistentTrack?: MediaStreamTrack;
+    };
+  };
+}
+
 declare global {
   interface Window {
     _dailyCallObject?: any;
@@ -24,8 +38,8 @@ const getOrCreateCallObject = () => {
 };
 
 const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
-  const callRef = useRef(null);
-  const [participants, setParticipants] = useState({});
+  const callRef = useRef<any>(null);
+  const [participants, setParticipants] = useState<Record<string, Participant>>({});
   const [isHovered, setIsHovered] = useState(false);
   const [callActive, setCallActive] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -41,9 +55,9 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
     const updateParticipants = () => {
       const participants = call.participants();
-      const meeting = {}
+      const meeting: Record<string, Participant> = {};
       Object.entries(participants).forEach(([id, p]) => {
-        meeting[id] = p;
+        meeting[id] = p as Participant;
       });
       setParticipants(meeting);
     };
@@ -68,13 +82,13 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
   useEffect(() => {
     Object.keys(participants).length > 0 && Object.entries(participants).forEach(([id, p]) => {
-      const videoEl = document.getElementById(`video-${id}`);
+      const videoEl = document.getElementById(`video-${id}`) as HTMLVideoElement;
       if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
         videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
       }
       
       if (id !== 'local'){
-        const audioEl = document.getElementById(`audio-${id}`);
+        const audioEl = document.getElementById(`audio-${id}`) as HTMLAudioElement;
         if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
           audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
         }
