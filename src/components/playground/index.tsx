@@ -17,22 +17,22 @@ const Playground: React.FC = () => {
   const callObject = useCallObject();
 
   return (
-      <div className="w-full space-y-4">
-        <div className="flex gap-2">
-          <InputBar value={apiKey} onChange={setApiKey} />
-          <StartButton onClick={handleStart} loading={loading} />
-        </div>
-        
-        {error && (
-          <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-            <p className="text-destructive text-sm">{error}</p>
-          </div>
-        )}
-        
-      <DailyProvider callObject={callObject}>
-        <Call data={data}/>
-      </DailyProvider>
+    <div className="w-full space-y-4">
+      <div className="flex gap-2">
+        <InputBar value={apiKey} onChange={setApiKey} />
+        <StartButton onClick={handleStart} loading={loading} />
       </div>
+      
+      {error && (
+        <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+          <p className="text-destructive text-sm">{error}</p>
+        </div>
+      )}
+      
+    <DailyProvider callObject={callObject}>
+      <Call data={data}/>
+    </DailyProvider>
+    </div>
   );
 };
 
