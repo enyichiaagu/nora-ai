@@ -9,5 +9,5 @@ export default function useTranscript(){
     }
   })
 
-  return {transcript, startTranscription, stopTranscription}
+  return { transcript, startTranscription, stopTranscription }
 }
