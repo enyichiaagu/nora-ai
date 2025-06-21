@@ -30,7 +30,7 @@ const Playground: React.FC = () => {
         </div>
       )}
       
-      <Call data={data} onCallEnd={handleCallEnd} />
+      <Call data={data}/>
     </div>
   );
 };
