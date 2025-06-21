@@ -13,7 +13,11 @@ const Playground: React.FC = () => {
     makeCall(apiKey);
   };
 
+  // Create an instance of the Daily call object
+  const callObject = useCallObject();
+
   return (
+    <DailyProvider>
     <div className="w-full space-y-4">
       <div className="flex gap-2">
         <InputBar value={apiKey} onChange={setApiKey} />
@@ -28,6 +32,7 @@ const Playground: React.FC = () => {
       
       <Call data={data}/>
     </div>
+    </DailyProvider>
   );
 };
 
