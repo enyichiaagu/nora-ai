@@ -15,13 +15,13 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data }) => {
-  const [callObject, setCallObject] = useState(useDaily())
+  callObject = useDaily()
   const localSession = useLocalSessionId()
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
 
-  function leaveCall() {
+  const leaveCall = useCallback(() =>{
     callObject.destroy()
-  }
+  }, [callObject])
   
   return (
     <div 
