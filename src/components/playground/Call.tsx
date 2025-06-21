@@ -17,6 +17,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     >
       <EndCall />
       <DailyVideo />
+      <DailyVideo />
       <DailyAudio onPlayFailed={(e) => console.error(`Failed to play ${e.type} for ${e.sessionId}.`)}/>
     </div>
   );
