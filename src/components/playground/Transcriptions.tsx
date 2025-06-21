@@ -5,7 +5,7 @@ function Transcriptions() {
   const [transcript, setTranscript] = useState('')
   const {startTranscription, stopTranscription} = useTranscription({
     onTransriptionMessage: (message) => {
-      setTranscript(message)
+      setTranscript(message.text)
     }
   })
 
