@@ -29,7 +29,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     >
       <DailyVideo automirror sessionId={localSession}/>
       {remoteParticipantIds.length > 0 && <DailyVideo sessionId={remoteParticipantIds}/>}
-      <EndCall />
+      <EndCall leaveCall={leaveCall}/>
       <DailyAudio onPlayFailed={(e) => console.error(`Failed to play ${e.type} for ${e.sessionId}.`)}/>
     </div>
   );
