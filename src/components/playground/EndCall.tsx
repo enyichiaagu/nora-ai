@@ -18,8 +18,6 @@ function EndCall() {
             End Call
           </Button>
         </div>
-      )}
-    </div>
   )
 }
 
