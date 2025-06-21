@@ -14,11 +14,6 @@ const Playground: React.FC = () => {
     makeCall(apiKey);
   }, []);
 
-  useEffect(()=> {
-    const newCall = useCallObject()
-    setCallObject(newCall)    
-  }, [data?.conversation_url])
-
   return (
     <div className="w-full space-y-4">
       <div className="flex gap-2">
