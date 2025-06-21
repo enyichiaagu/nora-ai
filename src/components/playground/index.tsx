@@ -13,6 +13,7 @@ const Playground: React.FC = () => {
 
   const handleStart = useCallback(() => {
     makeCall(apiKey);
+    setCallObject(useCallObject())
   }, []);
 
   return (
