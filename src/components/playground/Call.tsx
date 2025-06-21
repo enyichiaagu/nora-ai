@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import DailyIframe from '@daily-co/daily-js';
 import { ConversationData } from './types/conversation';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
 import EndCall from './EndCall'
 import Static from './Static'
 
@@ -15,6 +13,8 @@ const Call: React.FC<CallProps> = ({ data }) => {
       <Static/>
     );
   }
+
+  
 
   return (
     <div 
