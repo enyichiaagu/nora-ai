@@ -33,7 +33,11 @@ const Playground: React.FC = () => {
       )}
 
       {
-        !data ? <Static/> : <DailyProvider></DailyProvider>
+        !data ? <Static/> : (
+          <DailyProvider>
+            <Call/>
+          </DailyProvider>
+        )
       }
     </div>
   );
