@@ -16,7 +16,7 @@ interface CallProps {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const callObject = useDaily();
-  const callState = useCallState();
+  const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
 
