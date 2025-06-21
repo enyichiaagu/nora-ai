@@ -7,7 +7,6 @@ import Static from './Static'
 
 interface CallProps {
   data: ConversationData | null;
-  onCallEnd?: () => void;
 }
 
 interface Participant {
