@@ -9,7 +9,7 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data }) => {
-  // const [callObject, setCallObject] = useCallObject()
+  const [callObject, setCallObject] = useState(useCallObject())
   
   return (
     <div 
