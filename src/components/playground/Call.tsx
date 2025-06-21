@@ -8,6 +8,7 @@ import {
   useMeetingState
 } from '@daily-co/daily-react';
 import { ConversationData } from './types/conversation';
+import useTranscript from './hooks/useTranscript'
 import Transcriptions from './Transcriptions'
 import EndCall from './EndCall'
 
