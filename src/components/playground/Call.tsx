@@ -109,7 +109,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
         </div>
       )}
 
-      <Trancriptions/>
+      <Trancriptions transcript={transcript}/>
       <EndCall endCall={handleEndCall}/>
       <DailyAudio />
     </div>
