@@ -1,4 +1,4 @@
-import { Video } from 'lucide-react'
+import { Video, Users } from 'lucide-react'
 
 function Static() {
   return (
