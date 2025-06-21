@@ -23,4 +23,4 @@ function EndCall() {
   )
 }
 
-export default EndCall
+export default EndCall;
