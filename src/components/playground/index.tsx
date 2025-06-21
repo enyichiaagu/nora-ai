@@ -17,7 +17,6 @@ const Playground: React.FC = () => {
   const callObject = useCallObject();
 
   return (
-    <DailyProvider callObject={callObject}>
       <div className="w-full space-y-4">
         <div className="flex gap-2">
           <InputBar value={apiKey} onChange={setApiKey} />
@@ -30,9 +29,10 @@ const Playground: React.FC = () => {
           </div>
         )}
         
+      <DailyProvider callObject={callObject}>
         <Call data={data}/>
+      </DailyProvider>
       </div>
-    </DailyProvider>
   );
 };
 
