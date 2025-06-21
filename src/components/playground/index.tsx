@@ -2,12 +2,12 @@ import React, { useState, useCallback } from 'react';
 import { DailyProvider, useCallObject } from '@daily-co/daily-react';
 import InputBar from './InputBar';
 import StartButton from './StartButton';
+import Static from './Static'
 import Call from './Call';
 import useCall from './hooks/useCall';
 
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
-  const [callObject, setCallObject] = useState()
   const { data, loading, error, makeCall } = useCall();
 
   const handleStart = useCallback(() => {
@@ -31,10 +31,10 @@ const Playground: React.FC = () => {
           <p className="text-destructive text-sm">{error}</p>
         </div>
       )}
-      
-      <DailyProvider callObject={callObject}>
-        <Call data={data}/>
-      </DailyProvider>
+
+      {
+        !data ? <Static/> : <DailyProvider></DailyProvider>
+      }
     </div>
   );
 };
