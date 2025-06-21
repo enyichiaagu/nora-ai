@@ -15,7 +15,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     );
   }
 
-  
+  const newCallObject = useCallObject()
 
   return (
     <div 
