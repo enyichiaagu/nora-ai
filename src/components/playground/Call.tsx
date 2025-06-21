@@ -40,6 +40,10 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     if (callState === 'new') {
       joinCall();
     }
+
+    return (
+      onCallEnd()
+    )
   }, [callObject, callState, data, isEnding]);
 
   const handleEndCall = async () => {
