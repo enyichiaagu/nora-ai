@@ -9,7 +9,7 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data }) => {
-  // const [callObject, setCallObject] = useState()
+  const [callObject, setCallObject] = useState()
   
   if (!data) {
     return (
@@ -18,7 +18,8 @@ const Call: React.FC<CallProps> = ({ data }) => {
   }
 
   const newCallObject = useCallObject()
-  newCallObject.join(data.conversation_url)
+  setCallObject(newCallObject)
+  callObject.join(data.conversation_url)
 
   return (
     <div 
