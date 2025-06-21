@@ -26,10 +26,13 @@ const Playground: React.FC = () => {
           <p className="text-destructive text-sm">{error}</p>
         </div>
       )}
-      <DailyProvider><Call/></DailyProvider>
+
       {
-        {/* !data ? <Static/> : ( */}
-        // )
+        !data ? <Static/> : (
+          <DailyProvider url={data.conversation_url}>
+            <Call data={data}/>
+          </DailyProvider>
+        )
       }
     </div>
   );
