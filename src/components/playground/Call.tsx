@@ -15,7 +15,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     const newCallObject = useCallObject()
     setCallObject(newCallObject)
     newCallObject.startCamera()
-    newCallObject.join({url: data.conversation_url})
+    newCallObject.join({url: data.conversation_url, userName: 'You'})
   }, [data?.conversation_url])
   
   if (!data) {
