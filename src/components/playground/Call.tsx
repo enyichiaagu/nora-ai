@@ -24,6 +24,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     if (!callObject) return;
 
     const joinCall = async () => {
+      if (callObject, data){
       try {
         await callObject.join({url: data.conversation_url});
       } catch (error) {
@@ -33,7 +34,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
     if (callState !== 'left-meeting') {
       joinCall();
-    }
+    }}
   }, [callObject, callState, data]);
 
   const leaveCall = useCallback(() => {
