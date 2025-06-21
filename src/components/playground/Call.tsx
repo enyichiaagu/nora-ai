@@ -9,6 +9,7 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data }) => {
+  const [callObject, setCallObject] = useState(null)
   if (!data) {
     return (
       <Static/>
