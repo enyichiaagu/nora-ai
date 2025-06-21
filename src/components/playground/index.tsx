@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { DailyProvider, useCallObject } from '@daily-co/daily-react';
+import { DailyProvider } from '@daily-co/daily-react';
 import InputBar from './InputBar';
 import StartButton from './StartButton';
 import Call from './Call';
@@ -12,9 +12,6 @@ const Playground: React.FC = () => {
   const handleStart = useCallback(() => {
     makeCall(apiKey);
   }, []);
-
-  // Create an instance of the Daily call object
-  const callObject = useCallObject();
 
   return (
     <div className="w-full space-y-4">
