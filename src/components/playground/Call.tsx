@@ -49,7 +49,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       try {
         await callObject.leave();
         await callObject.destroy();
-        stopTranscription
+        stopTranscription()
       } catch (error) {
         console.error('Error ending call:', error);
       }
@@ -111,7 +111,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
         </div>
       )}
 
-      <Trancriptions transcript={transcript}/>
+      <Transcriptions transcript={transcript}/>
       <EndCall endCall={handleEndCall}/>
       <DailyAudio />
     </div>
