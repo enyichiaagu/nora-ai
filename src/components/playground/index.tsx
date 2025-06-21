@@ -27,13 +27,13 @@ const Playground: React.FC = () => {
         </div>
       )}
 
-      {
-        !data ? <Static/> : (
-          <DailyProvider url={data.conversation_url}>
-            <Call data={data}/>
-          </DailyProvider>
-        )
-      }
+      {!data ? (
+        <Static/>
+      ) : (
+        <DailyProvider url={data.conversation_url}>
+          <Call data={data}/>
+        </DailyProvider>
+      )}
     </div>
   );
 };
