@@ -26,10 +26,9 @@ const Playground: React.FC = () => {
           <p className="text-destructive text-sm">{error}</p>
         </div>
       )}
-
+      <DailyProvider><Call/></DailyProvider>
       {
         {/* !data ? <Static/> : ( */}
-          <DailyProvider><Call/></DailyProvider>
         // )
       }
     </div>
