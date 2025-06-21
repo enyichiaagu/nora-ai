@@ -31,7 +31,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
       }
     };
 
-    if (callState === 'left-meeting') {
+    if (callState !== 'left-meeting') {
       joinCall();
     }
   }, [callObject, callState]);
