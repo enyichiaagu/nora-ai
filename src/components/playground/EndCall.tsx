@@ -6,7 +6,7 @@ function EndCall({leaveCall}) {
     <div 
           className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out ${
             // isHovered ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
-            'translate-y-16 opacity-0'
+            'translate-y-0 opacity-100'
           }`}
         >
           <Button 
