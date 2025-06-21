@@ -5,7 +5,7 @@ import {
   useParticipantIds, 
   useLocalSessionId, 
   useDaily,
-  useCallState
+  useMeetingState
 } from '@daily-co/daily-react';
 import { ConversationData } from './types/conversation';
 import EndCall from './EndCall'
