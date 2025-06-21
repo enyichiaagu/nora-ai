@@ -20,7 +20,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
 
   function leaveCall() {
-    callObject
+    callObject.destroy()
   }
   
   return (
