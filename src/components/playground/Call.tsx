@@ -10,74 +10,6 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data }) => {
-  const localVideoRef = useRef<HTMLVideoElement>(null);
-  const [participants, setParticipants] = useState<Record<string, Participant>>({});
-  const [isHovered, setIsHovered] = useState(false);
-  const [callActive, setCallActive] = useState(false);
-
-  useEffect(() => {
-    if (!data?.conversation_url) return;
-
-    const call = getOrCreateCallObject();
-    callRef.current = call;
-
-    call.join({ url: data.conversation_url });
-    setCallActive(true);
-
-    const updateParticipants = () => {
-      const participants = call.participants();
-      const meeting: Record<string, Participant> = {};
-      Object.entries(participants).forEach(([id, p]) => {
-        meeting[id] = p as Participant;
-      });
-      setParticipants(meeting);
-    };
-
-    const handleCallLeft = () => {
-      setCallActive(false);
-      setParticipants({});
-      if (onCallEnd) {
-        onCallEnd();
-      }
-    };
-
-    call.on('participant-joined', updateParticipants);
-    call.on('participant-updated', updateParticipants);
-    call.on('participant-left', updateParticipants);
-    call.on('left-meeting', handleCallLeft);
-
-    return () => {
-      leaveCall();
-    };
-  }, [data?.conversation_url, onCallEnd]);
-
-  // Handle local video stream
-  useEffect(() => {
-    const localParticipant = participants['local'];
-    if (localVideoRef.current && localParticipant?.tracks.video) {
-      if (localParticipant.tracks.video.state === 'playable' && localParticipant.tracks.video.persistentTrack) {
-        localVideoRef.current.srcObject = new MediaStream([localParticipant.tracks.video.persistentTrack]);
-      } else {
-        localVideoRef.current.srcObject = null;
-      }
-    }
-  }, [participants]);
-
-  useEffect(() => {
-    Object.keys(participants).length > 0 && Object.entries(participants).forEach(([id, p]) => {
-      if (id === 'local') return; // Skip local participant, handled separately
-      
-      const videoEl = document.getElementById(`video-${id}`) as HTMLVideoElement;
-      if (videoEl && p.tracks.video && p.tracks.video.state === 'playable' && p.tracks.video.persistentTrack) {
-        videoEl.srcObject = new MediaStream([p.tracks.video.persistentTrack]);
-      }
-      
-      const audioEl = document.getElementById(`audio-${id}`) as HTMLAudioElement;
-      if (audioEl && p.tracks.audio && p.tracks.audio.state === 'playable' && p.tracks.audio.persistentTrack) {
-        audioEl.srcObject = new MediaStream([p.tracks.audio.persistentTrack]);
-      }
-    });
-  }, [participants]);
 
   const leaveCall = async () => {
     try {
@@ -112,7 +44,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
   const remoteParticipants = Object.entries(participants).filter(([id]) => id !== 'local');
   const mainRemoteParticipant = remoteParticipants[0];
 
-  if (!data || !callActive) {
+  if (!data) {
     return (
       <Static/>
     );
