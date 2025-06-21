@@ -14,6 +14,8 @@ const Playground: React.FC = () => {
     makeCall(apiKey);
   };
 
+  console.log(data)
+
   return (
     <div className="w-full space-y-4">
       <div className="flex gap-2">
@@ -28,7 +30,7 @@ const Playground: React.FC = () => {
       )}
 
       {
-        !data ? <Static/> : (
+        {/* !data ? <Static/> : ( */}
           <DailyProvider url={data.conversation_url}>
             <Call/>
           </DailyProvider>
