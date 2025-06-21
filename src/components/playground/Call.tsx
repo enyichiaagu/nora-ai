@@ -10,40 +10,6 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data }) => {
-
-  const leaveCall = async () => {
-    try {
-      if (callRef.current) {
-        await callRef.current.leave();
-        
-        // Clean up all video and audio elements
-        document.querySelectorAll('video, audio').forEach((el) => {
-          if (el instanceof HTMLVideoElement || el instanceof HTMLAudioElement) {
-            el.srcObject = null;
-          }
-        });
-        
-        callRef.current.destroy();
-        window._dailyCallObject = null;
-      }
-    } catch (e) {
-      console.error('Leaving failed', e);
-    }
-  };
-
-  const endCall = async () => {
-    await leaveCall();
-    setCallActive(false);
-    setParticipants({});
-    if (onCallEnd) {
-      onCallEnd();
-    }
-  };
-
-  const localParticipant = participants['local'];
-  const remoteParticipants = Object.entries(participants).filter(([id]) => id !== 'local');
-  const mainRemoteParticipant = remoteParticipants[0];
-
   if (!data) {
     return (
       <Static/>
