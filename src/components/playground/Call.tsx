@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   DailyAudio, 
   DailyVideo, 
@@ -17,6 +17,7 @@ interface CallProps {
 
 const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const newcallObject = useDaily();
+  const [callObject, setCallObject] = useState(newcallObject)
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
@@ -41,6 +42,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const handleEndCall = async () => {
     if (callObject) {
       await callObject.destroy();
+      setCallObject(null)
     }
     onCallEnd();
   };
