@@ -31,7 +31,7 @@ const Playground: React.FC = () => {
       {!data ? (
         <Static/>
       ) : (
-        <DailyProvider >
+        <DailyProvider callObject={callObject}>
           <Call data={data}/>
         </DailyProvider>
       )}
