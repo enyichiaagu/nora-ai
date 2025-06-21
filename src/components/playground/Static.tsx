@@ -1,6 +1,6 @@
 import { Video } from 'lucide-react'
 
-function Static (){
+function Static() {
   return (
     <div 
         className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8 flex flex-col items-center justify-center shadow-lg"
