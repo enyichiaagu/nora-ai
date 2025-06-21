@@ -19,8 +19,6 @@ const Call: React.FC<CallProps> = ({ data }) => {
   return (
     <div 
       className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <EndCall />
     </div>
