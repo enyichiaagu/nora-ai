@@ -22,3 +22,5 @@ function EndCall() {
     </div>
   )
 }
+
+export default EndCall
