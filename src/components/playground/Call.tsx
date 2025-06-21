@@ -49,6 +49,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       try {
         await callObject.leave();
         await callObject.destroy();
+        stopTranscription
       } catch (error) {
         console.error('Error ending call:', error);
       }
