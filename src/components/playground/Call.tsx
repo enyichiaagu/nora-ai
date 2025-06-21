@@ -19,7 +19,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
   const newCallObject = useCallObject()
   setCallObject(newCallObject)
-  callObject.join(data.conversation_url)
+  callObject.join({url: data.conversation_url})
 
   return (
     <div 
