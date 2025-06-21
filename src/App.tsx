@@ -1,19 +1,25 @@
-import "./app.css";
-import Waitlist from "./pages/Waitlist";
-import { Toaster } from "react-hot-toast";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import './app.css';
+import Waitlist from './pages/Waitlist';
+import Demo from './pages/Demo';
+import { Toaster } from 'react-hot-toast';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 
 const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <Waitlist />,
-	},
+  {
+    path: '/',
+    element: <Waitlist />,
+  },
+  {
+    path: '/demo',
+    element: <Demo />
+  }
 ]);
+
 export default function App() {
-	return (
-		<>
-			<Toaster />
-			<RouterProvider router={router} />
-		</>
-	);
+  return (
+    <>
+      <Toaster />
+      <RouterProvider router={router} />
+    </>
+  );
 }
