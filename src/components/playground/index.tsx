@@ -12,11 +12,6 @@ const Playground: React.FC = () => {
     makeCall(apiKey);
   };
 
-  const handleCallEnd = () => {
-    // Reset the call data when call ends
-    // This will trigger the default screen to show
-  };
-
   return (
     <div className="w-full space-y-4">
       <div className="flex gap-2">
