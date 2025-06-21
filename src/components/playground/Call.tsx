@@ -41,6 +41,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
   const handleEndCall = async () => {
     if (callObject) {
+      await callObject.leave()
       await callObject.destroy();
       setCallObject(null)
     }
