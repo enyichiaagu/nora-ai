@@ -6,8 +6,10 @@ interface UseCallReturn {
   loading: boolean;
   error: string | null;
   makeCall: (apiKey: string) => Promise<void>;
-  resetCall: () => void;
+  resetCall: (apiKey?: string) => Promise<void>;
 }
+
+const API_BASE_URL = 'https://tavusapi.com/v2/conversations';
 
 const useCall = (): UseCallReturn => {
   const [data, setData] = useState<ConversationData | null>(null);
@@ -37,7 +39,7 @@ const useCall = (): UseCallReturn => {
     };
 
     try {
-      const response = await fetch('https://tavusapi.com/v2/conversations', options);
+      const response = await fetch(API_BASE_URL, options);
       const result = await response.json();
       
       if (!response.ok) {
@@ -53,7 +55,23 @@ const useCall = (): UseCallReturn => {
     }
   };
 
-  const resetCall = () => {
+  const resetCall = async (apiKey?: string) => {
+    if (data?.conversation_id && apiKey) {
+      try {
+        const options = {
+          method: 'POST',
+          headers: {
+            'x-api-key': apiKey
+          }
+        };
+
+        await fetch(`${API_BASE_URL}/${data.conversation_id}/end`, options);
+        console.log('Conversation ended on server');
+      } catch (err) {
+        console.error('Failed to end conversation on server:', err);
+      }
+    }
+    
     setData(null);
     setError(null);
   };

@@ -15,7 +15,7 @@ const Playground: React.FC = () => {
   };
 
   const handleCallEnd = () => {
-    resetCall();
+    resetCall(apiKey);
   };
 
   return (
