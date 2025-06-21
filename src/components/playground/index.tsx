@@ -29,9 +29,9 @@ const Playground: React.FC = () => {
         </div>
       )}
       
-    <DailyProvider callObject={callObject}>
-      <Call data={data}/>
-    </DailyProvider>
+      <DailyProvider callObject={callObject}>
+        <Call data={data}/>
+      </DailyProvider>
     </div>
   );
 };
