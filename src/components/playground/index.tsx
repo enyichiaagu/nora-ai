@@ -15,7 +15,8 @@ const Playground: React.FC = () => {
   }, []);
 
   useEffect(()=> {
-    const newCall = 
+    const newCall = useCallObject()
+    
   }, [data?.conversation_url])
 
   return (
