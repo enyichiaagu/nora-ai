@@ -32,6 +32,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       try {
         console.log('Joining call with URL:', data.conversation_url);
         await callObject.join({ url: data.conversation_url });
+        await startTranscription()
       } catch (error) {
         console.error('Failed to join call:', error);
       }
@@ -39,7 +40,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
     if (callState === 'new') {
       joinCall();
-      startTranscription()
     }
   }, [callObject, callState, data, isEnding]);
 
@@ -47,9 +47,9 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     setIsEnding(true);
     if (callObject) {
       try {
+        await stopTranscription()
         await callObject.leave();
         await callObject.destroy();
-        stopTranscription()
       } catch (error) {
         console.error('Error ending call:', error);
       }
