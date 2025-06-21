@@ -13,3 +13,5 @@ function Static (){return <div
           <span>Waiting for participants...</span>
         </div>
       </div>}
+
+export default Static
