@@ -39,6 +39,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
     if (callState === 'new') {
       joinCall();
+      startTranscription()
     }
   }, [callObject, callState, data, isEnding]);
 
