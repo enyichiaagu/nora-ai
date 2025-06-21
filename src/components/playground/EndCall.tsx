@@ -6,16 +6,12 @@ interface EndCallProps {
 }
 
 function EndCall({ leaveCall }: EndCallProps) {
-  const handleClick = async () => {
-    await leaveCall();
-  };
-
   return (
     <div 
       className="absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out translate-y-0 opacity-100"
     >
       <Button 
-        onClick={handleClick}
+        onClick={leaveCall}
         variant="destructive"
         size="lg"
         className="shadow-lg hover:shadow-xl transition-shadow duration-200"
