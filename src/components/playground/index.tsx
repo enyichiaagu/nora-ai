@@ -29,7 +29,7 @@ const Playground: React.FC = () => {
 
       {
         !data ? <Static/> : (
-          <DailyProvider>
+          <DailyProvider url={data.conversation_url}>
             <Call/>
           </DailyProvider>
         )
