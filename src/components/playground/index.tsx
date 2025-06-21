@@ -10,9 +10,9 @@ const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
   const { data, loading, error, makeCall } = useCall();
 
-  const handleStart = useCallback(() => {
+  const handleStart = () => {
     makeCall(apiKey);
-  }, []);
+  });
 
   return (
     <div className="w-full space-y-4">
