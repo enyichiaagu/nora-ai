@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { DailyProvider, useCallObject } from '@daily-co/daily-react';
+import { DailyProvider } from '@daily-co/daily-react';
 import InputBar from './InputBar';
 import StartButton from './StartButton';
 import Static from './Static'
@@ -32,7 +32,7 @@ const Playground: React.FC = () => {
       {
         !data ? <Static/> : (
           <DailyProvider>
-            <Call data={data}/>
+            <Call/>
           </DailyProvider>
         )
       }
