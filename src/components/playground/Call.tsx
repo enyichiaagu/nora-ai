@@ -10,16 +10,18 @@ interface CallProps {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const [callObject, setCallObject] = useState()
+
+  useEffect(() => {
+    const newCallObject = useCallObject()
+    setCallObject(newCallObject)
+    callObject.join({url: data.conversation_url})
+  }, [data?.conversation_url])
   
   if (!data) {
     return (
       <Static/>
     );
   }
-
-  const newCallObject = useCallObject()
-  setCallObject(newCallObject)
-  callObject.join({url: data.conversation_url})
 
   return (
     <div 
