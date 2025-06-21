@@ -8,4 +8,6 @@ function Transcriptions() {
       setTranscript(message)
     }
   })
+
+  return <p>{transcript}</p>
 }
