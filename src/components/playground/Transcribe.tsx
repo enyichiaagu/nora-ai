@@ -6,4 +6,6 @@ function Transcribe({callObject}) {
   useEffect(() => {
     startTranscription() 
   }, [])
+
+  
 }
