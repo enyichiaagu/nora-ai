@@ -11,3 +11,5 @@ function Transcriptions() {
 
   return <p>{transcript}</p>
 }
+
+export default Transcriptions
