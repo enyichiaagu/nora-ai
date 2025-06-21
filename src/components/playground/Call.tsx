@@ -124,7 +124,6 @@ const Call: React.FC<CallProps> = ({ data }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-
       {/* Animated end call button */}
       {Object.keys(participants).length > 0 && (
         <EndCall />
