@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useCallObject } from '@daily-co/daily-react';
 import { ConversationData } from './types/conversation';
 import EndCall from './EndCall'
 import Static from './Static'
