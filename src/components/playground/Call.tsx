@@ -40,7 +40,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
   const leaveCall = useCallback(() => {
     if (callObject) {
-      await callObject.leave();
+      callObject.leave();
       callObject.destroy();
     }
   }, [callObject]);
