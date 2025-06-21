@@ -8,9 +8,6 @@ interface CallProps {
   data: ConversationData | null;
 }
 
-const STATE_IDLE = 'STATE_IDLE'
-const STATE_ERROR = 'STATE_ERROR'
-
 const Call: React.FC<CallProps> = ({ data }) => {
   const [callState, setCallState] = useState(STATE_IDLE)
   const [callObject, setCallObject] = useState()
@@ -24,8 +21,11 @@ const Call: React.FC<CallProps> = ({ data }) => {
 
   const leaveCall = useCallback(() => {
     if (!callObject) return;
+
     
-  }, [callObject])
+  }, [callObject, callState])
+
+  
   
   if (!data) {
     return (
