@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { 
   DailyAudio, 
   DailyVideo, 
   useParticipantIds, 
   useLocalSessionId, 
   useDaily,
-  useMeetingState
+  useMeetingState,
+  useLocalParticipant
 } from '@daily-co/daily-react';
 import { ConversationData } from './types/conversation';
 import EndCall from './EndCall'
@@ -16,46 +17,62 @@ interface CallProps {
 
 const Call: React.FC<CallProps> = ({ data }) => {
   const callObject = useDaily();
-  const callState = useMeetingState();
+  const meetingState = useMeetingState();
   const localSessionId = useLocalSessionId();
+  const localParticipant = useLocalParticipant();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
+  const [isJoining, setIsJoining] = useState(false);
 
   useEffect(() => {
-    if (!callObject) return;
+    if (!callObject || meetingState === 'joined-meeting') return;
 
     const joinCall = async () => {
       try {
+        setIsJoining(true);
         await callObject.join();
       } catch (error) {
         console.error('Failed to join call:', error);
+      } finally {
+        setIsJoining(false);
       }
     };
 
-    if (callState === 'left-meeting') {
+    if (meetingState === 'left-meeting') {
       joinCall();
     }
-  }, [callObject, callState]);
+  }, [callObject, meetingState]);
 
-  const leaveCall = useCallback(() => {
-    if (callObject) {
-      callObject.leave();
+  const leaveCall = useCallback(async () => {
+    if (callObject && meetingState === 'joined-meeting') {
+      try {
+        await callObject.leave();
+      } catch (error) {
+        console.error('Failed to leave call:', error);
+      }
     }
-  }, [callObject]);
+  }, [callObject, meetingState]);
 
-  if (!callObject) {
+  // Show loading state
+  if (!callObject || isJoining || meetingState === 'joining-meeting' || meetingState === 'left-meeting') {
     return (
       <div className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative flex items-center justify-center">
-        <p className="text-white">Loading call...</p>
+        <div className="text-center text-white">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-lg">Connecting to call...</p>
+        </div>
       </div>
     );
   }
+
+  // Check if local video is available (camera is on)
+  const hasLocalVideo = localParticipant?.video && localSessionId;
   
   return (
     <div 
       className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative"
     >
       {/* Local video */}
-      {localSessionId && (
+      {hasLocalVideo && (
         <DailyVideo 
           sessionId={localSessionId}
           automirror
@@ -74,7 +91,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
       {/* Remote videos */}
       {remoteParticipantIds.length > 0 ? (
         <div className="w-full h-full">
-          {remoteParticipantIds.map((sessionId, index) => (
+          {remoteParticipantIds.map((sessionId) => (
             <DailyVideo 
               key={sessionId} 
               sessionId={sessionId}
@@ -90,12 +107,14 @@ const Call: React.FC<CallProps> = ({ data }) => {
         <div className="w-full h-full flex items-center justify-center">
           <div className="text-center text-white">
             <p className="text-lg mb-2">Waiting for participants...</p>
-            <p className="text-sm opacity-70">Call state: {callState}</p>
+            <p className="text-sm opacity-70">Meeting state: {meetingState}</p>
           </div>
         </div>
       )}
       
-      <EndCall leaveCall={leaveCall}/>
+      {/* Only show EndCall button when local video is available */}
+      {hasLocalVideo && <EndCall leaveCall={leaveCall} />}
+      
       <DailyAudio />
     </div>
   );
