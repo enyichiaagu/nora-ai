@@ -22,7 +22,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-        <EndCall />
+      <EndCall />
     </div>
   );
 };
