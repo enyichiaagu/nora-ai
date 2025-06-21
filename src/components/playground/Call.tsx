@@ -24,7 +24,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
     if (!callObject) return;
 
     const joinCall = async () => {
-      if (callObject, data){
+      if (callObject, data?.conversation_url){
       try {
         await callObject.join({url: data.conversation_url});
       } catch (error) {
