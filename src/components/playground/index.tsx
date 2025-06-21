@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { DailyProvider, useCallObject } from '@daily-co/daily-react';
+import React, { useState } from 'react';
+import { DailyProvider } from '@daily-co/daily-react';
 import InputBar from './InputBar';
 import StartButton from './StartButton';
 import Static from './Static'
@@ -8,7 +8,6 @@ import useCall from './hooks/useCall';
 
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
-  const callObject = useCallObject()
   const { data, loading, error, makeCall } = useCall();
 
   const handleStart = () => {
@@ -31,7 +30,7 @@ const Playground: React.FC = () => {
       {!data ? (
         <Static/>
       ) : (
-        <DailyProvider callObject={callObject}>
+        <DailyProvider url={data.conversation_url}>
           <Call data={data}/>
         </DailyProvider>
       )}

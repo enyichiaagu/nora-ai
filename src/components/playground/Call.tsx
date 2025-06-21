@@ -21,27 +21,26 @@ const Call: React.FC<CallProps> = ({ data }) => {
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
 
   useEffect(() => {
-    if (!callObject) return;
+    if (!callObject || !data?.conversation_url) return;
 
     const joinCall = async () => {
-      if (callObject, data?.conversation_url){
       try {
-        await callObject.join({url: data.conversation_url});
+        console.log('Joining call with URL:', data.conversation_url);
+        await callObject.join({ url: data.conversation_url });
       } catch (error) {
         console.error('Failed to join call:', error);
       }
     };
 
-    if (callState !== 'left-meeting') {
+    // Only join if we're not already in a meeting
+    if (callState === 'new') {
       joinCall();
     }
-  }
   }, [callObject, callState, data]);
 
   const leaveCall = useCallback(() => {
     if (callObject) {
       callObject.leave();
-      callObject.destroy();
     }
   }, [callObject]);
 
@@ -77,7 +76,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
       {/* Remote videos */}
       {remoteParticipantIds.length > 0 ? (
         <div className="w-full h-full">
-          {remoteParticipantIds.map((sessionId, index) => (
+          {remoteParticipantIds.map((sessionId) => (
             <DailyVideo 
               key={sessionId} 
               sessionId={sessionId}
@@ -92,8 +91,12 @@ const Call: React.FC<CallProps> = ({ data }) => {
       ) : (
         <div className="w-full h-full flex items-center justify-center">
           <div className="text-center text-white">
-            <p className="text-lg mb-2">Waiting for participants...</p>
-            <p className="text-sm opacity-70">Call state: {callState}</p>
+            <p className="text-lg mb-2">
+              {callState === 'joining-meeting' ? 'Joining call...' : 
+               callState === 'joined-meeting' ? 'Waiting for participants...' :
+               `Call state: ${callState}`}
+            </p>
+            <p className="text-sm opacity-70">URL: {data?.conversation_url}</p>
           </div>
         </div>
       )}
