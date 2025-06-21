@@ -1,5 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { DailyAudio, DailyVideo, useParticipantIds, useLocalSessionId, useCallObject } from '@daily-co/daily-react';
+import { 
+  DailyAudio, 
+  DailyVideo, 
+  useParticipantIds, 
+  useLocalSessionId, 
+  useDaily 
+} from '@daily-co/daily-react';
 import { ConversationData } from './types/conversation';
 import EndCall from './EndCall'
 import Static from './Static'
@@ -9,9 +15,13 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data }) => {
-  const [callObject, setCallObject] = useState(useCallObject())
+  const [callObject, setCallObject] = useState(useDaily())
   const localSession = useLocalSessionId()
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
+
+  function leaveCall() {
+    callObject
+  }
   
   return (
     <div 
