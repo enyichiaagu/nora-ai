@@ -1,4 +1,4 @@
-import 
+import {Video} from 'lucide-react'
 
 function Static (){
   return (
