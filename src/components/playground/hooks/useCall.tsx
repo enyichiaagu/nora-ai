@@ -36,7 +36,10 @@ const useCall = (): UseCallReturn => {
         replica_id: 'r9d30b0e55ac',
         persona_id: 'pe13ed370726',
         properties: {
-          enable_closed_captions: true
+          max_call_duration: 120,
+          participant_left_timeout: 5,
+          partcipant_absent_timeout: 60,
+          enable_closed_captions: true,
         }
       })
     };
