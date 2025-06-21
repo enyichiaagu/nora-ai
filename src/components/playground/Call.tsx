@@ -16,8 +16,7 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
-  const newcallObject = useDaily();
-  const [callObject, setCallObject] = useState(newcallObject)
+  const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
@@ -43,7 +42,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     if (callObject) {
       await callObject.leave()
       await callObject.destroy();
-      setCallObject(null)
     }
     onCallEnd();
   };
