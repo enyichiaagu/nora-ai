@@ -28,7 +28,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
       className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative"
     >
       <DailyVideo automirror sessionId={localSession}/>
-      {remoteParticipantIds.length > 0 && <DailyVideo sessionId={remoteParticipantIds[0]}/>}
+      {remoteParticipantIds.length > 0 && <DailyVideo sessionId={remoteParticipantIds[0]} onPlayFailed={(e) => console.error(`Failed to play ${e.type} for ${e.sessionId}.`)}/>}
       <EndCall leaveCall={leaveCall}/>
       <DailyAudio onPlayFailed={(e) => console.error(`Failed to play ${e.type} for ${e.sessionId}.`)}/>
     </div>
