@@ -4,6 +4,7 @@ import { ConversationData } from './types/conversation';
 import { Button } from '@/components/ui/button';
 import { PhoneOff, Video, Users } from 'lucide-react';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import Static from './Static'
 
 interface CallProps {
   data: ConversationData | null;
