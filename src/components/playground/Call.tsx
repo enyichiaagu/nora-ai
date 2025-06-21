@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { 
   DailyAudio, 
   DailyVideo, 
@@ -33,28 +33,18 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       }
     };
 
-    // Only join if we're not already in a meeting
     if (callState === 'new') {
       joinCall();
     }
   }, [callObject, callState, data]);
 
-  const endCall = useCallback(async () => {
+  const handleEndCall = () => {
     if (callObject) {
-      try {
-        // First leave the meeting
-        await callObject.leave();
-        // Then destroy the call object
-        await callObject.destroy();
-        // Reset the parent component state
-        onCallEnd();
-      } catch (error) {
-        console.error('Error ending call:', error);
-        // Still reset state even if there's an error
-        onCallEnd();
-      }
+      callObject.leave();
+      callObject.destroy();
     }
-  }, [callObject, onCallEnd]);
+    onCallEnd();
+  };
 
   if (!callObject) {
     return (
@@ -68,7 +58,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     <div 
       className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative"
     >
-      {/* Local video */}
       {localSessionId && (
         <DailyVideo 
           sessionId={localSessionId}
@@ -85,7 +74,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
         />
       )}
       
-      {/* Remote videos */}
       {remoteParticipantIds.length > 0 ? (
         <div className="w-full h-full">
           {remoteParticipantIds.map((sessionId) => (
@@ -108,12 +96,11 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
                callState === 'joined-meeting' ? 'Waiting for participants...' :
                `Call state: ${callState}`}
             </p>
-            <p className="text-sm opacity-70">URL: {data?.conversation_url}</p>
           </div>
         </div>
       )}
       
-      <EndCall endCall={endCall}/>
+      <EndCall endCall={handleEndCall}/>
       <DailyAudio />
     </div>
   );
