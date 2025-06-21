@@ -6,6 +6,7 @@ interface UseCallReturn {
   loading: boolean;
   error: string | null;
   makeCall: (apiKey: string) => Promise<void>;
+  resetCall: () => void;
 }
 
 const useCall = (): UseCallReturn => {
@@ -52,7 +53,12 @@ const useCall = (): UseCallReturn => {
     }
   };
 
-  return { data, loading, error, makeCall };
+  const resetCall = () => {
+    setData(null);
+    setError(null);
+  };
+
+  return { data, loading, error, makeCall, resetCall };
 };
 
 export default useCall;

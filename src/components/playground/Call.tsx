@@ -12,9 +12,10 @@ import EndCall from './EndCall'
 
 interface CallProps {
   data: ConversationData | null;
+  onCallEnd: () => void;
 }
 
-const Call: React.FC<CallProps> = ({ data }) => {
+const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
@@ -38,11 +39,22 @@ const Call: React.FC<CallProps> = ({ data }) => {
     }
   }, [callObject, callState, data]);
 
-  const leaveCall = useCallback(() => {
+  const endCall = useCallback(async () => {
     if (callObject) {
-      callObject.leave();
+      try {
+        // First leave the meeting
+        await callObject.leave();
+        // Then destroy the call object
+        await callObject.destroy();
+        // Reset the parent component state
+        onCallEnd();
+      } catch (error) {
+        console.error('Error ending call:', error);
+        // Still reset state even if there's an error
+        onCallEnd();
+      }
     }
-  }, [callObject]);
+  }, [callObject, onCallEnd]);
 
   if (!callObject) {
     return (
@@ -101,7 +113,7 @@ const Call: React.FC<CallProps> = ({ data }) => {
         </div>
       )}
       
-      <EndCall leaveCall={leaveCall}/>
+      <EndCall endCall={endCall}/>
       <DailyAudio />
     </div>
   );

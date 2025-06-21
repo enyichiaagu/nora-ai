@@ -2,16 +2,16 @@ import { Button } from '@/components/ui/button';
 import { PhoneOff } from 'lucide-react';
 
 interface EndCallProps {
-  leaveCall: () => void;
+  endCall: () => void;
 }
 
-function EndCall({ leaveCall }: EndCallProps) {
+function EndCall({ endCall }: EndCallProps) {
   return (
     <div 
       className="absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out translate-y-0 opacity-100"
     >
       <Button 
-        onClick={leaveCall}
+        onClick={endCall}
         variant="destructive"
         size="lg"
         className="shadow-lg hover:shadow-xl transition-shadow duration-200"

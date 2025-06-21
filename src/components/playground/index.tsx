@@ -8,10 +8,14 @@ import useCall from './hooks/useCall';
 
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
-  const { data, loading, error, makeCall } = useCall();
+  const { data, loading, error, makeCall, resetCall } = useCall();
 
   const handleStart = () => {
     makeCall(apiKey);
+  };
+
+  const handleCallEnd = () => {
+    resetCall();
   };
 
   return (
@@ -31,7 +35,7 @@ const Playground: React.FC = () => {
         <Static/>
       ) : (
         <DailyProvider url={data.conversation_url}>
-          <Call data={data}/>
+          <Call data={data} onCallEnd={handleCallEnd}/>
         </DailyProvider>
       )}
     </div>
