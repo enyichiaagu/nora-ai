@@ -20,9 +20,10 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
+  const [isEnding, setIsEnding] = useState(false);
 
   useEffect(() => {
-    if (!callObject || !data?.conversation_url) return;
+    if (!callObject || !data?.conversation_url || isEnding) return;
 
     const joinCall = async () => {
       try {
@@ -36,12 +37,17 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     if (callState === 'new') {
       joinCall();
     }
-  }, [callObject, callState, data]);
+  }, [callObject, callState, data, isEnding]);
 
   const handleEndCall = async () => {
+    setIsEnding(true);
     if (callObject) {
-      await callObject.leave()
-      await callObject.destroy();
+      try {
+        await callObject.leave();
+        await callObject.destroy();
+      } catch (error) {
+        console.error('Error ending call:', error);
+      }
     }
     onCallEnd();
   };

@@ -14,8 +14,8 @@ const Playground: React.FC = () => {
     makeCall(apiKey);
   };
 
-  const handleCallEnd = () => {
-    resetCall(apiKey);
+  const handleCallEnd = async () => {
+    await resetCall(apiKey);
   };
 
   return (
