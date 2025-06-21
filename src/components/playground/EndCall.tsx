@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { PhoneOff } from 'lucide-react';
 
-function EndCall() {
+function EndCall({leaveCall}) {
   return (
     <div 
           className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out ${
@@ -9,7 +9,7 @@ function EndCall() {
           }`}
         >
           <Button 
-            onClick={endCall}
+            onClick={leaveCall}
             variant="destructive"
             size="lg"
             className="shadow-lg hover:shadow-xl transition-shadow duration-200"
