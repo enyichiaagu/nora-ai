@@ -8,4 +8,6 @@ export default function useTranscript(){
       setTranscript(message.text)
     }
   })
+
+  return {transcript, startTranscription, stopTranscription}
 }
