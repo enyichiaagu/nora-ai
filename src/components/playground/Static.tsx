@@ -1,4 +1,4 @@
-export default Static = () => <div 
+export default Static = () => (<div 
         className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8 flex flex-col items-center justify-center shadow-lg"
       >
         <div className="bg-white/20 backdrop-blur-sm rounded-full p-6 shadow-md mb-4">
@@ -12,4 +12,4 @@ export default Static = () => <div
           <Users className="h-4 w-4" />
           <span>Waiting for participants...</span>
         </div>
-      </div>
+      </div>)
