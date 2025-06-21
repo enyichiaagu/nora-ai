@@ -8,6 +8,7 @@ import useCall from './hooks/useCall';
 
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
+  const [callObject, setCallObject] = useState(null);
   const { data, loading, error, makeCall } = useCall();
 
   const handleStart = useCallback(() => {
