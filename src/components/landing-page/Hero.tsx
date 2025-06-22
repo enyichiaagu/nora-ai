@@ -1,8 +1,7 @@
-import React from 'react';
 
 const Hero: React.FC = () => {
   return (
-    <section className="h-[90vh] bg-app-primary noice">
+  <section className='bg-app-primary noice md:min-h-[40rem] h-[90vh] flex items-center justify-center '>
       <div>
 				<div className='mx-auto w-fit mb-4'>
 					<img
