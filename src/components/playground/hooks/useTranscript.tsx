@@ -5,6 +5,7 @@ const websocket = new WebSocket('ws://localhost:3000')
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
   const startTranscribing = async () => {
