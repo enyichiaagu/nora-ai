@@ -10,6 +10,7 @@ import useTranscript from './hooks/useTranscript'
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
   const { data, loading, error, makeCall, resetCall } = useCall();
+  const {} = useTranscript() // Import everything from useTranscript that were exported
 
   const handleStart = () => {
     makeCall(apiKey);
@@ -39,7 +40,7 @@ const Playground: React.FC = () => {
           <Call data={data} onCallEnd={handleCallEnd}/>
         </DailyProvider>
       )}
-      // Create a simple button here. This button accepts audio. It basically starts a microphone. That's what it does. Clear this comment if you understand. Also, make it in such a way where clicking the button again stops the microphone. Use as few lines of code as possible.
+      // Create a simple button here. This button accepts audio. It basically starts a microphone. That's what it does. Clear this comment if you understand. Also, make it in such a way where clicking the button again stops the microphone (from a function in useTranscript). Use as few lines of code as possible.
     </div>
   );
 };
