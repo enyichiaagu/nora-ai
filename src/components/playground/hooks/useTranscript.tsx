@@ -3,7 +3,7 @@ import { useTranscription } from '@daily-co/daily-react';
 
 export default function useTranscript(){
   const [transcript, setTranscript] = useState('')
-  useTranscription({
+  const [startTranscription, stopTranscription] = useTranscription({
     onTransriptionMessage: (message) => {
       console.log(message.text)
       setTranscript(message.text)
