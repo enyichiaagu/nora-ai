@@ -17,10 +17,10 @@ export default function useTranscript() {
       processor.onaudioprocess = (e) => {
         const float32 = e.inputBuffer.getChannelData(0);
         const int16 = new Int16Array(float32.length);
-          
         for (let i = 0; i < float32.length; i++) {
           int16[i] = float32[i] * 32767;
         }
+        
         if (websocket.readyState === WebSocket.OPEN) {
           websocket.send(int16.buffer);
         }
