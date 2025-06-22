@@ -13,7 +13,9 @@ export default function useTranscript() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
-      
+
+      audioContext = new AudioContext({ sampleRate: 16000 });
+      audioRef.current = audioContext
       microphone = audioContext.createMediaStreamSource(stream);
       microphoneRef.current = microphone
       processor = audioContext.createScriptProcessor(1024, 1, 1);
