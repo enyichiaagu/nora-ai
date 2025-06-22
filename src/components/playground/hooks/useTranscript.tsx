@@ -4,6 +4,8 @@ export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const streamRef = useRef<MediaStream | null>(null)
+  const microphoneRef = useRef()
+  const processorRef = useRef()
   const websocket = new WebSocket('ws://localhost:8080');
 
   const startTranscribing = async () => {
