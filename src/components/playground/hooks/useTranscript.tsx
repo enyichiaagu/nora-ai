@@ -21,6 +21,7 @@ export default function useTranscript() {
         if (event.data.size > 0) {
           console.log('Audio blob:', event.data)
           const converted = await client.speechToText.convert({modelId: "scribe_v1"});
+          console.log(converted)
         }
       }
       
