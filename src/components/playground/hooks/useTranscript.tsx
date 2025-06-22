@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
 
-const client = new ElevenLabsClient({ apiKey: import.env.VITE_ELEVENLABS });
+const client = new ElevenLabsClient({ apiKey: import.meta.env.VITE_ELEVENLABS });
 
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
