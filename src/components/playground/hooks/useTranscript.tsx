@@ -13,5 +13,5 @@ export default function useTranscript(){
     }
   })
 
-  return { transcript, isTranscribing }
+  return { transcript, isTranscribing, startTranscription, stopTranscription }
 }
