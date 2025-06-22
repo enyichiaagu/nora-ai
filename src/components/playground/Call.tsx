@@ -41,7 +41,9 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       joinCall();
     }
 
-    return () => {onCallEnd()}
+    return () => {
+      onCallEnd()
+    }
   }, [callObject, callState, data, isEnding]);
 
   const handleEndCall = async () => {
