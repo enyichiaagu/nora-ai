@@ -30,7 +30,6 @@ export default function useTranscript() {
       processor.connect(audioContext.destination);
       setIsRecording(true)
       
-      
     } catch (error) {
       console.error('Error starting recording:', error)
     }
