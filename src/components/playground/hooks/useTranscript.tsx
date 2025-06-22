@@ -35,7 +35,12 @@ export default function useTranscript() {
   }
 
   const stopTranscribing = () => {
-    
+    if (processor) {
+      processor.disconnect();
+      microphone.disconnect();
+      audioContext.close();
+    }
+    if (websocket) websocket.close();
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop())
     }
