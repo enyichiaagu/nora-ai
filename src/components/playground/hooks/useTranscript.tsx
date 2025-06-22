@@ -4,7 +4,7 @@ export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const streamRef = useRef<MediaStream | null>(null)
-  const webSocket = useRef(null)
+  const [webSocket, setWebSocket] = useState(null)
 
   const startTranscribing = async () => {
     try {
