@@ -1,12 +1,10 @@
 import { useState, useRef } from 'react'
-import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
 
-const client = new ElevenLabsClient({ apiKey: import.meta.env.VITE_ELEVENLABS_API });
+const websocket = new WebSocket('ws://localhost:3000')
 
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
   const startTranscribing = async () => {
