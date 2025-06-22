@@ -9,6 +9,11 @@ export default function useTranscript() {
   const audioRef = useRef()
   const websocket = new WebSocket('ws://localhost:8080');
 
+  websocket.onmessage = (event) => {
+   const data = JSON.parse(event.data);
+   setTranscript(data.)
+  };
+
   const startTranscribing = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
