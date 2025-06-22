@@ -13,7 +13,7 @@ import { Mic, MicOff } from 'lucide-react';
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
   const { data, loading, error, makeCall, resetCall } = useCall();
-  const { transcript, startTranscribing, stopTranscribing } = useTranscript()
+  const { isRecording, transcript, startTranscribing, stopTranscribing } = useTranscript()
 
   const handleStart = () => {
     makeCall(apiKey);
