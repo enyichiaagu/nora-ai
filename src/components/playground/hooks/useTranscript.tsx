@@ -11,7 +11,7 @@ export default function useTranscript() {
 
   websocket.onmessage = (event) => {
    const data = JSON.parse(event.data);
-   setTranscript(data.)
+   setTranscript(data.transcript)
   };
 
   const startTranscribing = async () => {
