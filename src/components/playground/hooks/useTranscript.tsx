@@ -18,10 +18,7 @@ export default function useTranscript() {
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           console.log('Audio blob:', event.data)
-          client.speechToText.convert({
-            modelId: "scribe_v1",
-            file: event.data
-          }).then(response => console.log(response.text));
+          (new Audio(URL.createObjectURL(event.data))).play()
         }
       }
       
