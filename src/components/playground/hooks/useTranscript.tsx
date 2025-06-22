@@ -22,8 +22,8 @@ export default function useTranscript() {
           int16[i] = float32[i] * 32767;
         }
         
-        if (websocket.readyState === WebSocket.OPEN) {
-          websocket.send(int16.buffer);
+        if (rebsocket.readyState === WebSocket.OPEN) {
+          rebsocket.send(int16.buffer);
         }
       };
       microphone.connect(processor);
