@@ -38,6 +38,7 @@ const Playground: React.FC = () => {
           <Call data={data} onCallEnd={handleCallEnd}/>
         </DailyProvider>
       )}
+      // Create a simple button here. This button accepts audio. It basically starts a microphone. That's what it does. Clear this comment if you understand. Also, make it in such a way where clicking the button again stops the microphone. Use as few lines of code as possible.
     </div>
   );
 };
