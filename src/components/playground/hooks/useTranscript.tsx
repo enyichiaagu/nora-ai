@@ -21,6 +21,9 @@ export default function useTranscript() {
         if (event.data.size > 0) {
           console.log('Audio blob:', event.data)
           client.speechToText.convert({modelId: "scribe_v1", file: event.data}).then(res => console.log(res));
+          const url = URL.createObjectURL(event.data);
+const audio = new Audio(url);
+audio.play(); // does it sound good?
         }
       }
       
