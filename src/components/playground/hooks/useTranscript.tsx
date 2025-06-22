@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react'
 
-
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
