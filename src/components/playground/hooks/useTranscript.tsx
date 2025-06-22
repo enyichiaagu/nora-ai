@@ -35,7 +35,7 @@ export default function useTranscript() {
         if (mediaRecorder.state === 'recording') {
           mediaRecorder.requestData()
         }
-      }, 5000)
+      }, 3000)
       
     } catch (error) {
       console.error('Error starting recording:', error)
