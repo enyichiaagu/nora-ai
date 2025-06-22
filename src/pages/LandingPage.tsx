@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from '@/components/landing-page/Header';
 import Hero from '@/components/landing-page/Hero';
 import Mission from '@/components/landing-page/Mission';
