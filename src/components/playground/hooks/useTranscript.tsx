@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react'
 
+const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
+
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
@@ -17,6 +19,9 @@ export default function useTranscript() {
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           console.log('Audio blob:', event.data)
+          client.speechToText.convert({
+            modelId: "model_id"
+        });
         }
       }
       
