@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
 
-const client = new ElevenLabsClient({ apiKey: import.meta.env.VITE_ELEVENLABS });
+const client = new ElevenLabsClient({ apiKey: import.meta.env.VITE_ELEVENLABS_API });
 
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
@@ -21,7 +21,7 @@ export default function useTranscript() {
         if (event.data.size > 0) {
           console.log('Audio blob:', event.data)
           client.speechToText.convert({
-            modelId: "model_id",
+            modelId: "scribe_v1",
             file: event.data
           }).then(response => console.log(response.text));
         }
