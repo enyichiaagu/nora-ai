@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MessageSquare } from 'lucide-react';
 
 
-function Transcriptions({ transcript, transcriptions }: TranscriptionsProps) {
+function Transcriptions({ transcript }: TranscriptionsProps) {
   const [isNew, setIsNew] = useState(false);
 
   if (!transcript) {
