@@ -16,6 +16,10 @@ function Transcriptions({ transcript, isTranscribing, transcriptions }: Transcri
     }
   }, [transcript]);
 
+  useEffect(() => {
+    console.log('isTranscribing', isTranscribing)
+  }, [transcriptions])
+
   if (!transcript) {
     return (
       <div className="absolute bottom-20 left-4 right-4 bg-black/40 backdrop-blur-md rounded-lg border border-white/20 p-4">
