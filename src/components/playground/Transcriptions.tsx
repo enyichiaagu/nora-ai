@@ -27,6 +27,7 @@ function Transcriptions({ transcript, isTranscribing, transcriptions }: Transcri
         <div className="flex items-center gap-2 text-white/60">
           <MessageSquare className="h-4 w-4" />
           <span className="text-sm">Waiting for conversation...</span>
+          <span className="text-sm">isTranscribing: {`${isTranscribing}`}</span>
         </div>
       </div>
     );
