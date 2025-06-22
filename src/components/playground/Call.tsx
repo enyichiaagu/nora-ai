@@ -23,7 +23,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
   const [isEnding, setIsEnding] = useState(false);
-  const { transcript, isTranscribing, startTranscription, stopTranscription } = useTranscript()
+  const { transcript, isTranscribing, startTranscription, stopTranscription, transcriptions } = useTranscript()
 
   useEffect(() => {
     if (!callObject || !data?.conversation_url || isEnding) return;
