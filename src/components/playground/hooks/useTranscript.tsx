@@ -22,7 +22,7 @@ export default function useTranscript() {
         }
         
         if (websocket.readyState === WebSocket.OPEN) {
-          rebsocket.send(int16.buffer);
+          websocket.send(int16.buffer);
         }
       };
       microphone.connect(processor);
