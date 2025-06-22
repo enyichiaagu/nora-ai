@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@daily-co/daily-js": "^0.80.0",
 		"@daily-co/daily-react": "^0.22.0",
+		"@elevenlabs/elevenlabs-js": "^2.3.0",
 		"@radix-ui/react-dialog": "^1.1.14",
 		"@radix-ui/react-label": "^2.1.7",
 		"@radix-ui/react-slot": "^1.2.3",
