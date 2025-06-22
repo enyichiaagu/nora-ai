@@ -18,6 +18,7 @@ function Transcriptions({ transcript, isTranscribing, transcriptions }: Transcri
 
   useEffect(() => {
     console.log('isTranscribing', isTranscribing)
+    console.log('Transcriptions', transcriptions)
   }, [transcriptions])
 
   if (!transcript) {
