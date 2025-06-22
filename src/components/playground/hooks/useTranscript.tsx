@@ -20,9 +20,7 @@ export default function useTranscript() {
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           console.log('Audio blob:', event.data)
-          const converted = await client.speechToText.convert({
-    modelId: "model_id"
-});
+          const converted = await client.speechToText.convert({modelId: "model_id"});
         }
       }
       
