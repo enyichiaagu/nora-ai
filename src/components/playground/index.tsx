@@ -56,7 +56,7 @@ const Playground: React.FC = () => {
         {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
         {isRecording ? 'Stop' : 'Start'} Audio
       </Button>
-      <Transcriptions 
+      <Transcriptions transcript={transcript}/>
     </div>
   );
 };
