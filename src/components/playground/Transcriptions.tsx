@@ -5,7 +5,7 @@ interface TranscriptionsProps {
   transcript: string;
 }
 
-function Transcriptions({ transcript }: TranscriptionsProps) {
+function Transcriptions({ transcript, isTranscribing, transcriptions }: TranscriptionsProps) {
   const [isNew, setIsNew] = useState(false);
 
   useEffect(() => {
