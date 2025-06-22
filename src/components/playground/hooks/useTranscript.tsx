@@ -1,6 +1,8 @@
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 import { useState, useRef } from 'react'
 
+const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
+
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
