@@ -6,6 +6,7 @@ export default function useTranscript() {
   const streamRef = useRef<MediaStream | null>(null)
   const microphoneRef = useRef()
   const processorRef = useRef()
+  const audioRef = useRef()
   const websocket = new WebSocket('ws://localhost:8080');
 
   const startTranscribing = async () => {
@@ -40,7 +41,7 @@ export default function useTranscript() {
     if (processorRef.current) {
       processorRef.current.disconnect();
       microphone.curent.disconnect();
-      audioContext.close();
+      audioRef.current.close();
     }
     if (websocket) websocket.close();
     if (streamRef.current) {
