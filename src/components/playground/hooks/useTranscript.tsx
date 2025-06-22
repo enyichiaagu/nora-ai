@@ -3,7 +3,7 @@ import { useTranscription } from '@daily-co/daily-react';
 
 export default function useTranscript(){
   const [transcript, setTranscript] = useState('')
-  const [startTranscription, stopTranscription] = useTranscription({
+  const {isTranscribing}= useTranscription({
     onTransriptionMessage: (message) => {
       console.log(message.text)
       setTranscript(message.text)
@@ -13,5 +13,5 @@ export default function useTranscript(){
     }
   })
 
-  return { transcript }
+  return { transcript, isTranscribing }
 }
