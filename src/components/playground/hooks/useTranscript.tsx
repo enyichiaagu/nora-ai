@@ -20,7 +20,8 @@ export default function useTranscript() {
         if (event.data.size > 0) {
           console.log('Audio blob:', event.data)
           client.speechToText.convert({
-            modelId: "model_id"
+            modelId: "model_id",
+            file: event.data
         });
         }
       }
