@@ -1,5 +1,6 @@
 import { supabase } from "@/utils/supabase.utils";
 import showToast from "@/utils/toast.utils";
+import BoltBadge from "@/components/common/BoltBadge";
 import { useState } from "react";
 
 const addEmail = async (email: string) => {
@@ -120,6 +121,7 @@ function Waitlist() {
 					className='.hidden w-[70%] max-w-[21rem] md:w-[37%] absolute right-0 translate-x-[29%]  md:translate-x-[37%] bottom-0 sm:translate-y-[10%] translate-y-[30%] md:translate-y-[50%]  '
 				/>
 			</div>
+			<BoltBadge />
 		</div>
 	);
 }
