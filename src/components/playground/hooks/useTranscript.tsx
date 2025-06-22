@@ -4,7 +4,7 @@ export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const streamRef = useRef<MediaStream | null>(null)
-  const refSocket = useRef(null)
+  const webSocket = useRef(null)
 
   const startTranscribing = async () => {
     try {
@@ -22,7 +22,7 @@ export default function useTranscript() {
           int16[i] = float32[i] * 32767;
         }
         
-        if (rebsocket.readyState === WebSocket.OPEN) {
+        if (websocket.readyState === WebSocket.OPEN) {
           rebsocket.send(int16.buffer);
         }
       };
