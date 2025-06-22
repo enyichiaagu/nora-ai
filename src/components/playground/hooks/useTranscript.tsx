@@ -1,49 +1,49 @@
-import { useState, useRef } from 'react'
+import { useState, useRef } from 'react';
 
 export default function useTranscript() {
-  const [transcript, setTranscript] = useState('')
-  const [isRecording, setIsRecording] = useState(false)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-  const streamRef = useRef<MediaStream | null>(null)
+  const [transcript, setTranscript] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const intervalRef = useRef<number | null>(null);
 
   const startTranscribing = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      streamRef.current = stream
-      
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
-      
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          console.log('Audio blob:', event.data)
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+
+      streamRef.current = stream;
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = ({ data }) => {
+        if (data.size > 0) {
+          console.log('Audio blob:', data);
+          // TODO: Send blob to ElevenLabs or similar
         }
-      }
-      
-      mediaRecorder.start()
-      setIsRecording(true)
-      
-      // Get audio blob every 3 seconds
-      setInterval(() => {
-        if (mediaRecorder.state === 'recording') {
-          mediaRecorder.requestData()
+      };
+
+      recorder.start();
+      setIsRecording(true);
+
+      intervalRef.current = window.setInterval(() => {
+        if (recorder.state === 'recording') {
+          recorder.requestData();
         }
-      }, 3000)
-      
-    } catch (error) {
-      console.error('Error starting recording:', error)
+      }, 3000);
+
+    } catch (err) {
+      console.error('Failed to start transcription:', err);
     }
-  }
+  };
 
   const stopTranscribing = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-      mediaRecorderRef.current.stop()
-    }
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop())
-    }
-    setIsRecording(false)
-  }
+    mediaRecorderRef.current?.stop();
+    streamRef.current?.getTracks().forEach(track => track.stop());
+    if (intervalRef.current) clearInterval(intervalRef.current);
 
-  return { transcript, isRecording, startTranscribing, stopTranscribing }
+    setIsRecording(false);
+  };
+
+  return { transcript, isRecording, startTranscribing, stopTranscribing };
 }
