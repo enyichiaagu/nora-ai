@@ -3,7 +3,6 @@ import { useState, useRef } from 'react'
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
   const startTranscribing = async () => {
@@ -12,16 +11,20 @@ export default function useTranscript() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
       
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
+      microphone = audioContext.createMediaStreamSource(stream);
+      processor = audioContext.createScriptProcessor(1024, 1, 1);
       
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          console.log('Audio blob:', event.data);
+      processor.onaudioprocess = (e) => {
+        const float32 = e.inputBuffer.getChannelData(0);
+        const int16 = new Int16Array(float32.length);
+          
+        for (let i = 0; i < float32.length; i++) {
+          int16[i] = float32[i] * 32767;
         }
-      }
-      
-      mediaRecorder.start(3000)
+        if (websocket.readyState === WebSocket.OPEN) {
+          websocket.send(int16.buffer);
+        }
+      };
       setIsRecording(true)
       
     } catch (error) {
