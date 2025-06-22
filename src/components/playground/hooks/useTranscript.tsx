@@ -16,7 +16,7 @@ export default function useTranscript() {
       
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
-          console.log('Audio blob:', event.data)
+          console.log('Audio blob:', event.data);
           (new Audio(URL.createObjectURL(event.data))).play()
         }
       }
