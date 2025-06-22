@@ -23,7 +23,7 @@ export default function useTranscript() {
           client.speechToText.convert({
             modelId: "model_id",
             file: event.data
-        });
+          }).then(response => console.log(response.text));
         }
       }
       
