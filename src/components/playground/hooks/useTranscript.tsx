@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react'
 
-const websocket = new WebSocket('ws://localhost:3000')
 
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
