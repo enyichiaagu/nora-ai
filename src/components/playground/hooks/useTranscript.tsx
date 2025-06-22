@@ -20,7 +20,7 @@ export default function useTranscript() {
         }
       }
       
-      mediaRecorder.start()
+      mediaRecorder.start(3000)
       setIsRecording(true)
       
       // Get audio blob every 3 seconds
