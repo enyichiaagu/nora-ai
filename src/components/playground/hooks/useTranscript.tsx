@@ -23,13 +23,6 @@ export default function useTranscript() {
       mediaRecorder.start(3000)
       setIsRecording(true)
       
-      // Get audio blob every 3 seconds
-      setInterval(() => {
-        if (mediaRecorder.state === 'recording') {
-          mediaRecorder.requestData()
-        }
-      }, 3000)
-      
     } catch (error) {
       console.error('Error starting recording:', error)
     }
