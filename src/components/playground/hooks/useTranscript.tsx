@@ -2,7 +2,7 @@ import {useState, useRef} from 'react'
 
 export default function useTranscript(){
   const [transcript, setTranscript] = useState('')
-  const recordRef = useRef() // This ref is supposed to be passed into the audio element to get 
+  // Inside this hook, start the media recorder once the hook is called. Then
   
 
   return { transcript }
