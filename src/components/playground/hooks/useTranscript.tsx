@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
 
 const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
 
