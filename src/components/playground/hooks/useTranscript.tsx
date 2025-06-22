@@ -4,13 +4,12 @@ export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const streamRef = useRef<MediaStream | null>(null)
-  const [webSocket, setWebSocket] = useState(null)
+  const websocket = new WebSocket('ws://localhost:8080');
 
   const startTranscribing = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
-      refsocket.current = new WebSocket('ws://localhost:8080');
       
       microphone = audioContext.createMediaStreamSource(stream);
       processor = audioContext.createScriptProcessor(1024, 1, 1);
