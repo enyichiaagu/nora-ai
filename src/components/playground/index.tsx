@@ -5,6 +5,7 @@ import StartButton from './StartButton';
 import Static from './Static'
 import Call from './Call';
 import useCall from './hooks/useCall';
+import useTranscript from './hooks/useTranscript'
 
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
