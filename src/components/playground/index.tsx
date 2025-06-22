@@ -6,13 +6,14 @@ import Static from './Static'
 import Call from './Call';
 import useCall from './hooks/useCall';
 import useTranscript from './hooks/useTranscript'
+import Transcriptions from './Transcriptions'
 import { Button } from '@/components/ui/button';
 import { Mic, MicOff } from 'lucide-react';
 
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
   const { data, loading, error, makeCall, resetCall } = useCall();
-  const { isRecording, startTranscribing, stopTranscribing } = useTranscript()
+  const { transcript, startTranscribing, stopTranscribing } = useTranscript()
 
   const handleStart = () => {
     makeCall(apiKey);
@@ -55,6 +56,7 @@ const Playground: React.FC = () => {
         {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
         {isRecording ? 'Stop' : 'Start'} Audio
       </Button>
+      <Transcriptions 
     </div>
   );
 };
