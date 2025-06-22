@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero: React.FC = () => {
   return (
-    <section className="h-[90vh] bg-app-primary noice">
+    <section className="h-[90vh] bg-app-primary noise">
       <div>
 				<div className='mx-auto w-fit mb-4'>
 					<img
