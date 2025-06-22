@@ -1,25 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare } from 'lucide-react';
 
-interface TranscriptionsProps {
-  transcript: string;
-}
 
 function Transcriptions({ transcript, isTranscribing, transcriptions }: TranscriptionsProps) {
   const [isNew, setIsNew] = useState(false);
-
-  useEffect(() => {
-    if (transcript) {
-      setIsNew(true);
-      const timer = setTimeout(() => setIsNew(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [transcript]);
-
-  useEffect(() => {
-    console.log('isTranscribing', isTranscribing)
-    console.log('Transcriptions', transcriptions)
-  }, [transcriptions, isTranscribing])
 
   if (!transcript) {
     return (
@@ -27,7 +11,6 @@ function Transcriptions({ transcript, isTranscribing, transcriptions }: Transcri
         <div className="flex items-center gap-2 text-white/60">
           <MessageSquare className="h-4 w-4" />
           <span className="text-sm">Waiting for conversation...</span>
-          <span className="text-sm">isTranscribing: {`${isTranscribing}`}</span>
         </div>
       </div>
     );
