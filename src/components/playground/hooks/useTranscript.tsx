@@ -37,9 +37,9 @@ export default function useTranscript() {
   }
 
   const stopTranscribing = () => {
-    if (processor) {
-      processor.disconnect();
-      microphone.disconnect();
+    if (processorRef.current) {
+      processorRef.current.disconnect();
+      microphone.curent.disconnect();
       audioContext.close();
     }
     if (websocket) websocket.close();
