@@ -7,6 +7,9 @@ export default function useTranscript(){
     onTransriptionMessage: (message) => {
       console.log(message.text)
       setTranscript(message.text)
+    },
+    onTransriptionError: (err) => {
+      console.log('Transcription Error')
     }
   })
 
