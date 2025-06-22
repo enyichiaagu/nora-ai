@@ -4,10 +4,10 @@ export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const streamRef = useRef<MediaStream | null>(null)
+  const websocket = new WebSocket('ws://localhost:8080');
 
   const startTranscribing = async () => {
     try {
-      const websocket = new WebSocket('ws://localhost:8080');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
       
