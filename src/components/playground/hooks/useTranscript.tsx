@@ -25,7 +25,10 @@ export default function useTranscript() {
           websocket.send(int16.buffer);
         }
       };
+      microphone.connect(processor);
+      processor.connect(audioContext.destination);
       setIsRecording(true)
+      
       
     } catch (error) {
       console.error('Error starting recording:', error)
