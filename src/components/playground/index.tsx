@@ -44,11 +44,11 @@ const Playground: React.FC = () => {
         </div>
       )}
 
-      <div className="w-full h-[600px] backdrop-blur-sm rounded-lg border border-white/20 p-8">
-        {!data ? (
+      <div className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8">
+        {data ? (
           <Static/>
         ) : (
-          <DailyProvider url={data.conversation_url}>
+          <DailyProvider url={data.conversation_url || ''}>
             <Call data={data} onCallEnd={handleCallEnd}/>
           </DailyProvider>
         )}
