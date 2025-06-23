@@ -6,60 +6,54 @@ function Footer() {
 			{/* White space area with well-arranged doodles */}
 			<div className='relative bg-white py-16'>
 				{/* Top row - well spaced doodles */}
-				<div className='absolute top-6 left-[12%] w-16 h-16 opacity-60 rotate-12'>
+				<div className='absolute top-6 left-[15%] w-16 h-16 opacity-80 rotate-12'>
 					<img src='/icons/anytime-access.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-8 right-[18%] w-14 h-14 opacity-50 -rotate-25'>
+				<div className='absolute top-8 right-[20%] w-14 h-14 opacity-75 -rotate-25'>
 					<img src='/icons/custom-learning.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-4 left-[35%] w-12 h-12 opacity-65 rotate-45'>
+				<div className='absolute top-4 left-[45%] w-12 h-12 opacity-85 rotate-45'>
 					<img src='/icons/kite.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-10 right-[45%] w-18 h-18 opacity-45 rotate-90'>
+				<div className='absolute top-10 right-[50%] w-18 h-18 opacity-70 rotate-90'>
 					<img src='/icons/community-support.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-6 left-[65%] w-13 h-13 opacity-70 -rotate-30'>
+				<div className='absolute top-6 left-[75%] w-13 h-13 opacity-90 -rotate-30'>
 					<img src='/icons/proven-success.svg' alt='' className='w-full h-full' />
-				</div>
-				<div className='absolute top-12 right-[8%] w-15 h-15 opacity-55 rotate-60'>
-					<img src='/icons/kite.svg' alt='' className='w-full h-full' />
 				</div>
 
 				{/* Middle row - balanced placement */}
-				<div className='absolute top-20 left-[8%] w-11 h-11 opacity-75 -rotate-45'>
+				<div className='absolute top-20 left-[10%] w-11 h-11 opacity-85 -rotate-45'>
 					<img src='/icons/anytime-access.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-24 right-[25%] w-17 h-17 opacity-40 rotate-120'>
+				<div className='absolute top-24 right-[30%] w-17 h-17 opacity-70 rotate-120'>
 					<img src='/icons/custom-learning.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-18 left-[50%] w-10 h-10 opacity-80 -rotate-75'>
+				<div className='absolute top-18 left-[60%] w-10 h-10 opacity-90 -rotate-75'>
 					<img src='/icons/proven-success.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-22 right-[65%] w-14 h-14 opacity-50 rotate-15'>
+				<div className='absolute top-22 right-[70%] w-14 h-14 opacity-75 rotate-15'>
 					<img src='/icons/community-support.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute top-16 left-[85%] w-9 h-9 opacity-85 -rotate-60'>
+				<div className='absolute top-16 left-[85%] w-9 h-9 opacity-95 -rotate-60'>
 					<img src='/icons/kite.svg' alt='' className='w-full h-full' />
 				</div>
 				
 				{/* Bottom row - strategic positioning */}
-				<div className='absolute bottom-10 left-[15%] w-14 h-14 opacity-65 rotate-75'>
+				<div className='absolute bottom-10 left-[20%] w-14 h-14 opacity-80 rotate-75'>
 					<img src='/icons/community-support.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute bottom-6 right-[20%] w-12 h-12 opacity-70 -rotate-90'>
+				<div className='absolute bottom-6 right-[25%] w-12 h-12 opacity-85 -rotate-90'>
 					<img src='/icons/kite.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute bottom-14 left-[40%] w-16 h-16 opacity-45 rotate-135'>
+				<div className='absolute bottom-14 left-[50%] w-16 h-16 opacity-70 rotate-135'>
 					<img src='/icons/anytime-access.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute bottom-8 right-[55%] w-13 h-13 opacity-75 -rotate-105'>
+				<div className='absolute bottom-8 right-[60%] w-13 h-13 opacity-90 -rotate-105'>
 					<img src='/icons/proven-success.svg' alt='' className='w-full h-full' />
 				</div>
-				<div className='absolute bottom-12 left-[75%] w-15 h-15 opacity-55 rotate-30'>
+				<div className='absolute bottom-12 left-[80%] w-15 h-15 opacity-75 rotate-30'>
 					<img src='/icons/custom-learning.svg' alt='' className='w-full h-full' />
-				</div>
-				<div className='absolute bottom-4 right-[85%] w-11 h-11 opacity-80 -rotate-150'>
-					<img src='/icons/kite.svg' alt='' className='w-full h-full' />
 				</div>
 
 				{/* Main CTA cards */}
