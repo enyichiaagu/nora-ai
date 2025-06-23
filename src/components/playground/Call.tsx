@@ -25,6 +25,12 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd, startTranscribing, stopTra
   const [isEnding, setIsEnding] = useState(false);
 
   useEffect(() => {
+    if (remoteParticipantIds.length > 0) {
+      startTranscribing();
+    }
+  }, [remoteParticipantIds])
+
+  useEffect(() => {
     if (!callObject || !data?.conversation_url || isEnding) return;
 
     const joinCall = async () => {
@@ -42,6 +48,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd, startTranscribing, stopTra
   }, [callObject, callState, data, isEnding]);
 
   const handleEndCall = async () => {
+    stopTranscribing()
     setIsEnding(true);
     if (callObject) {
       try {
