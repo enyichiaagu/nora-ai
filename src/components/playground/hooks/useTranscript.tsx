@@ -9,7 +9,7 @@ export default function useTranscript() {
   const audioRef = useRef()
   const websockRef = useRef()
 
-  websocket.current.onmessage = (event) => {
+  websockRef.current.onmessage = (event) => {
      const data = JSON.parse(event.data);
      setTranscript(data.transcript)
     };
