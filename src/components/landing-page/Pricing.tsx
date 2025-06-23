@@ -1,117 +1,116 @@
-const pricingPlans = [
+import { Box, Check, Info, MoveRight } from "lucide-react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip"; // Adjust import path as needed
+
+const features = [
 	{
-		name: "Basic",
-		price: "$9",
-		period: "/month",
-		description: "Perfect for getting started with AI tutoring",
-		features: [
-			"5 video sessions per month",
-			"Basic transcription",
-			"Email reminders",
-			"Study plan creation"
-		],
-		popular: false
+		title: "Video Conversations",
+		subtitle: "Engage with personalized lessons through live video calls.",
+		included: true,
 	},
 	{
-		name: "Pro",
-		price: "$19",
-		period: "/month", 
-		description: "Best for regular learners who want more sessions",
-		features: [
-			"Unlimited video sessions",
-			"Advanced transcription & notes",
-			"Priority scheduling",
-			"Custom study plans",
-			"Progress tracking"
-		],
-		popular: true
+		title: "Real-Time Transcription",
+		subtitle: "Get every word transcribed instantly for easy review.",
+		included: true,
 	},
 	{
-		name: "Premium",
-		price: "$39",
-		period: "/month",
-		description: "For serious learners who want everything",
-		features: [
-			"Everything in Pro",
-			"1-on-1 expert sessions",
-			"Advanced analytics",
-			"Custom AI personality",
-			"24/7 priority support"
-		],
-		popular: false
-	}
+		title: "Progress Tracking",
+		subtitle: "Monitor your learning journey and celebrate milestones.",
+		included: true,
+	},
+	{
+		title: "Study Plan",
+		subtitle: "Set study times and get email reminders with lesson links.",
+		included: true,
+	},
 ];
+
+const PricingCard = () => {
+	return (
+		<TooltipProvider>
+			<article className='border border-gray-200 .border-app-primary rounded-lg p-6 shadow-sm'>
+				<div className='flex items-center justify-between'>
+					<Box
+						strokeWidth='1'
+						size={35}
+					/>
+					<div className='flex items-center'>
+						<p className='font-montserrat font-semibold text-2xl'>$30</p>
+					</div>
+				</div>
+				<div className='my-6'>
+					<div className='flex gap-2 items-center justify-between'>
+						<h2 className='text-2xl font-montserrat font-semibold'>
+							Starter
+						</h2>
+						<p className='  text-gray-500  rounded-md text-sm py-1'>
+							Per Month
+						</p>
+					</div>
+
+					<p className='mt-4 text-gray-600 text-md'>
+						Affordable option for small teams seeking essential project
+						management.
+					</p>
+				</div>
+				<hr className='border-dashed border-gray-400' />
+				<button className='flex items-center justify-center gap-3 w-full my-6 border bg-gray-100 py-3 rounded-xl font-montserrat font-semibold'>
+					Get Started <MoveRight />
+				</button>
+				<div>
+					<h2 className='font-marlin'>Features Included:</h2>
+					<div className='mt-4'>
+						{features.map((feature, index) => (
+							<div
+								className={`flex items-center justify-between gap-2 border-b border-b-gray-100 py-3 `}
+								key={index}>
+								<div className='w-5 h-5 rounded-md flex items-center justify-center bg-app-primary p-1'>
+									<Check
+										className='text-white'
+										strokeWidth='3'
+									/>
+								</div>
+								<p className='mr-auto font-marlin'>{feature.title}</p>
+
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Info
+											size={18}
+											className='text-gray-500 cursor-help hover:text-gray-700 transition-colors'
+										/>
+									</TooltipTrigger>
+									<TooltipContent className='bg-white shadow-lg border rounded-md py-1.5 px-4'>
+										<p className='max-w-xs text-gray-600 text-sm'>
+											{feature.subtitle}
+										</p>
+									</TooltipContent>
+								</Tooltip>
+							</div>
+						))}
+					</div>
+				</div>
+			</article>
+		</TooltipProvider>
+	);
+};
 
 function Pricing() {
 	return (
-		<section className='max-w-6xl my-[7rem] mx-auto flex flex-col items-center px-4'>
+		<section className='max-w-6xl mx-auto flex flex-col items-center my-[8rem]'>
 			<p className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'>
 				Pricing
 			</p>
-			<h1 className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3 text-center'>
-				Choose Your Plan
+			<h1 className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3'>
+				Our Pricing Plans
 			</h1>
-			<p className='text-gray-600 text-center mt-4 max-w-2xl'>
-				Start learning with Nora today. All plans include our core AI tutoring features.
-			</p>
-
-			<div className='grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 w-full'>
-				{pricingPlans.map((plan, index) => (
-					<div 
-						key={index}
-						className={`relative bg-white rounded-2xl border-2 p-8 transition-all duration-300 hover:shadow-lg ${
-							plan.popular 
-								? 'border-app-primary shadow-lg scale-105' 
-								: 'border-gray-200 hover:border-gray-300'
-						}`}
-					>
-						{plan.popular && (
-							<div className='absolute -top-4 left-1/2 transform -translate-x-1/2'>
-								<span className='bg-app-primary text-white px-4 py-2 rounded-full text-sm font-semibold'>
-									Most Popular
-								</span>
-							</div>
-						)}
-						
-						<div className='text-center'>
-							<h3 className='font-marlin text-2xl font-semibold text-gray-800'>
-								{plan.name}
-							</h3>
-							<div className='mt-4 flex items-baseline justify-center'>
-								<span className='text-5xl font-bold text-gray-900'>
-									{plan.price}
-								</span>
-								<span className='text-gray-500 ml-1'>
-									{plan.period}
-								</span>
-							</div>
-							<p className='text-gray-600 mt-4'>
-								{plan.description}
-							</p>
-						</div>
-
-						<ul className='mt-8 space-y-4'>
-							{plan.features.map((feature, featureIndex) => (
-								<li key={featureIndex} className='flex items-center'>
-									<svg className='w-5 h-5 text-green-500 mr-3' fill='currentColor' viewBox='0 0 20 20'>
-										<path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
-									</svg>
-									<span className='text-gray-700'>{feature}</span>
-								</li>
-							))}
-						</ul>
-
-						<button 
-							className={`w-full mt-8 py-3 px-6 rounded-lg font-semibold transition-all duration-200 ${
-								plan.popular
-									? 'bg-app-primary text-white hover:bg-blue-700'
-									: 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-							}`}
-						>
-							Get Started
-						</button>
-					</div>
-				))}
+			<div className='flex gap-6 mt-12 justify-center items-center'>
+				<PricingCard />
+				<PricingCard />
+				<PricingCard />
 			</div>
 		</section>
 	);
