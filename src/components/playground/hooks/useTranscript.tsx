@@ -7,10 +7,10 @@ export default function useTranscript() {
   const microphoneRef = useRef()
   const processorRef = useRef()
   const audioRef = useRef()
+    const websocket = new WebSocket('ws://localhost:3000');
 
 
   const startTranscribing = async () => {
-    const websocket = new WebSocket('ws://localhost:3080');
     websocket.onmessage = (event) => {
      const data = JSON.parse(event.data);
      setTranscript(data.transcript)
