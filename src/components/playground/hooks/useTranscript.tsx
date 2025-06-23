@@ -22,9 +22,7 @@ export default function useTranscript() {
         const data = JSON.parse(event.data);
         console.log(data.transcript)
         setTranscript(data.transcript)
-      };
-      
-      
+      };      
 
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioRef.current = audioContext
