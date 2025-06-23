@@ -40,7 +40,7 @@ function Waitlist() {
 	};
 	return (
 		<div className='min-h-screen'>
-			<div className='min-h-screen flex flex-col items-center justify-center noice bg-[#1a46c9] overflow-hidden relative bottom-[40%]'>
+			<div className='min-h-screen flex flex-col items-center justify-center noice bg-app-primary overflow-hidden relative bottom-[40%]'>
 				<img
 					src='/icons/logo.svg'
 					alt=''

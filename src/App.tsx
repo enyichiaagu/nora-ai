@@ -1,6 +1,7 @@
 import './app.css';
 import Waitlist from './pages/Waitlist';
 import Demo from './pages/Demo';
+import LandingPage from './pages/LandingPage';
 import { Toaster } from 'react-hot-toast';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
   {
     path: '/demo',
     element: <Demo />
+  },
+  {
+    path: '/dev',
+    element: <LandingPage />
   }
 ]);
 
