@@ -44,14 +44,15 @@ const Playground: React.FC = () => {
         </div>
       )}
 
+      Call Screen Components
       <div>
-      {!data ? (
-        <Static/>
-      ) : (
-        <DailyProvider url={data.conversation_url}>
-          <Call data={data} onCallEnd={handleCallEnd}/>
-        </DailyProvider>
-      )}
+        {!data ? (
+          <Static/>
+        ) : (
+          <DailyProvider url={data.conversation_url}>
+            <Call data={data} onCallEnd={handleCallEnd}/>
+          </DailyProvider>
+        )}
       </div>
       
       <Button onClick={handleAudioToggle} variant={isRecording ? "destructive" : "default"}>
