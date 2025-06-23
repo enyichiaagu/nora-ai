@@ -2,9 +2,6 @@ import { Video, Users } from 'lucide-react'
 
 function Static() {
   return (<>
-    <div className="bg-white/20 backdrop-blur-sm rounded-full p-6 shadow-md mb-4">
-        <Video className="h-12 w-12 text-white" />
-      </div>
       <h3 className="text-xl font-semibold text-white mb-2">Ready to Connect</h3>
       <p className="text-white/80 text-center max-w-md">
         Your call interface will appear here once connected.
