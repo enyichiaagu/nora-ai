@@ -333,10 +333,10 @@ const Onboarding: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-            <steps[currentStep].icon className="h-8 w-8 text-blue-600" />
+            <User className="h-8 w-8 text-blue-600" />
           </div>
           <h1 className="text-2xl font-marlin font-bold text-gray-900 mb-2">
-            {steps[currentStep].title}
+            {/* {steps[currentStep].title} */}
           </h1>
           <p className="text-gray-600">{steps[currentStep].subtitle}</p>
         </motion.div>
