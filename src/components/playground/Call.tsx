@@ -56,9 +56,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
   if (!callObject) {
     return (
-      <div className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative flex items-center justify-center">
-        <p className="text-white">Loading call...</p>
-      </div>
+      <p className="text-white">Loading call...</p>
     );
   }
   
