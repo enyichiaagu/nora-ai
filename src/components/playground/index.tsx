@@ -49,7 +49,7 @@ const Playground: React.FC = () => {
           <Static/>
         ) : (
           <DailyProvider url={data?.conversation_url || ''}>
-            <Call data={data|| null} onCallEnd={handleCallEnd}/>
+            <Call data={data} onCallEnd={handleCallEnd}/>
           </DailyProvider>
         )}
       </div>
