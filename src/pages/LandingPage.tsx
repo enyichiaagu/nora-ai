@@ -6,6 +6,7 @@ import Pricing from '@/components/landing-page/Pricing';
 import Faq from '@/components/landing-page/Faq';
 import Cta from '@/components/landing-page/Cta';
 import Footer from '@/components/landing-page/Footer';
+import BoltBadge from '@/components/common/BoltBadge';
 
 const LandingPage: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const LandingPage: React.FC = () => {
       <Faq />
       <Cta />
       <Footer />
+      <BoltBadge />
     </div>
   );
 };
