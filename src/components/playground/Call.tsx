@@ -92,8 +92,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
         <div className="text-center text-white">
           <p className="text-lg mb-2">
             {callState === 'joining-meeting' ? 'Joining call...' : 
-             callState === 'joined-meeting' ? 'Waiting for participants...' : callState === 'new' ? 'Created meeting' :
-             `Call state: ${callState}`}
+             callState === 'joined-meeting' ? 'Waiting for participants...' : callState === 'new' ? 'Created meeting' :`Call state: ${callState}`}
           </p>
         </div>
       )}
