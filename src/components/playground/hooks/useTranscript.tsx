@@ -1,13 +1,7 @@
 import { useState, useRef } from 'react'
 
-const CONNECT_IDLE = 'CONNECT_IDLE'
-const CONNECT_LOADING = 'CONNECT_LOADING'
-const CONNECT_DONE = 'CONNECT_DONE'
-const CONNECT_ERROR = 'CONNECT_ERROR'
-
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
-  const [connect, setConnect] = useState(CONNECT_IDLE)
   const [isRecording, setIsRecording] = useState(false)
   const streamRef = useRef<MediaStream | null>(null)
   const microphoneRef = useRef()
@@ -22,16 +16,12 @@ export default function useTranscript() {
 
       const websocket = new WebSocket('wss://7b29-102-90-118-228.ngrok-free.app');
       websockRef.current = websocket;
-      setConnect(CONNECT_LOADING)
       websocket.onmessage = (event) => {
-        console.log(event.data)
         const data = JSON.parse(event.data);
-        if (data.CONNECTED) return setConnect(CONNECT_DONE)
-        if (connect === CONNECT_DONE) {
-          console.log(data.transcript)
-          return setTranscript(data.transcript)
-        }
-      };      
+        console.log(data.transcript)
+        return setTranscript(data.transcript)
+      }
+    };      
 
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioRef.current = audioContext
