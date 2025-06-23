@@ -54,7 +54,7 @@ export default function useTranscript() {
       microphoneRef.current.disconnect();
       audioRef.current.close();
     }
-    if (websocket) websocket.close();
+    if (websockRef) websockRef.current.close();
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop())
     }
