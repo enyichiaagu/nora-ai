@@ -17,7 +17,7 @@ interface CallProps {
   onCallEnd: () => void;
 }
 
-const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
+const Call: React.FC<CallProps> = ({ data, onCallEnd, startTranscribing, stopTranscribing }) => {
   const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
