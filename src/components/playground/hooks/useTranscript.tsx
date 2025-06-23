@@ -24,6 +24,7 @@ export default function useTranscript() {
 
       const websocket = new WebSocket('wss://7b29-102-90-118-228.ngrok-free.app');
       websockRef.current = websocket;
+      setConnect(CONNECT_LOADING)
       websocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.CONNECTED) return setConnect(CONNECT_DONE)
@@ -32,7 +33,6 @@ export default function useTranscript() {
           return setTranscript(data.transcript)
         }
       };      
-      setConnect(CONNECT_LOADING)
 
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioRef.current = audioContext
@@ -57,6 +57,7 @@ export default function useTranscript() {
       setIsRecording(true)
       
     } catch (error) {
+      setConnect(CONNECT_ERROR)
       console.error('Error starting recording:', error)
     }
   }
@@ -72,6 +73,7 @@ export default function useTranscript() {
       streamRef.current.getTracks().forEach(track => track.stop())
     }
     setIsRecording(false)
+    setConnect(CONNECT_IDLE)
   }
 
   return { transcript, isRecording, startTranscribing, stopTranscribing }
