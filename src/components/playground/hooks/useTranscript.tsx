@@ -36,7 +36,7 @@ export default function useTranscript() {
           int16[i] = float32[i] * 32767;
         }
         
-        if (websocket.readyState === WebSocket.OPEN && connect === CONNECT_DONE) {
+        if (websocket.readyState === WebSocket.OPEN) {
           websocket.send(int16.buffer);
         }
       };
@@ -61,7 +61,6 @@ export default function useTranscript() {
       streamRef.current.getTracks().forEach(track => track.stop())
     }
     setIsRecording(false)
-    setConnect(CONNECT_IDLE)
   }
 
   return { transcript, isRecording, startTranscribing, stopTranscribing }
