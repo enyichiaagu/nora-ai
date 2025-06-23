@@ -35,30 +35,9 @@ const Cta: React.FC = () => {
           </h2>
           
           {/* Subtext */}
-          <p className='text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed'>
+          <p className='text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed'>
             Join our exclusive waitlist and be among the first to experience AI-powered tutoring that feels like chatting with your smartest friend.
           </p>
-          
-          {/* Benefits List with Custom Icons */}
-          <div className='flex flex-wrap justify-center gap-6 mb-10'>
-            {[
-              { icon: '/icons/anytime-access.svg', text: 'Anytime Access' },
-              { icon: '/icons/custom-learning.svg', text: 'Custom Learning' },
-              { icon: '/icons/community-support.svg', text: 'Community Support' },
-              { icon: '/icons/proven-success.svg', text: 'Proven Success' }
-            ].map((benefit, index) => (
-              <div key={index} className='flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-5 py-3 hover:bg-white/15 transition-all duration-300 group'>
-                <div className='w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300'>
-                  <img 
-                    src={benefit.icon} 
-                    alt={benefit.text}
-                    className='w-full h-full filter invert opacity-90'
-                  />
-                </div>
-                <span className='text-white text-sm font-medium'>{benefit.text}</span>
-              </div>
-            ))}
-          </div>
           
           {/* CTA Buttons */}
           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
@@ -83,43 +62,6 @@ const Cta: React.FC = () => {
                 <path d='M8 5v10l7-5-7-5z'/>
               </svg>
             </a>
-          </div>
-          
-          {/* Trust Indicators with Custom Icons */}
-          <div className='mt-12 pt-8 border-t border-white/20'>
-            <p className='text-white/60 text-sm mb-4'>Trusted by students worldwide</p>
-            <div className='flex justify-center items-center gap-8 opacity-60'>
-              <div className='flex items-center gap-2'>
-                <div className='w-8 h-8 bg-white/20 rounded-full flex items-center justify-center'>
-                  <img 
-                    src='/icons/custom-learning.svg' 
-                    alt='AI Powered'
-                    className='w-4 h-4 filter invert'
-                  />
-                </div>
-                <span className='text-white text-sm'>AI Powered</span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <div className='w-8 h-8 bg-white/20 rounded-full flex items-center justify-center'>
-                  <img 
-                    src='/icons/community-support.svg' 
-                    alt='Secure'
-                    className='w-4 h-4 filter invert'
-                  />
-                </div>
-                <span className='text-white text-sm'>Secure</span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <div className='w-8 h-8 bg-white/20 rounded-full flex items-center justify-center'>
-                  <img 
-                    src='/icons/anytime-access.svg' 
-                    alt='24/7 Available'
-                    className='w-4 h-4 filter invert'
-                  />
-                </div>
-                <span className='text-white text-sm'>24/7 Available</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
