@@ -1,7 +1,12 @@
 import { useState, useRef } from 'react'
 
+const CONNECT_IDLE = 'CONNECT_IDLE'
+const CONNECT_LOADING = 'CONNECT_LOADING'
+const CONNECT_DONE = 'CONNECT_DONE'
+
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
+  const [connect, setConnect] = useState()
   const [isRecording, setIsRecording] = useState(false)
   const streamRef = useRef<MediaStream | null>(null)
   const microphoneRef = useRef()
