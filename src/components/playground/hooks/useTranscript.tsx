@@ -45,7 +45,6 @@ export default function useTranscript() {
       setIsRecording(true)
       
     } catch (error) {
-      setConnect(CONNECT_ERROR)
       console.error('Error starting recording:', error)
     }
   }
