@@ -85,6 +85,7 @@ const FreePlanIcon: React.FC = () => (
 		<Box
 			strokeWidth='1.5'
 			size={32}
+      fill="white"
 			className='text-gray-600 '
 		/>
 	</div>
