@@ -43,13 +43,13 @@ const Playground: React.FC = () => {
           <p className="text-destructive text-sm">{error}</p>
         </div>
       )}
-<div>
+
+      <div>
         {!data ? (
           <Static/>
         ) : (
         )}
       </div>
-      
           <DailyProvider url={data?.conversation_url || ''}>
             <Call data={data} onCallEnd={handleCallEnd}/>
           </DailyProvider>
