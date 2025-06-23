@@ -79,10 +79,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       
       {remoteParticipantIds.length === 1 ? (
         <div className="w-full h-full">
-          {remoteParticipantIds.map((sessionId) => (
-            <DailyVideo 
-              key={sessionId} 
-              sessionId={sessionId}
+            <DailyVideo  
+              sessionId={remoteParticipantIds[0]}
               style={{
                 width: '100%',
                 height: '100%',
