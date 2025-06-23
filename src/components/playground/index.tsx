@@ -44,13 +44,15 @@ const Playground: React.FC = () => {
         </div>
       )}
 
-      {!data ? (
-        <Static/>
-      ) : (
-        <DailyProvider url={data.conversation_url}>
-          <Call data={data} onCallEnd={handleCallEnd}/>
-        </DailyProvider>
-      )}
+      <div>
+        {!data ? (
+          <Static/>
+        ) : (
+          <DailyProvider url={data.conversation_url}>
+            <Call data={data} onCallEnd={handleCallEnd}/>
+          </DailyProvider>
+        )}
+      </div>
       
       <Button onClick={handleAudioToggle} variant={isRecording ? "destructive" : "default"}>
         {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
