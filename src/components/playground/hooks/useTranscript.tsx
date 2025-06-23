@@ -29,7 +29,7 @@ export default function useTranscript() {
         if (data.CONNECTED) return setConnect(CONNECT_DONE)
         if (connect === CONNECT_DONE) {
           console.log(data.transcript)
-          setTranscript(data.transcript)
+          return setTranscript(data.transcript)
         }
       };      
       setConnect(CONNECT_LOADING)
