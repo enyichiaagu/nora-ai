@@ -1,4 +1,6 @@
 import { AtSign, Github } from "lucide-react";
+import { motion } from 'framer-motion';
+
 
 function Footer() {
 	return (
