@@ -43,7 +43,7 @@ export default function useTranscript() {
           int16[i] = float32[i] * 32767;
         }
         
-        if (websocket.readyState === WebSocket.OPEN) {
+        if (websocket.readyState === WebSocket.OPEN && connect === CONNECT_DONE) {
           websocket.send(int16.buffer);
         }
       };
