@@ -69,7 +69,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
           style={{
             width: '200px',
             height: '150px',
-            position: 'absolute',
           }}
         />
       )}
