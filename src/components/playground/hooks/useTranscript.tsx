@@ -24,7 +24,7 @@ export default function useTranscript() {
       audioRef.current = audioContext
       const microphone = audioContext.createMediaStreamSource(stream);
       microphoneRef.current = microphone
-      processor = audioContext.createScriptProcessor(1024, 1, 1);
+      const processor = audioContext.createScriptProcessor(1024, 1, 1);
       processorRef.current = processor
       
       processor.onaudioprocess = (e) => {
