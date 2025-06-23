@@ -16,9 +16,6 @@ export default function useTranscript() {
      const data = JSON.parse(event.data);
      setTranscript(data.transcript)
     };
-    websocket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
     websockRef.current = websocket;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
