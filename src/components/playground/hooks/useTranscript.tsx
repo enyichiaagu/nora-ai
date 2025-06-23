@@ -50,7 +50,7 @@ export default function useTranscript() {
   const stopTranscribing = () => {
     if (processorRef.current) {
       processorRef.current.disconnect();
-      microphoneRef.curent.disconnect();
+      microphoneRef.current.disconnect();
       audioRef.current.close();
     }
     if (websocket) websocket.close();
