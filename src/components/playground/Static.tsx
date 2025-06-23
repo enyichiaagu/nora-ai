@@ -2,9 +2,6 @@ import { Video, Users } from 'lucide-react'
 
 function Static() {
   return (
-    <div 
-        className="flex flex-col items-center justify-center shadow-lg"
-      >
       <div className="bg-white/20 backdrop-blur-sm rounded-full p-6 shadow-md mb-4">
         <Video className="h-12 w-12 text-white" />
       </div>
@@ -16,7 +13,6 @@ function Static() {
         <Users className="h-4 w-4" />
         <span>Waiting for participants...</span>
       </div>
-    </div>
   )
 }
 
