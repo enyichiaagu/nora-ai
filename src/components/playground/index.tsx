@@ -40,6 +40,7 @@ const Playground: React.FC = () => {
       
       {error && (
         <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+
           <p className="text-destructive text-sm">{error}</p>
         </div>
       )}
