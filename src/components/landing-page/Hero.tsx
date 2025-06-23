@@ -4,7 +4,7 @@ function Hero() {
 			<div>
 				<div className='mx-auto w-fit mb-4'>
 					<img
-						src='/icons/star.svg'
+						src='/icons/award.svg'
 						className='w-16'
 						alt=''
 					/>
