@@ -79,14 +79,14 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
       
       {remoteParticipantIds.length === 1 ? (
         <div className="w-full h-full">
-            <DailyVideo  
-              sessionId={remoteParticipantIds[0]}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
-            />
+          <DailyVideo  
+            sessionId={remoteParticipantIds[0]}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">
