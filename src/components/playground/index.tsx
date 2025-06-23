@@ -44,7 +44,7 @@ const Playground: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8 w-full h-[600px]">
+      <div className="w-full h-[600px] backdrop-blur-sm rounded-lg border border-white/20 p-8">
         {!data ? (
           <Static/>
         ) : (
