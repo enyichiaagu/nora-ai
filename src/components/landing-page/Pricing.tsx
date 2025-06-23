@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Check, Info, MoveRight, X } from "lucide-react";
+import { motion } from 'framer-motion';
 import {
 	Tooltip,
 	TooltipContent,
@@ -28,6 +29,7 @@ interface PricingCardProps {
 	originalPrice?: string | null;
 	buttonText?: string;
 	buttonStyle?: string;
+	index: number;
 }
 
 const allFeatures: Feature[] = [
@@ -120,6 +122,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
 	originalPrice = null,
 	buttonText = "Get Started",
 	buttonStyle = "border bg-gray-100",
+	index,
 }) => {
 	const getFeatureIncluded = (feature: Feature): boolean => {
 		switch (plan) {
@@ -136,16 +139,28 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
 	return (
 		<TooltipProvider>
-			<article
+			<motion.article
 				className={`relative border rounded-lg p-6 shadow-sm transition-all hover:shadow-md ${
 					isPopular ? "border-blue-500 bg-blue-50/30" : "border-gray-200"
-				}`}>
+				}`}
+				initial={{ opacity: 0, y: 50 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, margin: "-100px" }}
+				transition={{ duration: 0.6, delay: index * 0.2 }}
+				whileHover={{ y: -5, scale: 1.02 }}
+			>
 				{isPopular && (
-					<div className='absolute -top-3 left-1/2 transform -translate-x-1/2'>
+					<motion.div 
+						className='absolute -top-3 left-1/2 transform -translate-x-1/2'
+						initial={{ opacity: 0, scale: 0 }}
+						whileInView={{ opacity: 1, scale: 1 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.5, delay: 0.8 + index * 0.2 }}
+					>
 						<span className='bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium'>
 							Most Popular
 						</span>
-					</div>
+					</motion.div>
 				)}
 
 				<div className='flex items-center justify-between'>
@@ -177,29 +192,38 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
 				<hr className='border-dashed border-gray-400' />
 
-				<button
+				<motion.button
 					className={`flex items-center justify-center gap-3 w-full my-6 py-3 rounded-xl font-montserrat font-semibold transition-all ${
 						isPopular
 							? "bg-blue-500 text-white hover:bg-blue-600"
 							: buttonStyle + " hover:bg-gray-200"
-					}`}>
+					}`}
+					whileHover={{ scale: 1.05 }}
+					whileTap={{ scale: 0.95 }}
+					transition={{ type: "spring", stiffness: 400, damping: 17 }}
+				>
 					{buttonText} <MoveRight size={18} />
-				</button>
+				</motion.button>
 
 				<div>
 					<h2 className='font-marlin text-gray-700 font-medium mb-4'>
 						Features Included:
 					</h2>
 					<div className='space-y-1'>
-						{allFeatures.map((feature: Feature, index: number) => {
+						{allFeatures.map((feature: Feature, featureIndex: number) => {
 							const isIncluded = getFeatureIncluded(feature);
-							const islastFeature = allFeatures.length == index + 1;
+							const islastFeature = allFeatures.length == featureIndex + 1;
 							return (
-								<div
+								<motion.div
 									className={`flex items-center justify-between gap-2   py-3 ${
 										!islastFeature && "border-b-gray-100 border-b"
 									}`}
-									key={index}>
+									key={featureIndex}
+									initial={{ opacity: 0, x: -20 }}
+									whileInView={{ opacity: 1, x: 0 }}
+									viewport={{ once: true }}
+									transition={{ duration: 0.4, delay: 1 + index * 0.2 + featureIndex * 0.1 }}
+								>
 									<div
 										className={`w-5 h-5 rounded-md flex items-center justify-center p-1 ${
 											isIncluded ? "bg-blue-400" : "bg-gray-200"
@@ -238,12 +262,12 @@ const PricingCard: React.FC<PricingCardProps> = ({
 											</p>
 										</TooltipContent>
 									</Tooltip>
-								</div>
+								</motion.div>
 							);
 						})}
 					</div>
 				</div>
-			</article>
+			</motion.article>
 		</TooltipProvider>
 	);
 };
@@ -251,16 +275,36 @@ const PricingCard: React.FC<PricingCardProps> = ({
 const Pricing: React.FC = (): JSX.Element => {
 	return (
 		<section className='max-w-7xl mx-auto flex flex-col items-center my-[8rem] px-4'>
-			<p className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'>
+			<motion.p 
+				className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'
+				initial={{ opacity: 0, scale: 0.8 }}
+				whileInView={{ opacity: 1, scale: 1 }}
+				viewport={{ once: true, margin: "-100px" }}
+				transition={{ duration: 0.5 }}
+			>
 				Pricing
-			</p>
-			<h1 className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3 text-center'>
+			</motion.p>
+			
+			<motion.h1 
+				className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3 text-center'
+				initial={{ opacity: 0, y: 30 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, margin: "-100px" }}
+				transition={{ duration: 0.8, delay: 0.2 }}
+			>
 				Choose Your Learning Plan
-			</h1>
-			<p className='text-gray-600 text-lg mt-4 text-center max-w-2xl'>
+			</motion.h1>
+			
+			<motion.p 
+				className='text-gray-600 text-lg mt-4 text-center max-w-2xl'
+				initial={{ opacity: 0, y: 20 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, margin: "-100px" }}
+				transition={{ duration: 0.8, delay: 0.4 }}
+			>
 				Start learning with Nora for free, or upgrade for the complete
 				experience with transcription, notes, and study planning.
-			</p>
+			</motion.p>
 
 			<div className='grid md:grid-cols-3 gap-6 mt-12 w-full max-w-6xl'>
 				<PricingCard
@@ -271,6 +315,7 @@ const Pricing: React.FC = (): JSX.Element => {
 					description='Perfect for trying out Nora and good learning conversations.'
 					icon={FreePlanIcon}
 					buttonText='Start Free'
+					index={0}
 				/>
 
 				<PricingCard
@@ -282,6 +327,7 @@ const Pricing: React.FC = (): JSX.Element => {
 					icon={MonthlyPlanIcon}
 					isPopular={true}
 					buttonText='Get Started'
+					index={1}
 				/>
 
 				<PricingCard
@@ -293,15 +339,22 @@ const Pricing: React.FC = (): JSX.Element => {
 					description='Best value! Get everything in Monthly plus priority support and exclusive features.'
 					icon={YearlyPlanIcon}
 					buttonText='Save 21%'
+					index={2}
 				/>
 			</div>
 
-			<div className='mt-8 text-center'>
+			<motion.div 
+				className='mt-8 text-center'
+				initial={{ opacity: 0 }}
+				whileInView={{ opacity: 1 }}
+				viewport={{ once: true, margin: "-100px" }}
+				transition={{ duration: 0.8, delay: 1.2 }}
+			>
 				<p className='text-gray-500 text-sm'>
 					All plans include unlimited video conversations with Nora. Cancel
 					anytime.
 				</p>
-			</div>
+			</motion.div>
 		</section>
 	);
 };
