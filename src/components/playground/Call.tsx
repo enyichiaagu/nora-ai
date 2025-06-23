@@ -30,7 +30,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     const joinCall = async () => {
       try {
         console.log('Joining call with URL:', data.conversation_url);
-        await callObject.join({ url: data.conversation_url });
+        callObject.join({ url: data.conversation_url });
       } catch (error) {
         console.error('Failed to join call:', error);
       }
