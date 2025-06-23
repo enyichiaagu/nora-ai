@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
             <div className='bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-shadow duration-300'>
               <div className='mb-6'>
                 <img 
-                  src='/images/suggestion-girl.png' 
+                  src='/images/hi-study.png' 
                   alt='Girl with suggestions' 
                   className='w-48 h-48 mx-auto object-contain'
                 />
@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
             <div className='bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-shadow duration-300'>
               <div className='mb-6'>
                 <img 
-                  src='/images/info-guy.png' 
+                  src='/images/png-output.png' 
                   alt='Guy with info' 
                   className='w-48 h-48 mx-auto object-contain'
                 />
