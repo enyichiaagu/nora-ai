@@ -45,7 +45,7 @@ const Playground: React.FC = () => {
       )}
 
       Call Screen Components
-      <div>
+      <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8">
         {!data ? (
           <Static/>
         ) : (
