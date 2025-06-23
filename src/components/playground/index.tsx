@@ -49,16 +49,16 @@ const Playground: React.FC = () => {
           <Static/>
         ) : (
           <DailyProvider url={data.conversation_url}>
-            <Call data={data} onCallEnd={handleCallEnd}/>
+            <Call data={data} onCallEnd={handleCallEnd} startTranscribing={startTranscribing} stopTranscribing={stopTranscribing}/>
           </DailyProvider>
         )}
       </div>
+      <Transcriptions transcript={transcript}/>
       
       <Button onClick={handleAudioToggle} variant={isRecording ? "destructive" : "default"}>
         {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
         {isRecording ? 'Stop' : 'Start'} Audio
       </Button>
-      <Transcriptions transcript={transcript}/>
     </div>
   );
 };
