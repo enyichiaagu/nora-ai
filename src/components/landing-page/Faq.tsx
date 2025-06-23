@@ -111,7 +111,7 @@ function Faq() {
 				Clarifying Your Doubts
 			</h1>
 			
-			<div className='w-full mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8'>
+			<div className='w-full mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8'>
 				<FaqColumn data={firstcol} colType="first" />
 				<FaqColumn data={secondcol} colType="second" />
 			</div>
