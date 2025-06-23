@@ -36,7 +36,8 @@ const Cta: React.FC = () => {
           
           {/* Subtext */}
           <p className='text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed'>
-            Join our exclusive waitlist and be among the first to experience AI-powered tutoring that feels like chatting with your smartest friend.
+            Move beyond traditional studying – master any subject
+with personalized AI tutoring through real conversations!.
           </p>
           
           {/* CTA Buttons */}
