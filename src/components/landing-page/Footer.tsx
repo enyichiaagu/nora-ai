@@ -1,86 +1,80 @@
 import { AtSign, Github } from "lucide-react";
-import { motion } from 'framer-motion';
-
+import { motion } from "framer-motion";
 
 function Footer() {
 	return (
 		<footer className='relative'>
-		<motion.div
-					className='flex gap-12 items-center mx-auto w-full justify-center min-w-[22rem] translate-y-[5.3rem] relative z-10'
-					initial={{ opacity: 0, y: 50 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-100px" }}
-					transition={{ duration: 0.8 }}>
-					<motion.div
-						className='bg-[#fafafa] px-14 py-8 rounded-lg shadow-lg border-4 border-white min-w-[22rem]'
-						whileHover={{ y: -5, scale: 1.02 }}
-						transition={{ type: "spring", stiffness: 400, damping: 17 }}>
-						<div>
-							<motion.img
-								src='/images/hi-study.png'
-								alt=''
-								className='block w-[15rem] h-[15rem] object-contain mx-auto'
-								whileHover={{ scale: 1.05, rotate: 2 }}
-								transition={{
-									type: "spring",
-									stiffness: 400,
-									damping: 17,
-								}}
-							/>
-						</div>
-						<div className='text-center space-y-4 mt-2'>
-							<p className='font-montserrat text-2xl font-semibold'>
-								Got Suggestions?
-							</p>
-							<motion.button
-								className='bg-app-primary text-white font-montserrat px-4 py-2 rounded-lg block mx-auto'
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
-								transition={{
-									type: "spring",
-									stiffness: 400,
-									damping: 17,
-								}}>
-								Email Us
-							</motion.button>
-						</div>
-					</motion.div>
-
-					<motion.div
-						className='z-10 bg-[#fafafa] px-14 py-8 rounded-lg shadow-lg border-4 border-white min-w-[22rem]'
-						whileHover={{ y: -5, scale: 1.02 }}
-						transition={{ type: "spring", stiffness: 400, damping: 17 }}>
-						<div>
-							<motion.img
-								src='/images/png-output.png'
-								alt=''
-								className='block w-[15rem] h-[15rem] object-contain mx-auto'
-								whileHover={{ scale: 1.05, rotate: -2 }}
-								transition={{
-									type: "spring",
-									stiffness: 400,
-									damping: 17,
-								}}
-							/>
-						</div>
-						<div className='text-center space-y-4 mt-2'>
-							<p className='font-montserrat text-2xl font-semibold'>
-								Want More Info?
-							</p>
-							<motion.button
-								className='bg-app-primary text-white font-montserrat px-4 py-2 rounded-lg block mx-auto'
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
-								transition={{
-									type: "spring",
-									stiffness: 400,
-									damping: 17,
-								}}>
-								Check Our Page
-							</motion.button>
-						</div>
-					</motion.div>
+			<motion.div className='flex gap-12 items-center mx-auto w-full justify-center min-w-[22rem] translate-y-[5.3rem] relative z-10'>
+				<motion.div
+					className='bg-[#fafafa] px-14 py-8 rounded-lg shadow-lg border-4 border-white min-w-[22rem]'
+					whileHover={{ y: -5, scale: 1.02 }}
+					transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+					<div>
+						<motion.img
+							src='/images/hi-study.png'
+							alt=''
+							className='block w-[15rem] h-[15rem] object-contain mx-auto'
+							whileHover={{ scale: 1.05, rotate: 2 }}
+							transition={{
+								type: "spring",
+								stiffness: 400,
+								damping: 17,
+							}}
+						/>
+					</div>
+					<div className='text-center space-y-4 mt-2'>
+						<p className='font-montserrat text-2xl font-semibold'>
+							Got Suggestions?
+						</p>
+						<motion.button
+							className='bg-app-primary text-white font-montserrat px-4 py-2 rounded-lg block mx-auto'
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+							transition={{
+								type: "spring",
+								stiffness: 400,
+								damping: 17,
+							}}>
+							Email Us
+						</motion.button>
+					</div>
 				</motion.div>
+
+				<motion.div
+					className='z-10 bg-[#fafafa] px-14 py-8 rounded-lg shadow-lg border-4 border-white min-w-[22rem]'
+					whileHover={{ y: -5, scale: 1.02 }}
+					transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+					<div>
+						<motion.img
+							src='/images/png-output.png'
+							alt=''
+							className='block w-[15rem] h-[15rem] object-contain mx-auto'
+							whileHover={{ scale: 1.05, rotate: -2 }}
+							transition={{
+								type: "spring",
+								stiffness: 400,
+								damping: 17,
+							}}
+						/>
+					</div>
+					<div className='text-center space-y-4 mt-2'>
+						<p className='font-montserrat text-2xl font-semibold'>
+							Want More Info?
+						</p>
+						<motion.button
+							className='bg-app-primary text-white font-montserrat px-4 py-2 rounded-lg block mx-auto'
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+							transition={{
+								type: "spring",
+								stiffness: 400,
+								damping: 17,
+							}}>
+							Check Our Page
+						</motion.button>
+					</div>
+				</motion.div>
+			</motion.div>
 
 			<div className='bg-app-primary  overflow-x-hidden overflow-y-hidden relative noice pt-[10rem] -z-10'>
 				<div className='mb-[13rem] max-w-6xl mx-auto '>
