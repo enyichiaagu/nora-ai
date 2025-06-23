@@ -11,7 +11,7 @@ export default function useTranscript() {
 
 
   const startTranscribing = async () => {
-    const websocket = new WebSocket('wss://2aee-102-90-82-228.ngrok-free.app');
+    const websocket = new WebSocket('wss://467b-102-90-118-228.ngrok-free/');
     websocket.onmessage = (event) => {
      const data = JSON.parse(event.data);
      setTranscript(data.transcript)
