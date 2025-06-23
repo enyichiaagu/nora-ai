@@ -67,3 +67,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+@font-face {
+	font-family: "marlin-soft";
+	src: url(/fonts/marlin-soft.otf);
+}
