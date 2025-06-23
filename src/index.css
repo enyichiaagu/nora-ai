@@ -71,5 +71,8 @@
 
 @font-face {
 	font-family: "marlin-soft";
-	src: url(/fonts/marlin-soft.otf);
+	src: url("/fonts/marlin-soft.otf") format("opentype");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
 }
