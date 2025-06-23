@@ -15,8 +15,6 @@ export default function useTranscript() {
   const audioRef = useRef()
   const websockRef = useRef()
 
-
-
   const startTranscribing = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
