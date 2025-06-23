@@ -78,7 +78,7 @@ function Faq() {
 						onClick={() => toggleFaq(colType, index)}
 						className='w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors'
 					>
-						<h3 className='font-montserrat font-semibold text-lg text-gray-800'>
+						<h3 className='text-lg font-marlin text-gray-600 font-semibold'>
 							{faq.question}
 						</h3>
 						<img
