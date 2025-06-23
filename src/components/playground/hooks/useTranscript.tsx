@@ -26,7 +26,7 @@ export default function useTranscript() {
       websockRef.current = websocket;
       setConnect(CONNECT_LOADING)
       websocket.onmessage = (event) => {
-        console.log(event)
+        console.log(event.data)
         const data = JSON.parse(event.data);
         if (data.CONNECTED) return setConnect(CONNECT_DONE)
         if (connect === CONNECT_DONE) {
