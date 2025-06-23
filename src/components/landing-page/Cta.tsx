@@ -13,7 +13,7 @@ const Cta: React.FC = () => {
         
         {/* Floating Kite Elements */}
         <div className='absolute top-8 right-8 w-16 h-16 opacity-20'>
-          <img src='/icons/kite.svg' alt='' className='w-full h-full filter invert' />
+          <img src='/icons/kite.svg' alt='' className='w-full h-full filter invert brightness-100' />
         </div>
         <div className='absolute bottom-12 left-12 w-12 h-12 opacity-15'>
           <img src='/icons/kite.svg' alt='' className='w-full h-full filter invert rotate-45' />
