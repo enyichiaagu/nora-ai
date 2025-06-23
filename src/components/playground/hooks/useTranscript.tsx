@@ -9,11 +9,6 @@ export default function useTranscript() {
   const audioRef = useRef()
   const websockRef = useRef()
 
-  websocket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    console.log(data.transcript)
-    setTranscript(data.transcript)
-  };
 
 
   const startTranscribing = async () => {
@@ -23,6 +18,11 @@ export default function useTranscript() {
 
       const websocket = new WebSocket('wss://7b29-102-90-118-228.ngrok-free.app');
       websockRef.current = websocket;
+      websocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log(data.transcript)
+        setTranscript(data.transcript)
+      };
       
       
 
