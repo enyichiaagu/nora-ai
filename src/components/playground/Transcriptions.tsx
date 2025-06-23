@@ -3,7 +3,7 @@ import { MessageSquare } from 'lucide-react';
 
 
 function Transcriptions({ transcript }) {
-  <p>{transcript}</p>
+  return <p>{transcript}</p>
 }
 
 export default Transcriptions;
