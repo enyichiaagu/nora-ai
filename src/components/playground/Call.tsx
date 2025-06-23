@@ -70,10 +70,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
             width: '200px',
             height: '150px',
             position: 'absolute',
-            top: '20px',
-            right: '20px',
-            borderRadius: '8px',
-            zIndex: 10
           }}
         />
       )}
