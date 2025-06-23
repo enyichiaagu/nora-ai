@@ -4,9 +4,9 @@ const Cta: React.FC = () => {
   return (
     <section className='max-w-6xl mx-auto my-[8rem] px-4 '>
       <div className='relative bg-gradient-to-br from-app-primary via-blue-600 to-blue-800 rounded-3xl overflow-hidden '>
-         <img 
-                    src="/images/noise.png"
-                    className='w-full h-full filter absolute object-contain'
+         <div 
+                    
+                    className='w-full h-full filter absolute object-contain noice'
                   />
         {/* Background Pattern */}
         <div className='absolute inset-0 noice opacity-30'></div>
