@@ -29,6 +29,7 @@ export default function useTranscript() {
         console.log(data.transcript)
         setTranscript(data.transcript)
       };      
+      setConnect(CONNECT_LOADING)
 
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioRef.current = audioContext
