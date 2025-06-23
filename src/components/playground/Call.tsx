@@ -89,14 +89,12 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
           />
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="text-center text-white">
-            <p className="text-lg mb-2">
-              {callState === 'joining-meeting' ? 'Joining call...' : 
-               callState === 'joined-meeting' ? 'Waiting for participants...' :
-               `Call state: ${callState}`}
-            </p>
-          </div>
+        <div className="text-center text-white">
+          <p className="text-lg mb-2">
+            {callState === 'joining-meeting' ? 'Joining call...' : 
+             callState === 'joined-meeting' ? 'Waiting for participants...' :
+             `Call state: ${callState}`}
+          </p>
         </div>
       )}
 
