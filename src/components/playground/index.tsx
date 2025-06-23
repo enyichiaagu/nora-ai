@@ -45,7 +45,7 @@ const Playground: React.FC = () => {
       )}
 
       <div className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-8">
-        {data ? (
+        {!data ? (
           <Static/>
         ) : (
           <DailyProvider url={data?.conversation_url || ''}>
