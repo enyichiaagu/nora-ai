@@ -107,8 +107,8 @@ function Faq() {
 			<p className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'>
 				FAQ
 			</p>
-			<h1 className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3 text-center'>
-				Frequently Asked Questions
+			<h1 className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3'>
+				Clarifying Your Doubts
 			</h1>
 			
 			<div className='w-full mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8'>
