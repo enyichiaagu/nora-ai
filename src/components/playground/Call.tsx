@@ -87,7 +87,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
                 objectFit: 'cover'
               }}
             />
-          ))}
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">
