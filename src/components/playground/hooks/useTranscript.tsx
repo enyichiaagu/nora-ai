@@ -13,7 +13,7 @@ export default function useTranscript() {
   websocket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log(data.transcript)
-     setTranscript(data.transcript)
+    setTranscript(data.transcript)
   };
   websockRef.current = websocket;
 
