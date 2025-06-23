@@ -77,7 +77,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
         />
       )}
       
-      {remoteParticipantIds.length > 0 ? (
+      {remoteParticipantIds.length === 1 ? (
         <div className="w-full h-full">
           {remoteParticipantIds.map((sessionId) => (
             <DailyVideo 
