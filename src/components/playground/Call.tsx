@@ -60,10 +60,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     );
   }
   
-  return (
-    <div 
-      className="w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl overflow-hidden relative"
-    >
+  return (<>
       {localSessionId && (
         <DailyVideo 
           sessionId={localSessionId}
@@ -108,7 +105,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
       <EndCall endCall={handleEndCall}/>
       <DailyAudio />
-    </div>
+    </>
   );
 };
 
