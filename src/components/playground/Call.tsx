@@ -60,7 +60,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
     );
   }
   
-  return (<>
+  return (
+    <>
       {localSessionId && (
         <DailyVideo 
           sessionId={localSessionId}
