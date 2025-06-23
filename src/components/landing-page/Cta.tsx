@@ -31,8 +31,7 @@ const Cta: React.FC = () => {
           
           {/* Main Heading */}
           <h2 className='font-marlin text-white text-3xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-6'>
-            Ready to Transform <br className='hidden md:block' />
-            Your Learning Journey?
+            Ready to Learn Smarter?
           </h2>
           
           {/* Subtext */}
