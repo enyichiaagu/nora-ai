@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 const CONNECT_IDLE = 'CONNECT_IDLE'
 const CONNECT_LOADING = 'CONNECT_LOADING'
 const CONNECT_DONE = 'CONNECT_DONE'
+const CONNECT_ERROR = 'CONNECT_ERROR'
 
 export default function useTranscript() {
   const [transcript, setTranscript] = useState('')
