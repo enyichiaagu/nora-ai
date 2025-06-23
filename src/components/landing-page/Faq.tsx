@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const firstcol = [
 	{
@@ -57,35 +57,36 @@ const secondcol = [
 	},
 ];
 
-function Faq() {
-	const [openIndex, setOpenIndex] = useState<{ col: 'first' | 'second'; index: number } | null>(null);
+const FaqColumn = ({
+	data,
+	colType,
+}: {
+	data: typeof firstcol;
+	colType: "first" | "second";
+}) => {
+	const [openIndex, setOpenIndex] = useState<{
+		col: "first" | "second";
+		index: number;
+	} | null>(null);
 
-	const toggleFaq = (col: 'first' | 'second', index: number) => {
+	const toggleFaq = (col: "first" | "second", index: number) => {
 		setOpenIndex(
-			openIndex?.col === col && openIndex?.index === index 
-				? null 
+			openIndex?.col === col && openIndex?.index === index
+				? null
 				: { col, index }
 		);
 	};
-
-	const FaqColumn = ({ data, colType }: { data: typeof firstcol; colType: 'first' | 'second' }) => (
+	return (
 		<div className='space-y-4'>
 			{data.map((faq, index) => (
-				<motion.div 
+				<motion.div
 					key={index}
 					className='border border-gray-200 rounded-lg overflow-hidden'
 					initial={{ opacity: 0, y: 20 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-50px" }}
-					transition={{ duration: 0.5, delay: index * 0.1 }}
-					whileHover={{ scale: 1.02 }}
-				>
+					whileInView={{ opacity: 1, y: 0 }}>
 					<motion.button
 						onClick={() => toggleFaq(colType, index)}
-						className='w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors'
-						whileHover={{ backgroundColor: 'rgba(249, 250, 251, 1)' }}
-						whileTap={{ scale: 0.98 }}
-					>
+						className='w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors hover:bg-[rgba(249, 250, 251, 1)]'>
 						<h3 className='text-lg font-marlin text-gray-600 font-semibold'>
 							{faq.question}
 						</h3>
@@ -93,29 +94,31 @@ function Faq() {
 							src='/icons/down-arrow.svg'
 							alt=''
 							className='w-5 h-5'
-							animate={{ 
-								rotate: openIndex?.col === colType && openIndex?.index === index ? 180 : 0 
+							animate={{
+								rotate:
+									openIndex?.col === colType &&
+									openIndex?.index === index
+										? 180
+										: 0,
 							}}
 							transition={{ duration: 0.2 }}
 						/>
 					</motion.button>
-					
+
 					<AnimatePresence>
 						{openIndex?.col === colType && openIndex?.index === index && (
-							<motion.div 
+							<motion.div
 								className='px-6 pb-4 border-t border-gray-100'
 								initial={{ height: 0, opacity: 0 }}
-								animate={{ height: 'auto', opacity: 1 }}
+								animate={{ height: "auto", opacity: 1 }}
 								exit={{ height: 0, opacity: 0 }}
-								transition={{ duration: 0.3, ease: "easeInOut" }}
-							>
-								<motion.p 
+								transition={{ duration: 0.3, ease: "easeInOut" }}>
+								<motion.p
 									className='text-gray-600 leading-relaxed pt-4'
 									initial={{ y: -10, opacity: 0 }}
 									animate={{ y: 0, opacity: 1 }}
 									exit={{ y: -10, opacity: 0 }}
-									transition={{ duration: 0.2, delay: 0.1 }}
-								>
+									transition={{ duration: 0.2, delay: 0.1 }}>
 									{faq.answer}
 								</motion.p>
 							</motion.div>
@@ -125,38 +128,43 @@ function Faq() {
 			))}
 		</div>
 	);
+};
 
+function Faq() {
 	return (
 		<section className='max-w-6xl mx-auto flex flex-col items-center my-[8rem] px-4'>
-			<motion.p 
+			<motion.p
 				className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'
 				initial={{ opacity: 0, scale: 0.8 }}
 				whileInView={{ opacity: 1, scale: 1 }}
 				viewport={{ once: true, margin: "-100px" }}
-				transition={{ duration: 0.5 }}
-			>
+				transition={{ duration: 0.5 }}>
 				FAQ
 			</motion.p>
-			
-			<motion.h1 
+
+			<motion.h1
 				className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3'
 				initial={{ opacity: 0, y: 30 }}
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true, margin: "-100px" }}
-				transition={{ duration: 0.8, delay: 0.2 }}
-			>
+				transition={{ duration: 0.8, delay: 0.2 }}>
 				Clarifying Your Doubts
 			</motion.h1>
-			
-			<motion.div 
+
+			<motion.div
 				className='w-full mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8'
 				initial={{ opacity: 0, y: 40 }}
 				whileInView={{ opacity: 1, y: 0 }}
-				viewport={{ once: true, margin: "-100px" }}
-				transition={{ duration: 0.8, delay: 0.4 }}
-			>
-				<FaqColumn data={firstcol} colType="first" />
-				<FaqColumn data={secondcol} colType="second" />
+				viewport={{ once: true }} // Added this line too
+				transition={{ duration: 0.8, delay: 0.4 }}>
+				<FaqColumn
+					data={firstcol}
+					colType='first'
+				/>
+				<FaqColumn
+					data={secondcol}
+					colType='second'
+				/>
 			</motion.div>
 		</section>
 	);
