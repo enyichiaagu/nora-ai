@@ -8,14 +8,13 @@ export default function useTranscript() {
   const processorRef = useRef()
   const audioRef = useRef()
   const websocket = new WebSocket('wss://2aee-102-90-82-228.ngrok-free.app');
+  websocket.onmessage = (event) => {
+   const data = JSON.parse(event.data);
+   setTranscript(data.transcript)
+  };
 
 
   const startTranscribing = async () => {
-    websocket.onmessage = (event) => {
-     const data = JSON.parse(event.data);
-     setTranscript(data.transcript)
-    };
-    
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
