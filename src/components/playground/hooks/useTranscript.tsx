@@ -7,7 +7,7 @@ export default function useTranscript() {
   const microphoneRef = useRef()
   const processorRef = useRef()
   const audioRef = useRef()
-  const websocket = new WebSocket('ws://localhost:3000');
+  const websocket = new WebSocket('ws://2aee-102-90-82-228.ngrok-free.app');
 
 
   const startTranscribing = async () => {
