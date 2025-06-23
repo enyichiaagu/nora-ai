@@ -7,10 +7,16 @@ const Cta: React.FC = () => {
         {/* Background Pattern */}
         <div className='absolute inset-0 noice opacity-30'></div>
         
-        {/* Floating Elements */}
-        <div className='absolute top-8 right-8 w-20 h-20 bg-white/10 rounded-full blur-xl'></div>
-        <div className='absolute bottom-12 left-12 w-32 h-32 bg-white/5 rounded-full blur-2xl'></div>
-        <div className='absolute top-1/2 right-1/4 w-16 h-16 bg-white/10 rounded-full blur-lg'></div>
+        {/* Floating Kite Elements */}
+        <div className='absolute top-8 right-8 w-16 h-16 opacity-20'>
+          <img src='/icons/kite.svg' alt='' className='w-full h-full filter invert' />
+        </div>
+        <div className='absolute bottom-12 left-12 w-12 h-12 opacity-15'>
+          <img src='/icons/kite.svg' alt='' className='w-full h-full filter invert rotate-45' />
+        </div>
+        <div className='absolute top-1/2 right-1/4 w-10 h-10 opacity-10'>
+          <img src='/icons/kite.svg' alt='' className='w-full h-full filter invert -rotate-12' />
+        </div>
         
         <div className='relative z-10 px-8 md:px-16 py-16 md:py-20 text-center'>
           {/* Badge */}
@@ -30,16 +36,23 @@ const Cta: React.FC = () => {
             Join our exclusive waitlist and be among the first to experience AI-powered tutoring that feels like chatting with your smartest friend.
           </p>
           
-          {/* Benefits List */}
+          {/* Benefits List with Custom Icons */}
           <div className='flex flex-wrap justify-center gap-6 mb-10'>
             {[
-              '✨ Early Access',
-              '🎯 Personalized Learning',
-              '📝 Smart Transcription',
-              '🚀 Free Beta Access'
+              { icon: '/icons/anytime-access.svg', text: 'Anytime Access' },
+              { icon: '/icons/custom-learning.svg', text: 'Custom Learning' },
+              { icon: '/icons/community-support.svg', text: 'Community Support' },
+              { icon: '/icons/proven-success.svg', text: 'Proven Success' }
             ].map((benefit, index) => (
-              <div key={index} className='flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2'>
-                <span className='text-white text-sm font-medium'>{benefit}</span>
+              <div key={index} className='flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-5 py-3 hover:bg-white/15 transition-all duration-300 group'>
+                <div className='w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300'>
+                  <img 
+                    src={benefit.icon} 
+                    alt={benefit.text}
+                    className='w-full h-full filter invert opacity-90'
+                  />
+                </div>
+                <span className='text-white text-sm font-medium'>{benefit.text}</span>
               </div>
             ))}
           </div>
@@ -69,27 +82,39 @@ const Cta: React.FC = () => {
             </a>
           </div>
           
-          {/* Trust Indicators */}
+          {/* Trust Indicators with Custom Icons */}
           <div className='mt-12 pt-8 border-t border-white/20'>
             <p className='text-white/60 text-sm mb-4'>Trusted by students worldwide</p>
             <div className='flex justify-center items-center gap-8 opacity-60'>
               <div className='flex items-center gap-2'>
                 <div className='w-8 h-8 bg-white/20 rounded-full flex items-center justify-center'>
-                  <span className='text-white text-xs font-bold'>AI</span>
+                  <img 
+                    src='/icons/custom-learning.svg' 
+                    alt='AI Powered'
+                    className='w-4 h-4 filter invert'
+                  />
                 </div>
                 <span className='text-white text-sm'>AI Powered</span>
               </div>
               <div className='flex items-center gap-2'>
                 <div className='w-8 h-8 bg-white/20 rounded-full flex items-center justify-center'>
-                  <span className='text-white text-xs'>🔒</span>
+                  <img 
+                    src='/icons/community-support.svg' 
+                    alt='Secure'
+                    className='w-4 h-4 filter invert'
+                  />
                 </div>
                 <span className='text-white text-sm'>Secure</span>
               </div>
               <div className='flex items-center gap-2'>
                 <div className='w-8 h-8 bg-white/20 rounded-full flex items-center justify-center'>
-                  <span className='text-white text-xs'>24/7</span>
+                  <img 
+                    src='/icons/anytime-access.svg' 
+                    alt='24/7 Available'
+                    className='w-4 h-4 filter invert'
+                  />
                 </div>
-                <span className='text-white text-sm'>Available</span>
+                <span className='text-white text-sm'>24/7 Available</span>
               </div>
             </div>
           </div>
