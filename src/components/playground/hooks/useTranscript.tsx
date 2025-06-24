@@ -32,7 +32,7 @@ export default function useTranscript(audioTrack) {
         }
       };
       setIsRecording(true)
-      recorder.start()
+      recorder.start(500)
       
     } catch (error) {
       console.error('Error Starting Transcription:', error)
