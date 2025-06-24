@@ -19,7 +19,7 @@ export default function useTranscript(audioTrack) {
       
       websocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        return setTranscript(data.transcript)
+        setTranscript(data.transcript)
       }
       websocket.onerror = (event) => {
         setIsRecording(false)
