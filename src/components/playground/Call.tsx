@@ -24,14 +24,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
-  const { isRecording, transcript, startTranscribing, stopTranscribing } = useTranscript()
   const audioTrack = useAudioTrack(localSessionId)
-
-  useEffect(() => {
-    if (remoteParticipantIds.length > 0) {
-      startTranscribing();
-    }
-  }, [remoteParticipantIds])
+  const { isRecording, transcript, startTranscribing, stopTranscribing } = useTranscript(audioTrack)
 
   useEffect(() => {
     if (!callObject || !data?.conversation_url || isEnding) return;
