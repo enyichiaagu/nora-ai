@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { 
   DailyAudio,
-  DailyAudioTrack,
   DailyVideo, 
   useParticipantIds, 
   useLocalSessionId, 
   useDaily,
-  useMeetingState
+  useMeetingState,
+  useAudioTrack
 } from '@daily-co/daily-react';
 import { ConversationData } from './types/conversation';
 import useTranscript from './hooks/useTranscript'
