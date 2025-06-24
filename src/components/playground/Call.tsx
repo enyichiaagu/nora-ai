@@ -10,7 +10,7 @@ import {
 import { ConversationData } from './types/conversation';
 import useTranscript from './hooks/useTranscript'
 import Transcriptions from './Transcriptions'
-import EndCall from './EndCall'
+import Dock from './Dock'
 
 interface CallProps {
   data: ConversationData | null;
