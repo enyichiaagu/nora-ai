@@ -18,6 +18,7 @@ export default function useTranscript(audioTrack) {
         return setTranscript(data.transcript)
       }
       websocket.onerror = (event) => {
+        setIsRecording(false)
         throw new Error(event)
       }
 
@@ -31,7 +32,6 @@ export default function useTranscript(audioTrack) {
           websocket.send(buffer);
         }
       };
-      setIsRecording(true)
       recorder.start(500)
       
     } catch (error) {
