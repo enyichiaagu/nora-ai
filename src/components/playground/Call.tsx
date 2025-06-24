@@ -51,7 +51,6 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   }, [callObject, callState, data, isEnding]);
 
   const handleEndCall = async () => {
-    stopTranscribing()
     setIsEnding(true);
     if (callObject) {
       try {
