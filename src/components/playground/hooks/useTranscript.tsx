@@ -28,6 +28,7 @@ export default function useTranscript(audioTrack) {
         }
       };
       setIsRecording(true)
+      recorder.start()
       
     } catch (error) {
       console.error('Error Starting Transcription:', error)
@@ -35,8 +36,9 @@ export default function useTranscript(audioTrack) {
   }
 
   const stopTranscribing = () => {
-    
+    refCorder.current.stop()
     setIsRecording(false)
+    setTranscript('Transcripts will be displayed heres')
   }
 
   return { transcript, isRecording, startTranscribing, stopTranscribing }
