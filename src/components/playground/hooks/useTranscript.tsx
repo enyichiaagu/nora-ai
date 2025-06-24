@@ -22,7 +22,7 @@ export default function useTranscript() {
       }
 
       const audioContext = new AudioContext({ sampleRate: 16000 });
-      audioRef.current = audioContext
+      audioRef.current = audioContext;
       const microphone = audioContext.createMediaStreamSource(stream);
       microphoneRef.current = microphone
       const processor = audioContext.createScriptProcessor(1024, 1, 1);
