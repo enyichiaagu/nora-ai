@@ -47,7 +47,6 @@ const Playground: React.FC = () => {
           </DailyProvider>
         )}
       </div>
-      <Transcriptions transcript={transcript}/>
     </div>
   );
 };
