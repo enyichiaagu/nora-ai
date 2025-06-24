@@ -37,7 +37,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       }
 
       recorder.ondataavailable = async (event: BlobEvent) => {
-        console.log('Websocket.readyStae', websocket.readyState)
+        console.log('Websocket.readyState', websocket.readyState)
         console.log('event.data?.size', event.data?.size)
         if (event.data?.size > 0 && websocket.readyState === WebSocket.OPEN) {
           const buffer = await event.data.arrayBuffer()
