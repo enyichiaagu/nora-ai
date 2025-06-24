@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 
 export default function useTranscript(audioTrack) {
-  const [transcript, setTranscript] = useState('Hello World')
+  const [transcript, setTranscript] = useState('Transcripts will be displayed here')
   const [isRecording, setIsRecording] = useState(false)
   const websockRef = useRef()
   const refCorder = useRef()
