@@ -5,7 +5,7 @@ interface DockProps {
   endCall: () => void;
 }
 
-function Dock({ endCall }: DockProps) {
+function Dock({ endCall, startTranscribing, stopTranscribing }: DockProps) {
   return (
     <div 
       className="absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out translate-y-0 opacity-100"
