@@ -11,7 +11,7 @@ export default function useTranscript(audioTrack) {
       if (!audioTrack) throw new Error('Cannot start transcription without remote audio')
       setTranscript('Transcription Starting ...')
 
-      const websocket = new WebSocket('wss://7fa7-102-90-103-120.ngrok-free.app/');
+      const websocket = new WebSocket('b45d5ceda6c34ae3a4a22b9dafb3f851');
       websockRef.current = websocket;
       const stream = new MediaStream([audioTrack])
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
