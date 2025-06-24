@@ -18,6 +18,7 @@ export default function useTranscript(audioTrack) {
       refCorder.current = recorder;
       
       websocket.onmessage = (event) => {
+        console.log('received something')
         const data = JSON.parse(event.data);
         setTranscript(data.transcript)
       }
