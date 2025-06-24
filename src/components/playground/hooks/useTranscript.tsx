@@ -4,6 +4,7 @@ export default function useTranscript(audioTrack) {
   const [transcript, setTranscript] = useState('Hello World')
   const [isRecording, setIsRecording] = useState(false)
   const websockRef = useRef()
+  const refCorder = useRef()
 
   const startTranscribing = async () => {
     try {
@@ -18,6 +19,7 @@ export default function useTranscript(audioTrack) {
 
       const stream = mediaStream([audioTrack])
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      refCorder.current = recorder;
       
       recorder.ondataavailable = async (event) => {
         if (event.data.size > 0 && websocket.readyState === WebSocket.OPEN) {
@@ -33,15 +35,7 @@ export default function useTranscript(audioTrack) {
   }
 
   const stopTranscribing = () => {
-    if (processorRef.current) {
-      processorRef.current.disconnect();
-      microphoneRef.current.disconnect();
-      audioRef.current.close();
-    }
-    if (websockRef) websockRef.current.close();
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop())
-    }
+    
     setIsRecording(false)
   }
 
