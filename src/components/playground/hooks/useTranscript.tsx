@@ -23,6 +23,7 @@ export default function useTranscript(audioTrack) {
       }
       websocket.onerror = (event) => {
         setIsRecording(false)
+        recorder.stop()
         throw new Error(event)
       }
 
