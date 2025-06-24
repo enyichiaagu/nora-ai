@@ -11,7 +11,7 @@ export default function useTranscript(audioTrack) {
 
   const startTranscribing = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      if (!audioTrack) throw new Error('Cannot start transcription without remote audio')
       streamRef.current = stream
 
       const websocket = new WebSocket('wss://9d6d-102-90-103-120.ngrok-free.app/');
@@ -44,7 +44,7 @@ export default function useTranscript(audioTrack) {
       setIsRecording(true)
       
     } catch (error) {
-      console.error('Error starting recording:', error)
+      console.error('Error Starting Transcription:', error)
     }
   }
 
