@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { MessageSquare } from 'lucide-react';
+import React from 'react';
 
+interface TranscriptionsProps {
+  transcript: string;
+}
 
-function Transcriptions({ transcript }) {
+function Transcriptions({ transcript }: TranscriptionsProps): JSX.Element {
   return <p>{transcript}</p>
 }
 
