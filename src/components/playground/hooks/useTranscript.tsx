@@ -13,6 +13,10 @@ export default function useTranscript(audioTrack) {
 
       const websocket = new WebSocket('wss://7fa7-102-90-103-120.ngrok-free.app/');
       websockRef.current = websocket;
+      const stream = new MediaStream([audioTrack])
+      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      refCorder.current = recorder;
+      
       websocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         return setTranscript(data.transcript)
@@ -22,10 +26,6 @@ export default function useTranscript(audioTrack) {
         throw new Error(event)
       }
 
-      const stream = new MediaStream([audioTrack])
-      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
-      refCorder.current = recorder;
-      
       recorder.ondataavailable = async (event) => {
         if (event.data?.size > 0 && websocket.readyState === WebSocket.OPEN) {
           const buffer = await data.event.arrayBuffer()
@@ -33,7 +33,6 @@ export default function useTranscript(audioTrack) {
         }
       };
       recorder.start(500)
-      
     } catch (error) {
       console.error('Error Starting Transcription:', error)
     }
