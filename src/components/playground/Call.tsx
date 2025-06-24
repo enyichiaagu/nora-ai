@@ -18,11 +18,12 @@ interface CallProps {
 }
 
 const Call: React.FC<CallProps> = ({ data, onCallEnd, startTranscribing, stopTranscribing }) => {
+  const [isEnding, setIsEnding] = useState(false);
   const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
-  const [isEnding, setIsEnding] = useState(false);
+    const { isRecording, transcript, startTranscribing, stopTranscribing } = useTranscript()
 
   useEffect(() => {
     if (remoteParticipantIds.length > 0) {
