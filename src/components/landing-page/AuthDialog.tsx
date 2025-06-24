@@ -8,13 +8,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { authService } from "@/services/auth.service";
-import { useNavigate } from "react-router";
+import showToast from "@/utils/toast.utils";
+
+interface AuthDialogProps {
+	isOpen: boolean;
+	onClose: () => void;
+}
 
 // Google Icon Component
 const GoogleIcon = () => (
-	<svg
-		className='w-6 h-6'
-		viewBox='0 0 24 24'>
+	<svg className='w-6 h-6' viewBox='0 0 24 24'>
 		<path
 			fill='#4285f4'
 			d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'
@@ -34,43 +37,35 @@ const GoogleIcon = () => (
 	</svg>
 );
 
-// Nora AI Logo Component (simplified version)
+// Nora AI Logo Component
 const NoraLogo = () => (
-	<div className=' bg-app-primary  flex items-center justify-center p-6 pt-5 rounded-full noice relative'>
-		<img
-			src='/icons/bubble-chat.svg'
-			alt=''
-			className='absolute -left-4 -top-4 w-12'
-		/>
+	<div className='bg-app-primary flex items-center justify-center p-6 pt-5 rounded-full noice relative'>
 		<img
 			src='/icons/logo.svg'
-			alt=''
-			className=' h-[2.4rem]'
+			alt='Nora AI'
+			className='h-[2.4rem]'
 		/>
 	</div>
 );
 
-const AuthDialog: React.FC = () => {
-	const navigate = useNavigate();
-
+const AuthDialog: React.FC<AuthDialogProps> = ({ isOpen, onClose }) => {
 	const handleGoogleAuth = async () => {
 		try {
-			const response = await authService.signInWithGoogle();
-			console.log(response);
+			await authService.signInWithGoogle();
+			showToast.success("Redirecting to Google...");
 		} catch (error) {
-			console.log(error);
+			console.error("Auth error:", error);
+			showToast.error("Authentication failed");
 		}
 	};
 
 	return (
-		<Dialog
-			open={true}
-			onOpenChange={() => navigate("/")}>
-			<DialogContent className='sm:max-w-md bg-gray-900 border-gray-800 text-white px-4 md:px-8 overflow-hiddenn w-[93%] md:w-fit rounded-lg'>
+		<Dialog open={isOpen} onOpenChange={onClose}>
+			<DialogContent className='sm:max-w-md bg-gray-900 border-gray-800 text-white px-4 md:px-8 w-[93%] md:w-fit rounded-lg'>
 				<div className='relative'>
 					{/* Close Button */}
 					<button
-						onClick={() => navigate("/")}
+						onClick={onClose}
 						className='absolute top-2 bg-white/20 p-2 rounded-full right-0 z-10 text-gray-400 hover:text-white transition-colors'>
 						<X size={20} />
 					</button>
