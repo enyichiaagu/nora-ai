@@ -17,6 +17,9 @@ export default function useTranscript(audioTrack) {
         const data = JSON.parse(event.data);
         return setTranscript(data.transcript)
       }
+      websocket.onerror = (event) => {
+        throw new Error(event)
+      }
 
       const stream = mediaStream([audioTrack])
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
