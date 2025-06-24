@@ -9,6 +9,7 @@ export default function useTranscript(audioTrack) {
   const startTranscribing = async () => {
     try {
       if (!audioTrack) throw new Error('Cannot start transcription without remote audio')
+      setTranscript('Transcription Starting ...')
 
       const websocket = new WebSocket('wss://9d6d-102-90-103-120.ngrok-free.app/');
       websockRef.current = websocket;
