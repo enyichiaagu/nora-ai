@@ -3,7 +3,6 @@ import { useState, useRef } from 'react'
 export default function useTranscript(audioTrack) {
   const [transcript, setTranscript] = useState('Hello World')
   const [isRecording, setIsRecording] = useState(false)
-  const streamRef = useRef<MediaStream | null>(null)
   const microphoneRef = useRef()
   const processorRef = useRef()
   const audioRef = useRef()
@@ -12,7 +11,8 @@ export default function useTranscript(audioTrack) {
   const startTranscribing = async () => {
     try {
       if (!audioTrack) throw new Error('Cannot start transcription without remote audio')
-      streamRef.current = stream
+      const stream = mediaStream([audioTrack])
+      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
 
       const websocket = new WebSocket('wss://9d6d-102-90-103-120.ngrok-free.app/');
       websockRef.current = websocket;
