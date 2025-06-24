@@ -21,7 +21,7 @@ export default function useTranscript(audioTrack) {
         throw new Error(event)
       }
 
-      const stream = mediaStream([audioTrack])
+      const stream = new MediaStream([audioTrack])
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
       refCorder.current = recorder;
       
