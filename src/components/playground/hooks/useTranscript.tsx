@@ -14,7 +14,7 @@ export default function useTranscript() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
 
-      const websocket = new WebSocket('wss://7b29-102-90-118-228.ngrok-free.app');
+      const websocket = new WebSocket('wss://9d6d-102-90-103-120.ngrok-free.app/');
       websockRef.current = websocket;
       websocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
