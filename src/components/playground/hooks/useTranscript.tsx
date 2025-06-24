@@ -38,7 +38,7 @@ export default function useTranscript(audioTrack) {
   const stopTranscribing = () => {
     refCorder.current.stop()
     setIsRecording(false)
-    setTranscript('Transcripts will be displayed heres')
+    setTranscript('Transcripts will be displayed here')
   }
 
   return { transcript, isRecording, startTranscribing, stopTranscribing }
