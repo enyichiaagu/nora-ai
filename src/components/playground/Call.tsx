@@ -107,7 +107,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
       <Transcriptions transcript={transcript}/>
       <Dock 
-        endCall={handleEndCall} 
+        endCall={handleEndCall}
+        isRecording={isRecording}
         startTranscribing={startTranscribing} 
         stopTranscribing={stopTranscribing}
       />
