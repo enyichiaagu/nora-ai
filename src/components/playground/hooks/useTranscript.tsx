@@ -37,7 +37,7 @@ export default function useTranscript(audioTrack) {
           websocket.send(buffer);
         }
       };
-      recorder.start(500)
+      recorder.start(3000)
     } catch (error) {
       console.error('Error Starting Transcription:', error)
     }
