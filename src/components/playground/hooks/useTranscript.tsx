@@ -44,7 +44,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
           websocket.send(buffer);
         }
       };
-      recorder.start(3000)
+      recorder.start(500)
       setIsRecording(true)
     } catch (error) {
       console.error('Error Starting Transcription:', error)
