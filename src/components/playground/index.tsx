@@ -23,14 +23,6 @@ const Playground: React.FC = () => {
     await resetCall(apiKey);
   };
 
-  const handleAudioToggle = () => {
-    if (isRecording) {
-      stopTranscribing()
-    } else {
-      startTranscribing()
-    }
-  }
-
   return (
     <div className="w-full space-y-4">
       <div className="flex gap-2">
@@ -59,11 +51,6 @@ const Playground: React.FC = () => {
         )}
       </div>
       <Transcriptions transcript={transcript}/>
-      
-      <Button onClick={handleAudioToggle} variant={isRecording ? "destructive" : "default"}>
-        {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-        {isRecording ? 'Stop' : 'Start'} Audio
-      </Button>
     </div>
   );
 };
