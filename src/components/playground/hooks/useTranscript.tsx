@@ -30,6 +30,7 @@ export default function useTranscript(audioTrack) {
       }
 
       recorder.ondataavailable = async (event) => {
+        console.log(event.data)
         if (event.data?.size > 0 && websocket.readyState === WebSocket.OPEN) {
           const buffer = await event.data.arrayBuffer()
           websocket.send(buffer);
