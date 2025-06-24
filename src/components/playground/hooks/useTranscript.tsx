@@ -3,9 +3,6 @@ import { useState, useRef } from 'react'
 export default function useTranscript(audioTrack) {
   const [transcript, setTranscript] = useState('Hello World')
   const [isRecording, setIsRecording] = useState(false)
-  const microphoneRef = useRef()
-  const processorRef = useRef()
-  const audioRef = useRef()
   const websockRef = useRef()
 
   const startTranscribing = async () => {
@@ -22,26 +19,11 @@ export default function useTranscript(audioTrack) {
       const stream = mediaStream([audioTrack])
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
       
-      const audioContext = new AudioContext({ sampleRate: 16000 });
-      audioRef.current = audioContext;
-      const microphone = audioContext.createMediaStreamSource(stream);
-      microphoneRef.current = microphone
-      const processor = audioContext.createScriptProcessor(1024, 1, 1);
-      processorRef.current = processor
-      
-      processor.onaudioprocess = (e) => {
-        const float32 = e.inputBuffer.getChannelData(0);
-        const int16 = new Int16Array(float32.length);
-        for (let i = 0; i < float32.length; i++) {
-          int16[i] = float32[i] * 32767;
-        }
-        
-        if (websocket.readyState === WebSocket.OPEN) {
+      recorder.ondataavailable = async (event) => {
+        if (event.data.size > 0 && websocket.readyState === WebSocket.OPEN) {
           websocket.send(int16.buffer);
         }
       };
-      microphone.connect(processor);
-      processor.connect(audioContext.destination);
       setIsRecording(true)
       
     } catch (error) {
