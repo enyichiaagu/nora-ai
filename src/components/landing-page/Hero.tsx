@@ -3,7 +3,7 @@ import { ArrowRight, BookOpen } from "lucide-react";
 
 function Hero() {
 	return (
-		<section className='bg-app-primary noice md:min-h-[60rem] h-[90vh] flex items-center  px-4 md:px-2  relative overflow-hidden w-full  '>
+		<section className='bg-app-primary noice md:min-h-[50rem] h-[90vh] flex items-center  px-4 md:px-2  relative overflow-hidden w-full  '>
 			<img
 				className=' md:w-[22rem] w-[18rem] absolute md:-bottom-20 -bottom-[10rem] right-[10%] .rotate-45 '
 				src='/icons/bolt.svg'
