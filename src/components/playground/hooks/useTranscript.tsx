@@ -21,7 +21,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       const websocket = new WebSocket('wss://4de3-102-90-103-120.ngrok-free.app');
       websockRef.current = websocket;
 
-      const ctx = new AudioContext({sampleRate: 16_000})
+      const ctx = new AudioContext({sampleRate: 16_000, })
       contReft.current = ctx;
       await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
       const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]))
