@@ -18,7 +18,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       if (!audioTrack) throw new Error('Cannot start transcription without remote audio')
       setTranscript('Transcription Starting ...')
 
-      const websocket = new WebSocket('wss://4de3-102-90-103-120.ngrok-free.app');
+      const websocket = new WebSocket('wss://f387-102-90-118-78.ngrok-free.app');
       websockRef.current = websocket;
 
       const ctx = new AudioContext({sampleRate: 16_000, latencyHint: 1.00 })
