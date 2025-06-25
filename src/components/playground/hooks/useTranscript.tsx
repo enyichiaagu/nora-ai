@@ -11,6 +11,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
   const [transcript, setTranscript] = useState<string>('Transcripts will be displayed here')
   const [isRecording, setIsRecording] = useState<boolean>(false)
   const websockRef = useRef<WebSocket | null>(null)
+  const contReft = useRef()
 
   const startTranscribing = async (): Promise<void> => {
     try {
@@ -21,6 +22,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       websockRef.current = websocket;
 
       const ctx = new AudioContext({sampleRate: 16_000})
+      contReft.current = ctx;
       await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
       const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]))
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor')
@@ -54,6 +56,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
 
   const stopTranscribing = (): void => {
     if (websockRef.current) websockRef.current.close()
+    if (contReft.current) contReft.current.close()
     setIsRecording(false)
     setTranscript('Transcripts will be displayed here')
   }
