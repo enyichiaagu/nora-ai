@@ -12,6 +12,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
   const [isRecording, setIsRecording] = useState<boolean>(false)
   const websockRef = useRef<WebSocket | null>(null)
   const contReft = useRef()
+  const intervalRef = useRef()
 
   const startTranscribing = async (): Promise<void> => {
     try {
@@ -35,6 +36,8 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
           websocket.send(e.data);
         }
       };
+
+      
       
       websocket.onmessage = (event: MessageEvent) => {
         console.log('received something')
