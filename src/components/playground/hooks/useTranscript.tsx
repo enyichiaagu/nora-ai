@@ -26,6 +26,12 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor')
       source.connect(pcmNode);
       pcmNode.connect(ctx.destination)
+
+      pcmNode.port.onmessage = (e) => {
+        if (ws.readyState === WebSocket.OPEN) {
+          websocket.send(e.data);
+        }
+      };
       
       websocket.onmessage = (event: MessageEvent) => {
         console.log('received something')
