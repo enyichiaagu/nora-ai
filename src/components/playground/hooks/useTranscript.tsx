@@ -22,7 +22,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       websockRef.current = websocket;
 
       const ctx = new AudioContext({sampleRate: 16_000})
-      
+      await ctx.audioWorklet.addModule('audioworklet.js');
       const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]))
       refCorder.current = recorder;
       
