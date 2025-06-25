@@ -43,6 +43,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       websocket.onerror = (event: Event) => {
         setIsRecording(false)
         setTranscript('Transcription Error. Try again.')
+        await ctx.close()
         throw new Error(event.toString())
       }
       setIsRecording(true)
