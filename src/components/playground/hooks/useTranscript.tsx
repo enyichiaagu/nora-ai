@@ -29,6 +29,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
 
       pcmNode.port.onmessage = (e) => {
         if (event.data > 0 && ws.readyState === WebSocket.OPEN) {
+          console.log('sending data ...')
           websocket.send(e.data);
         }
       };
