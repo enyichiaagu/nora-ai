@@ -41,6 +41,20 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
 
       const intervalId = setInterval(()=> {
         if (websocket.readyState !== WebSocket.OPEN || bufferSize.current === 0) return;
+        
+        // Combine buffers
+        const combined = new Uint8Array(bufferSize.current);
+        let offset = 0;
+        for (const buf of bufferQueue.current) {
+          combined.set(buf, offset);
+          offset += buf.length;
+        }
+    
+        websocket.send(combined.buffer);
+    
+        // Clear buffers
+        bufferQueue.current = [];
+        bufferSize.current = 0;
       }, 500)
       intervalIdRef.current = intervalId
       
