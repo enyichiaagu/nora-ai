@@ -12,7 +12,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
   const [isRecording, setIsRecording] = useState<boolean>(false)
   const websockRef = useRef<WebSocket | null>(null)
   const contReft = useRef()
-  const intervalRef = useRef()
+  const intervalIdRef = useRef()
 
   const startTranscribing = async (): Promise<void> => {
     try {
