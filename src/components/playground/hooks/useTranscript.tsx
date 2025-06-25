@@ -28,7 +28,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       pcmNode.connect(ctx.destination)
 
       pcmNode.port.onmessage = (e) => {
-        if (ws.readyState === WebSocket.OPEN) {
+        if (event.data?.size > 0 && ws.readyState === WebSocket.OPEN) {
           websocket.send(e.data);
         }
       };
@@ -53,7 +53,6 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
           websocket.send(buffer);
         }
       };
-      recorder.start(500)
       setIsRecording(true)
     } catch (error) {
       console.error('Error Starting Transcription:', error)
