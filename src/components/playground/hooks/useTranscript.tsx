@@ -33,14 +33,14 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       pcmNode.connect(ctx.destination)
 
       pcmNode.port.onmessage = (e) => {
-        if (e.data && websocket.readyState === WebSocket.OPEN) {
+        if (e.data && ) {
           console.log('sending data ...')
           websocket.send(e.data);
         }
       };
 
       const intervalId = setInterval(()=> {
-        
+        if (websocket.readyState !== WebSocket.OPEN || bufferSize.current === 0) return;
       }, 500)
       intervalIdRef.current = intervalId
       
