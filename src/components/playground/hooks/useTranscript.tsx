@@ -34,8 +34,8 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
 
       pcmNode.port.onmessage = (e) => {
         if (e.data) {
-          console.log('sending data ...')
-          websocket.send(e.data);
+          bufferQueue.current.push(new Uint8Array(e.data));
+          bufferSize.current += e.data.byteLength;
         }
       };
 
