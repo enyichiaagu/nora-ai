@@ -22,7 +22,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       websockRef.current = websocket;
 
       const ctx = new AudioContext({sampleRate: 16_000})
-      const stream = new MediaStream([audioTrack])
+      const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]))
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
       refCorder.current = recorder;
       
