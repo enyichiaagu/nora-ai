@@ -39,6 +39,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
         const data = JSON.parse(event.data);
         setTranscript(data.transcript)
       }
+      
       websocket.onerror = (event: Event) => {
         setIsRecording(false)
         recorder.stop()
