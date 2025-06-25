@@ -13,6 +13,8 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
   const websockRef = useRef<WebSocket | null>(null)
   const contReft = useRef()
   const intervalIdRef = useRef<number>()
+  const bufferQueue = useRef<Uint8Array>([])
+  const bufferSize = useRef(0)
 
   const startTranscribing = async (): Promise<void> => {
     try {
@@ -37,7 +39,10 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
         }
       };
 
-      
+      const intervalId = setInterval(()=> {
+        
+      }, 500)
+      intervalIdRef.current = intervalId
       
       websocket.onmessage = (event: MessageEvent) => {
         console.log('received something')
