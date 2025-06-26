@@ -139,7 +139,7 @@ const SessionTableRow: React.FC<Session> = (props) => {
 								disabled={!props.note}
 								className='flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
 								<Download className='w-4 h-4 mr-3' />
-								Download Note
+								Download Summary
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={handleCopyLink}
