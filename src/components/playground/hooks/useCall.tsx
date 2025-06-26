@@ -6,7 +6,10 @@ interface UseCallReturn {
   loading: boolean;
   error: string | null;
   makeCall: (apiKey: string) => Promise<void>;
+  resetCall: (apiKey?: string) => Promise<void>;
 }
+
+const API_BASE_URL = 'https://tavusapi.com/v2/conversations';
 
 const useCall = (): UseCallReturn => {
   const [data, setData] = useState<ConversationData | null>(null);
@@ -31,12 +34,19 @@ const useCall = (): UseCallReturn => {
       },
       body: JSON.stringify({
         replica_id: 'r9d30b0e55ac',
-        persona_id: 'pe13ed370726'
+        persona_id: 'pe13ed370726',
+        properties: {
+          max_call_duration: 120,
+          participant_left_timeout: 5,
+          participant_absent_timeout: 10,
+          enable_closed_captions: true,
+          language: 'english'
+        }
       })
     };
 
     try {
-      const response = await fetch('https://tavusapi.com/v2/conversations', options);
+      const response = await fetch(API_BASE_URL, options);
       const result = await response.json();
       
       if (!response.ok) {
@@ -52,7 +62,28 @@ const useCall = (): UseCallReturn => {
     }
   };
 
-  return { data, loading, error, makeCall };
+  const resetCall = async (apiKey?: string) => {
+    if (data?.conversation_id && apiKey) {
+      try {
+        const options = {
+          method: 'POST',
+          headers: {
+            'x-api-key': apiKey
+          }
+        };
+
+        await fetch(`${API_BASE_URL}/${data.conversation_id}/end`, options);
+        console.log('Conversation ended on server');
+      } catch (err) {
+        console.error('Failed to end conversation on server:', err);
+      }
+    }
+    
+    setData(null);
+    setError(null);
+  };
+
+  return { data, loading, error, makeCall, resetCall };
 };
 
 export default useCall;
