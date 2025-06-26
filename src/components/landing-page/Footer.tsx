@@ -3,17 +3,17 @@ import { motion } from "framer-motion";
 
 function Footer() {
 	return (
-		<footer className='relative'>
-			<motion.div className='flex gap-12 items-center mx-auto w-full justify-center min-w-[22rem] translate-y-[5.3rem] relative z-10'>
+		<footer className='relative bg-[#FFF1E6FF]'>
+			<motion.div className='flex flex-col md:flex-row gap-12 items-center mx-auto w-full justify-center min-w-[22rem] translate-y-[5.3rem] relative z-20 '>
 				<motion.div
-					className='bg-[#fafafa] px-14 py-8 rounded-lg shadow-lg border-4 border-white min-w-[22rem]'
+					className='bg-[#fafafa] md:px-14  py-6 md:py-8 rounded-lg shadow-lg border-4 border-white w-[90%] md:w-auto md:min-w-[22rem]'
 					whileHover={{ y: -5, scale: 1.02 }}
 					transition={{ type: "spring", stiffness: 400, damping: 17 }}>
 					<div>
 						<motion.img
 							src='/images/hi-study.png'
 							alt=''
-							className='block w-[15rem] h-[15rem] object-contain mx-auto'
+							className='block w-[13rem] h-[15rem] object-contain mx-auto'
 							whileHover={{ scale: 1.05, rotate: 2 }}
 							transition={{
 								type: "spring",
@@ -23,7 +23,7 @@ function Footer() {
 						/>
 					</div>
 					<div className='text-center space-y-4 mt-2'>
-						<p className='font-montserrat text-2xl font-semibold'>
+						<p className='font-montserrat text-2xl font-semibold '>
 							Got Suggestions?
 						</p>
 						<motion.button
@@ -41,14 +41,14 @@ function Footer() {
 				</motion.div>
 
 				<motion.div
-					className='z-10 bg-[#fafafa] px-14 py-8 rounded-lg shadow-lg border-4 border-white min-w-[22rem]'
+					className='bg-[#fafafa] md:px-14  py-6 md:py-8 rounded-lg shadow-lg border-4 border-white w-[90%] md:w-auto md:min-w-[22rem]'
 					whileHover={{ y: -5, scale: 1.02 }}
 					transition={{ type: "spring", stiffness: 400, damping: 17 }}>
 					<div>
 						<motion.img
 							src='/images/png-output.png'
 							alt=''
-							className='block w-[15rem] h-[15rem] object-contain mx-auto'
+							className='block w-[12rem] h-[15rem] object-contain mx-auto'
 							whileHover={{ scale: 1.05, rotate: -2 }}
 							transition={{
 								type: "spring",
@@ -76,9 +76,9 @@ function Footer() {
 				</motion.div>
 			</motion.div>
 
-			<div className='bg-app-primary  overflow-x-hidden overflow-y-hidden relative noice pt-[10rem] -z-10'>
-				<div className='mb-[13rem] max-w-6xl mx-auto '>
-					<div className='mb-8 flex justify-between items-center'>
+			<div className='bg-app-primary  overflow-x-hidden overflow-y-hidden relative noice pt-[10rem] z-10 '>
+				<div className='md:mb-[13rem] mb-[5rem] max-w-6xl mx-auto  '>
+					<div className='mb-8 flex flex-col md:flex-row gap-8 justify-between items-center'>
 						<p className='text-[#ffffffd5] text-md'>
 							&copy; {new Date().getFullYear()} Onboard. All rights
 							reserved.
@@ -109,20 +109,15 @@ function Footer() {
 							</a>
 						</div>
 					</div>
-					<hr className='border border-[#f1f1f168]' />
+					<hr className='hidden md:block border border-[#f1f1f168]' />
 				</div>
-				<img
-					src='/icons/leaf.svg'
-					alt=''
-					className='absolute hidden left-10 bottom-0'
-				/>
-				<div className='flex items-center gap-2 w-full justify-center absolute left-1/2 bottom-0 translate-y-[48%] -translate-x-1/2  max-w-7xl'>
+				<div className='flex items-center gap-2 w-full justify-center absolute left-1/2 bottom-0 translate-y-[48%] -translate-x-1/2  max-w-7xl '>
 					<img
 						src='/icons/logo.svg'
 						alt=''
-						className='h-[23rem] mb-2'
+						className='md:h-[23rem] h-[5rem] mb-2'
 					/>
-					<p className='text-white font-marlin font-bold text-[18rem] whitespace-nowrap'>
+					<p className='text-white font-marlin font-bold text-[4rem] md:text-[18rem] whitespace-nowrap'>
 						Nora AI
 					</p>
 				</div>
