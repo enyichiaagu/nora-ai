@@ -27,7 +27,7 @@ export default function useTranscript(
 
       // Will soon set up Backend to have a permanent ws endpoint
       const websocket = new WebSocket(
-        'wss://f387-102-90-118-78.ngrok-free.app'
+        'wss://nora-backend-kjwh.onrender.com'
       );
       websockRef.current = websocket;
 
