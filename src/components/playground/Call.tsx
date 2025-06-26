@@ -27,8 +27,8 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const audioTrack = remoteParticipantIds?.[0] ? useAudioTrack(remoteParticipantIds[0]) : null;
   
   const { 
-    isRecording, 
-    transcript, 
+    isRecording,
+    transcript,
     startTranscribing,
     stopTranscribing
   } = useTranscript(audioTrack?.persistentTrack)
