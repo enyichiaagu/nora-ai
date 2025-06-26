@@ -27,7 +27,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const remoteTrack = useAudioTrack(remoteParticipantIds?.[0]);
   const localTrack = useAudioTrack(localSessionId);
   const { isRecording, transcript, startTranscribing, stopTranscribing } =
-    useTranscript([audioTrack?.persistentTrack, localTrack?.persistentTrack]);
+    useTranscript([remoteTrack?.persistentTrack, localTrack?.persistentTrack]);
 
   useEffect(() => {
     if (!callObject || !data?.conversation_url || isEnding) return;
