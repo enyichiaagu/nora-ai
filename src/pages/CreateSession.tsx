@@ -244,7 +244,7 @@ const CreateSession = () => {
 							<h4 className='font-semibold text-gray-800 mb-1'>
 								{availabletutors[selectedTutorIndex].name}
 							</h4>
-							<p className='text-gray-600 text-sm mb-3'>
+							<p className='text-gray-600 text-sm mb-3 hidden'>
 								{availabletutors[selectedTutorIndex].specialty}
 							</p>
 							<div className='flex items-center gap-4 text-sm text-gray-500'>
