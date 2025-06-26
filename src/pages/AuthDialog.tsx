@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -8,15 +8,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { authService } from "@/services/auth.service";
-import showToast from "@/utils/toast.utils";
+import { useNavigate } from "react-router";
 
-interface AuthDialogProps {
-	isOpen: boolean;
-	onClose: () => void;
-}
-
+// Google Icon Component
 const GoogleIcon = () => (
-	<svg className='w-6 h-6' viewBox='0 0 24 24'>
+	<svg
+		className='w-6 h-6'
+		viewBox='0 0 24 24'>
 		<path
 			fill='#4285f4'
 			d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'
@@ -36,40 +34,44 @@ const GoogleIcon = () => (
 	</svg>
 );
 
+// Nora AI Logo Component (simplified version)
 const NoraLogo = () => (
-	<div className='bg-app-primary flex items-center justify-center p-6 pt-5 rounded-full noice relative'>
+	<div className=' bg-app-primary  flex items-center justify-center p-6 pt-5 rounded-full noice relative'>
+		<img
+			src='/icons/bubble-chat.svg'
+			alt=''
+			className='absolute -left-4 -top-4 w-12'
+		/>
 		<img
 			src='/icons/logo.svg'
-			alt='Nora AI'
-			className='h-[2.4rem]'
+			alt=''
+			className=' h-[2.4rem]'
 		/>
 	</div>
 );
 
-const AuthDialog: React.FC<AuthDialogProps> = ({ isOpen, onClose }) => {
-	const [isLoading, setIsLoading] = useState(false);
+const AuthDialog: React.FC = () => {
+	const navigate = useNavigate();
 
 	const handleGoogleAuth = async () => {
 		try {
-			setIsLoading(true);
-			await authService.signInWithGoogle();
-			showToast.success("Redirecting to Google...");
+			const response = await authService.signInWithGoogle();
+			console.log(response);
 		} catch (error) {
-			console.error("Auth error:", error);
-			showToast.error("Authentication failed");
-		} finally {
-			setIsLoading(false);
+			console.log(error);
 		}
 	};
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4'>
-			<div className='bg-white rounded-2xl shadow-xl max-w-md w-full p-8'>
+		<Dialog
+			open={true}
+			onOpenChange={() => navigate("/")}>
+			<DialogContent className='sm:max-w-md bg-gray-900 border-gray-800 text-white px-4 md:px-8 overflow-hiddenn w-[93%] md:w-fit rounded-lg'>
 				<div className='relative'>
 					{/* Close Button */}
 					<button
-						onClick={onClose}
-						className='absolute top-2 bg-gray-100 hover:bg-gray-200 p-2 rounded-full right-0 z-10 text-gray-400 hover:text-gray-600 transition-colors'>
+						onClick={() => navigate("/")}
+						className='absolute top-2 bg-white/20 p-2 rounded-full right-0 z-10 text-gray-400 hover:text-white transition-colors'>
 						<X size={20} />
 					</button>
 
@@ -81,29 +83,28 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ isOpen, onClose }) => {
 						</div>
 
 						{/* Title */}
-						<div className='space-y-4 mb-8'>
-							<h1 className='text-2xl font-semibold text-gray-900 text-center font-montserrat'>
+						<DialogHeader className='space-y-4 mb-8'>
+							<DialogTitle className='text-2xl font-semibold text-app-offwhite text-center font-montserrat'>
 								Welcome to Nora AI
-							</h1>
-							<p className='text-sm text-gray-500 mt-6 leading-relaxed text-center'>
+							</DialogTitle>
+							<p className='text-xs text-gray-500 mt-6 leading-relaxed text-center'>
 								By continuing, you agree to our Terms of Service and
 								Privacy Policy. Start your personalized learning journey
 								today.
 							</p>
-						</div>
+						</DialogHeader>
 
 						{/* Google Sign In Button */}
 						<Button
 							onClick={handleGoogleAuth}
-							disabled={isLoading}
-							className='w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-5 px-6 rounded-lg flex items-center justify-center gap-3 transition-all duration-200 hover:shadow-lg mt-4'>
-							{!isLoading && <GoogleIcon />}
-							{isLoading ? "Signing in..." : "Continue with Google"}
+							className='w-full bg-app-offwhite hover:bg-gray-100 text-gray-900 font-medium py-5 px-6 rounded-lg flex items-center justify-center gap-3 transition-all duration-200 hover:shadow-lg mt-4'>
+							<GoogleIcon />
+							Continue with Google
 						</Button>
 					</div>
 				</div>
-			</div>
-		</div>
+			</DialogContent>
+		</Dialog>
 	);
 };
 
