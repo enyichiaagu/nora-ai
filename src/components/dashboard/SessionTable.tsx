@@ -1,4 +1,4 @@
-import {Add commentMore actions
+import {
 	ChevronDown,
 	Download,
 	Filter,
@@ -407,4 +407,4 @@ function SessionTable() {
 	);
 }
 
-export default SessionTable;Add comment
+export default SessionTable;
