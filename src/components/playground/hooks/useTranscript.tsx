@@ -86,8 +86,6 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
 
   const stopTranscribing = (): void => {
     if (websockRef.current) websockRef.current.close()
-    if (contReft.current) contReft.current.close()
-    setIsRecording(false)
     setTranscript('Transcripts will be displayed here')
   }
 
