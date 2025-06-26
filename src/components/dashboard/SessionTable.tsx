@@ -1,4 +1,4 @@
-import {
+import {Add commentMore actions
 	ChevronDown,
 	Download,
 	Filter,
@@ -6,6 +6,7 @@ import {
 	LayoutGrid,
 	List,
 	ExternalLink,
+	Search,
 } from "lucide-react";
 import React, { useState } from "react";
 import { exampleSessions } from "./sessionExample";
@@ -17,6 +18,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 
 type Session = {
 	name: string;
@@ -41,10 +43,10 @@ const SessionLink: React.FC<{ link: string }> = ({ link }) => {
 			href={link}
 			target='_blank'
 			rel='noopener noreferrer'
-			className='text-sm text-blue-600 hover:text-blue-800 hover:underline flex gap-1 items-center'
+			className='text-sm text-blue-600 hover:text-blue-800 hover:underline flex gap-1 items-center transition-colors'
 			title='Open session link in new tab'>
 			View
-			<ExternalLink className='w-4' />
+			<ExternalLink className='w-3 h-3' />
 		</a>
 	);
 };
@@ -55,7 +57,6 @@ const SessionTableRow: React.FC<Session> = (props) => {
 	const handleCopyLink = () => {
 		if (props.link) {
 			navigator.clipboard.writeText(props.link);
-			// You might want to show a toast notification here
 		}
 	};
 
@@ -74,43 +75,47 @@ const SessionTableRow: React.FC<Session> = (props) => {
 	};
 
 	return (
-		<tr className='bg-white hover:bg-gray-50 border-b border-gray-200 transition-colors'>
+		<tr className='bg-white hover:bg-gray-50/80 border-b border-gray-100 transition-all duration-200'>
 			{/* Date/Time */}
 			<td className='px-6 py-4'>
-				<p className='text-sm font-medium text-gray-900 mb-1'>
-					{created.date}
-				</p>
-				<p className='text-xs text-gray-500'>{created.time}</p>
+				<div className='text-sm'>
+					<p className='font-medium text-gray-900 mb-1'>{created.date}</p>
+					<p className='text-gray-500'>{created.time}</p>
+				</div>
 			</td>
 
 			{/* Tutor Info */}
 			<td className='px-6 py-4'>
 				<div className='flex items-center gap-3'>
-					<img
-						src={props.image}
-						alt={`${props.name} avatar`}
-						className='w-14 h-14 rounded-full object-cover border-4 border-gray-200 '
-						onError={(e) => {
-							e.currentTarget.src = "/images/default-avatar.jpg";
-						}}
-					/>
+					<div className='relative'>
+						<img
+							src={props.image}
+							alt={`${props.name} avatar`}
+							className='w-12 h-12 rounded-full object-cover border-2 border-gray-100'
+							onError={(e) => {
+								e.currentTarget.src = "/images/default-avatar.jpg";
+							}}
+						/>
+						<div className='absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white'></div>
+					</div>
 					<div>
-						<p className='text-sm font-medium text-gray-900 mb-1'>
-							{props.name}
-						</p>
+						<p className='text-sm font-medium text-gray-900'>{props.name}</p>
 						<p className='text-xs text-gray-500'>{props.tutorId}</p>
 					</div>
+				</div>
+			</td>
+
+			{/* Session Title */}
+			<td className='px-6 py-4'>
+				<div>
+					<p className='text-sm font-medium text-gray-900'>{props.title}</p>
+					<p className='text-xs text-gray-500 mt-1'>{props.description}</p>
 				</div>
 			</td>
 
 			{/* Status */}
 			<td className='px-6 py-4'>
 				<SessionStatusBadge status={props.status} />
-			</td>
-
-			{/* Session Title */}
-			<td className='px-6 py-4'>
-				<p className='text-sm font-medium text-gray-900'>{props.title}</p>
 			</td>
 
 			{/* Session Link */}
@@ -124,25 +129,23 @@ const SessionTableRow: React.FC<Session> = (props) => {
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<button
-								className='p-2 hover:bg-gray-100 rounded-full transition-colors'
+								className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
 								title='More options'>
 								<MoreHorizontal className='w-4 h-4 text-gray-400' />
 							</button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent
-							align='end'
-							className='w-48 bg-white shadow-lg ring-1 ring-black ring-opacity-5 border-0'>
+						<DropdownMenuContent align='end' className='w-48'>
 							<DropdownMenuItem
 								onClick={handleDownloadNote}
 								disabled={!props.note}
-								className='flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
+								className='cursor-pointer'>
 								<Download className='w-4 h-4 mr-3' />
 								Download Note
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={handleCopyLink}
 								disabled={!props.link}
-								className='flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
+								className='cursor-pointer'>
 								<ExternalLink className='w-4 h-4 mr-3' />
 								Copy Link
 							</DropdownMenuItem>
@@ -157,23 +160,35 @@ const SessionTableRow: React.FC<Session> = (props) => {
 const SessionTableFilters: React.FC<{
 	filterStatus: string;
 	onFilterChange: (status: string) => void;
-}> = ({ filterStatus, onFilterChange }) => {
-	// Add state declarations
-	const [searchTerm, setSearchTerm] = useState("");
+	searchTerm: string;
+	onSearchChange: (term: string) => void;
+}> = ({ filterStatus, onFilterChange, searchTerm, onSearchChange }) => {
 	const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
 	const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
 	return (
-		<div className='space-y-4'>
-			{/* First row - Search and Filter */}
-			<div className='flex flex-wrap gap-3 items-center justify-between'>
+		<div className='bg-white rounded-xl border p-4 mb-6 shadow-sm'>
+			<div className='flex flex-wrap gap-4 items-center justify-between'>
+				{/* Search */}
+				<div className='relative flex-1 max-w-md'>
+					<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4' />
+					<Input
+						type='text'
+						placeholder='Search sessions...'
+						value={searchTerm}
+						onChange={(e) => onSearchChange(e.target.value)}
+						className='pl-10 bg-gray-50 border-gray-200 focus:bg-white'
+					/>
+				</div>
+
 				<div className='flex gap-3 items-center'>
+					{/* Filter */}
 					<div className='relative'>
 						<button
 							type='button'
-							className='inline-flex items-center px-4 py-2.5 text-sm font-medium text-center text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-gray-100'
+							className='inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
 							onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
-							<Filter className='w-4 h-4 mr-2 -ml-1 text-gray-500' />
+							<Filter className='w-4 h-4 mr-2 text-gray-500' />
 							Filter
 							<ChevronDown
 								className={`w-4 h-4 ml-2 text-gray-500 transition-transform ${
@@ -183,128 +198,110 @@ const SessionTableFilters: React.FC<{
 						</button>
 
 						{isFilterMenuOpen && (
-							<div className='absolute left-0 z-10 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-								<div className='px-3 py-2 text-xs font-medium text-gray-500 uppercase'>
+							<div className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 border'>
+								<div className='px-3 py-2 text-xs font-medium text-gray-500 uppercase border-b'>
 									Status
 								</div>
-								<button
-									className={`block w-full text-left px-4 py-2 text-sm ${
-										filterStatus === "all"
-											? "bg-gray-100 text-gray-900"
-											: "text-gray-700"
-									}`}
-									onClick={() => {
-										onFilterChange("all");
-										setIsFilterMenuOpen(false);
-									}}>
-									All
-								</button>
-								<button
-									className={`block w-full text-left px-4 py-2 text-sm ${
-										filterStatus === "active"
-											? "bg-gray-100 text-gray-900"
-											: "text-gray-700"
-									}`}
-									onClick={() => {
-										onFilterChange("active");
-										setIsFilterMenuOpen(false);
-									}}>
-									Active
-								</button>
-								<button
-									className={`block w-full text-left px-4 py-2 text-sm ${
-										filterStatus === "completed"
-											? "bg-gray-100 text-gray-900"
-											: "text-gray-700"
-									}`}
-									onClick={() => {
-										onFilterChange("completed");
-										setIsFilterMenuOpen(false);
-									}}>
-									Completed
-								</button>
-								<button
-									className={`block w-full text-left px-4 py-2 text-sm ${
-										filterStatus === "revoked"
-											? "bg-gray-100 text-gray-900"
-											: "text-gray-700"
-									}`}
-									onClick={() => {
-										onFilterChange("revoked");
-										setIsFilterMenuOpen(false);
-									}}>
-									Revoked
-								</button>
+								{["all", "completed", "in_progress", "cancelled", "missed"].map((status) => (
+									<button
+										key={status}
+										className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+											filterStatus === status
+												? "bg-blue-50 text-blue-600"
+												: "text-gray-700"
+										}`}
+										onClick={() => {
+											onFilterChange(status);
+											setIsFilterMenuOpen(false);
+										}}>
+										{status === "all" ? "All Sessions" : status.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}
+									</button>
+								))}
 							</div>
 						)}
 					</div>
 
-					{(searchTerm || filterStatus !== "all") && (
-						<button
-							type='button'
-							className='inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50'
-							onClick={() => {
-								setSearchTerm("");
-								onFilterChange("all");
-							}}>
-							Clear filters
-						</button>
-					)}
-				</div>
-
-				{/* View Toggle and Export */}
-				<div className='flex gap-3 items-center'>
 					{/* View Toggle */}
-					<div className='flex items-center bg-gray-100 rounded-lg p-1'>
+					<div className='flex items-center bg-gray-50 rounded-lg p-1 border'>
 						<button
 							type='button'
-							className={`inline-flex items-center px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+							className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
 								viewMode === "list"
 									? "bg-white text-gray-900 shadow-sm"
 									: "text-gray-500 hover:text-gray-700"
 							}`}
-							onClick={() => setViewMode("list")}
-							title='List view'>
-							<List className='w-5 h-5' />
+							onClick={() => setViewMode("list")}>
+							<List className='w-4 h-4' />
 						</button>
 						<button
 							type='button'
-							className={`inline-flex items-center px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+							className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
 								viewMode === "grid"
 									? "bg-white text-gray-900 shadow-sm"
 									: "text-gray-500 hover:text-gray-700"
 							}`}
-							onClick={() => setViewMode("grid")}
-							title='Grid view'>
-							<LayoutGrid className='w-5 h-5' />
+							onClick={() => setViewMode("grid")}>
+							<LayoutGrid className='w-4 h-4' />
 						</button>
 					</div>
 
-					{/* Export Button */}
+					{/* Export */}
 					<button
 						type='button'
-						className='inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50'>
-						<Download className='w-4 h-4 mr-2 -ml-1 text-gray-500' />
+						className='inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'>
+						<Download className='w-4 h-4 mr-2 text-gray-500' />
 						Export
 					</button>
 				</div>
 			</div>
+
+			{/* Active Filters */}
+			{(searchTerm || filterStatus !== "all") && (
+				<div className='flex items-center gap-2 mt-3 pt-3 border-t'>
+					<span className='text-sm text-gray-500'>Active filters:</span>
+					{searchTerm && (
+						<span className='inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800'>
+							Search: {searchTerm}
+						</span>
+					)}
+					{filterStatus !== "all" && (
+						<span className='inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800'>
+							Status: {filterStatus.replace("_", " ")}
+						</span>
+					)}
+					<button
+						type='button'
+						className='text-xs text-gray-500 hover:text-gray-700 underline'
+						onClick={() => {
+							onSearchChange("");
+							onFilterChange("all");
+						}}>
+						Clear all
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };
 
 function SessionTable() {
 	const [currentPage, setCurrentPage] = useState(1);
-	const [itemsPerPage] = useState(10); // You can make this configurable
+	const [itemsPerPage] = useState(10);
 	const [filterStatus, setFilterStatus] = useState("all");
+	const [searchTerm, setSearchTerm] = useState("");
 
-	// Filter sessions based on status
+	// Filter sessions
 	const filteredSessions = exampleSessions.filter((session) => {
-		if (filterStatus === "all") return true;
-		return session.status.toLowerCase() === filterStatus.toLowerCase();
+		const matchesStatus = filterStatus === "all" || session.status.toLowerCase() === filterStatus.toLowerCase();
+		const matchesSearch = searchTerm === "" || 
+			session.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			session.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			session.description.toLowerCase().includes(searchTerm.toLowerCase());
+		
+		return matchesStatus && matchesSearch;
 	});
 
-	// Calculate pagination
+	// Pagination
 	const totalItems = filteredSessions.length;
 	const totalPages = Math.ceil(totalItems / itemsPerPage);
 	const startIndex = (currentPage - 1) * itemsPerPage;
@@ -319,9 +316,13 @@ function SessionTable() {
 		setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 	};
 
-	// Reset to page 1 when filter changes
 	const handleFilterChange = (newFilter: string) => {
 		setFilterStatus(newFilter);
+		setCurrentPage(1);
+	};
+
+	const handleSearchChange = (newSearch: string) => {
+		setSearchTerm(newSearch);
 		setCurrentPage(1);
 	};
 
@@ -330,45 +331,35 @@ function SessionTable() {
 			<SessionTableFilters
 				filterStatus={filterStatus}
 				onFilterChange={handleFilterChange}
+				searchTerm={searchTerm}
+				onSearchChange={handleSearchChange}
 			/>
 
-			<div className='mt-7 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden'>
-				<table className='min-w-full divide-y divide-gray-200'>
-					<thead className='bg-gray-50'>
+			<div className='bg-white rounded-xl border shadow-sm overflow-hidden'>
+				<table className='min-w-full divide-y divide-gray-100'>
+					<thead className='bg-gray-50/80'>
 						<tr>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-								Created
+							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
+								Date
 							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
 								Tutor
 							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
+								Session
+							</th>
+							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
 								Status
 							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-								Title
-							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
 								Link
 							</th>
-							<th
-								scope='col'
-								className='relative px-6 py-3'>
+							<th className='relative px-6 py-4'>
 								<span className='sr-only'>Actions</span>
 							</th>
 						</tr>
 					</thead>
-					<tbody className='bg-white divide-y divide-gray-200'>
+					<tbody className='bg-white divide-y divide-gray-50'>
 						{currentSessions.map((session) => (
 							<SessionTableRow
 								key={session.sessionId}
@@ -379,30 +370,33 @@ function SessionTable() {
 				</table>
 
 				{/* Pagination */}
-				<div className='bg-gray-50 px-6 py-3 border-t border-gray-200 flex items-center justify-between'>
-					<div className='text-sm text-gray-700'>
-						Showing <span className='font-medium'>{startIndex + 1}</span>{" "}
-						to <span className='font-medium'>{endIndex}</span> of{" "}
-						<span className='font-medium'>{totalItems}</span> session(s)
+				<div className='bg-gray-50/50 px-6 py-4 border-t border-gray-100 flex items-center justify-between'>
+					<div className='text-sm text-gray-600'>
+						Showing <span className='font-medium'>{startIndex + 1}</span> to{" "}
+						<span className='font-medium'>{endIndex}</span> of{" "}
+						<span className='font-medium'>{totalItems}</span> sessions
 					</div>
 					<div className='flex items-center gap-2'>
 						<button
 							onClick={goToPreviousPage}
 							disabled={currentPage === 1}
-							className={`px-4 py-2 border border-gray-200 rounded-md text-sm ${
+							className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
 								currentPage === 1
-									? "text-gray-400 bg-gray-50 cursor-not-allowed"
-									: "text-gray-700 bg-white hover:bg-gray-50"
+									? "text-gray-400 bg-gray-50 border-gray-200 cursor-not-allowed"
+									: "text-gray-700 bg-white border-gray-300 hover:bg-gray-50"
 							}`}>
 							Previous
 						</button>
+						<span className='text-sm text-gray-600'>
+							Page {currentPage} of {totalPages}
+						</span>
 						<button
 							onClick={goToNextPage}
 							disabled={currentPage === totalPages || totalPages === 0}
-							className={`px-4 py-2 border border-gray-200 rounded-md text-sm ${
+							className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
 								currentPage === totalPages || totalPages === 0
-									? "text-gray-400 bg-gray-50 cursor-not-allowed"
-									: "text-gray-700 bg-white hover:bg-gray-50"
+									? "text-gray-400 bg-gray-50 border-gray-200 cursor-not-allowed"
+									: "text-gray-700 bg-white border-gray-300 hover:bg-gray-50"
 							}`}>
 							Next
 						</button>
@@ -413,4 +407,4 @@ function SessionTable() {
 	);
 }
 
-export default SessionTable;
+export default SessionTable;Add comment
