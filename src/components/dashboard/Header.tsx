@@ -154,7 +154,7 @@ const Header: React.FC<HeaderProps> = (props) => {
 								className='flex items-center space-x-1 px-2 py-1 h-auto bg-white border border-2 rounded-3xl'>
 								<Avatar className='w-8 h-8'>
 									<AvatarImage
-										src='/icons/welcome.svg'
+										src='/icons/avatar.svg'
 										// src={userData.avatar}
 										alt={userData.name}
 									/>
