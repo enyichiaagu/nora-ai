@@ -1,40 +1,70 @@
-import './app.css';
-import Waitlist from './pages/Waitlist';
-import Demo from './pages/Demo';
-import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard';
-import Onboarding from './pages/Onboarding';
-import { Toaster } from 'react-hot-toast';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import "./app.css";
+import Waitlist from "./pages/Waitlist";
+import Demo from "./pages/Demo";
+import LandingPage from "./pages/LandingPage";
+import { Toaster } from "react-hot-toast";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import Dashboard from "./pages/Dashboard";
+import AuthCallback from "./pages/AuthCallBack";
+import AuthDialog from "./components/landing-page/AuthDialog";
+import DashboardLayout from "./components/dashboard/DashboardLayout";
+import CreateSession from "./pages/CreateSession";
+import SessionHistory from "./pages/SessionHistory";
+import SessionCall from "./pages/SessionCall";
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Waitlist />,
-  },
-  {
-    path: '/demo',
-    element: <Demo />
-  },
-  {
-    path: '/dev',
-    element: <LandingPage />
-  },
-  {
-    path: '/dashboard',
-    element: <Dashboard />
-  },
-  {
-    path: '/onboarding',
-    element: <Onboarding />
-  }
+	{
+		path: "/",
+		element: <LandingPage />,
+		children: [
+			{
+				path: "/auth",
+				element: <AuthDialog />,
+			},
+		],
+	},
+	{
+		path: "/demo",
+		element: <Demo />,
+	},
+	{
+		path: "/waitlist",
+		element: <Waitlist />,
+	},
+	{
+		path: "/dashboard",
+		// loader: requireAuth,
+		element: <DashboardLayout />,
+		children: [
+			{
+				index: true,
+				element: <Dashboard />,
+			},
+			{
+				path: "/dashboard/session/create",
+				element: <CreateSession />,
+			},
+			{
+				path: "/dashboard/session/history",
+				element: <SessionHistory />,
+			},
+		],
+	},
+	{
+		path: "/auth/callback",
+		element: <AuthCallback />,
+	},
+	{
+		path: "/session/call/:id",
+		element: <SessionCall />,
+	},
 ]);
 
 export default function App() {
-  return (
-    <>
-      <Toaster />
-      <RouterProvider router={router} />
-    </>
-  );
+	return (
+		<>
+			<Toaster />
+			<RouterProvider router={router} />
+		</>
+	);
 }
