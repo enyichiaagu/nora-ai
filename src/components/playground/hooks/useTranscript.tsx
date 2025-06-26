@@ -26,7 +26,7 @@ export default function useTranscript(
       setTranscript('Transcription Starting ...');
 
       // Will soon set up Backend to have a permanent ws endpoint
-      const websocket = new WebSocket('wss://nora-backend-kjwh.onrender.com');
+      const websocket = new WebSocket('wss://5ae1-102-90-100-6.ngrok-free.app');
       websockRef.current = websocket;
 
       const ctx = new AudioContext({ sampleRate: 16_000 });
