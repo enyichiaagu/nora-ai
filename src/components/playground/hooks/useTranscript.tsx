@@ -16,7 +16,9 @@ export default function useTranscript(
     onTranscriptionStarted: () => console.log('Started!')
   })
 
+  console.log('Transcript:', transcript)
   const startTranscribing = async (): Promise<void> => {
+    startTranscription()
       setIsRecording(true);
   };
 
