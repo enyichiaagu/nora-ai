@@ -67,6 +67,8 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       websocket.onclose = (event) => {
         console.log('Clearing interval')
         clearInterval(intervalId)
+        ctx.close()
+        setIsRecording(false)
       }
       
       websocket.onerror = async (event: Event) => {
