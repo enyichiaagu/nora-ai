@@ -75,7 +75,7 @@ const CreateSession = () => {
 						Create New Session
 					</h1>
 				</div>
-				<p className='text-gray-600 text-lg'>Choose your AI tutor and start learning</p>
+				<p className='text-gray-600 text-lg text-left'>Choose your AI tutor and start learning</p>
 			</motion.div>
 
 			<motion.div 
