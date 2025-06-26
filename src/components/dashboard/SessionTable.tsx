@@ -18,7 +18,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Input } from "../ui/input";
 
 type Session = {
 	name: string;
@@ -43,10 +43,10 @@ const SessionLink: React.FC<{ link: string }> = ({ link }) => {
 			href={link}
 			target='_blank'
 			rel='noopener noreferrer'
-			className='text-sm text-blue-600 hover:text-blue-800 hover:underline flex gap-1 items-center transition-colors'
+			className='text-sm text-blue-600 hover:text-blue-800 hover:underline flex gap-1 items-center'
 			title='Open session link in new tab'>
 			View
-			<ExternalLink className='w-3 h-3' />
+			<ExternalLink className='w-4' />
 		</a>
 	);
 };
@@ -57,6 +57,7 @@ const SessionTableRow: React.FC<Session> = (props) => {
 	const handleCopyLink = () => {
 		if (props.link) {
 			navigator.clipboard.writeText(props.link);
+			// You might want to show a toast notification here
 		}
 	};
 
@@ -75,47 +76,43 @@ const SessionTableRow: React.FC<Session> = (props) => {
 	};
 
 	return (
-		<tr className='bg-white hover:bg-gray-50/80 border-b border-gray-100 transition-all duration-200'>
+		<tr className='bg-white hover:bg-gray-50 border-b border-gray-200 transition-colors'>
 			{/* Date/Time */}
 			<td className='px-6 py-4'>
-				<div className='text-sm'>
-					<p className='font-medium text-gray-900 mb-1'>{created.date}</p>
-					<p className='text-gray-500'>{created.time}</p>
-				</div>
+				<p className='text-sm font-medium text-gray-900 mb-1'>
+					{created.date}
+				</p>
+				<p className='text-xs text-gray-500'>{created.time}</p>
 			</td>
 
 			{/* Tutor Info */}
 			<td className='px-6 py-4'>
 				<div className='flex items-center gap-3'>
-					<div className='relative'>
-						<img
-							src={props.image}
-							alt={`${props.name} avatar`}
-							className='w-12 h-12 rounded-full object-cover border-2 border-gray-100'
-							onError={(e) => {
-								e.currentTarget.src = "/images/default-avatar.jpg";
-							}}
-						/>
-						<div className='absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white'></div>
-					</div>
+					<img
+						src={props.image}
+						alt={`${props.name} avatar`}
+						className='w-14 h-14 rounded-full object-cover border-4 border-gray-200 '
+						onError={(e) => {
+							e.currentTarget.src = "/images/default-avatar.jpg";
+						}}
+					/>
 					<div>
-						<p className='text-sm font-medium text-gray-900'>{props.name}</p>
+						<p className='text-sm font-medium text-gray-900 mb-1'>
+							{props.name}
+						</p>
 						<p className='text-xs text-gray-500'>{props.tutorId}</p>
 					</div>
-				</div>
-			</td>
-
-			{/* Session Title */}
-			<td className='px-6 py-4'>
-				<div>
-					<p className='text-sm font-medium text-gray-900'>{props.title}</p>
-					<p className='text-xs text-gray-500 mt-1'>{props.description}</p>
 				</div>
 			</td>
 
 			{/* Status */}
 			<td className='px-6 py-4'>
 				<SessionStatusBadge status={props.status} />
+			</td>
+
+			{/* Session Title */}
+			<td className='px-6 py-4'>
+				<p className='text-sm font-medium text-gray-900'>{props.title}</p>
 			</td>
 
 			{/* Session Link */}
@@ -129,23 +126,25 @@ const SessionTableRow: React.FC<Session> = (props) => {
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<button
-								className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
+								className='p-2 hover:bg-gray-100 rounded-full transition-colors'
 								title='More options'>
 								<MoreHorizontal className='w-4 h-4 text-gray-400' />
 							</button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end' className='w-48'>
+						<DropdownMenuContent
+							align='end'
+							className='w-48 bg-white shadow-lg ring-1 ring-black ring-opacity-5 border-0'>
 							<DropdownMenuItem
 								onClick={handleDownloadNote}
 								disabled={!props.note}
-								className='cursor-pointer'>
+								className='flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
 								<Download className='w-4 h-4 mr-3' />
 								Download Note
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={handleCopyLink}
 								disabled={!props.link}
-								className='cursor-pointer'>
+								className='flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
 								<ExternalLink className='w-4 h-4 mr-3' />
 								Copy Link
 							</DropdownMenuItem>
@@ -202,7 +201,13 @@ const SessionTableFilters: React.FC<{
 								<div className='px-3 py-2 text-xs font-medium text-gray-500 uppercase border-b'>
 									Status
 								</div>
-								{["all", "completed", "in_progress", "cancelled", "missed"].map((status) => (
+								{[
+									"all",
+									"completed",
+									"in_progress",
+									"cancelled",
+									"missed",
+								].map((status) => (
 									<button
 										key={status}
 										className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
@@ -214,7 +219,13 @@ const SessionTableFilters: React.FC<{
 											onFilterChange(status);
 											setIsFilterMenuOpen(false);
 										}}>
-										{status === "all" ? "All Sessions" : status.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}
+										{status === "all"
+											? "All Sessions"
+											: status
+													.replace("_", " ")
+													.replace(/\b\w/g, (l) =>
+														l.toUpperCase()
+													)}
 									</button>
 								))}
 							</div>
@@ -286,22 +297,17 @@ const SessionTableFilters: React.FC<{
 
 function SessionTable() {
 	const [currentPage, setCurrentPage] = useState(1);
-	const [itemsPerPage] = useState(10);
+	const [itemsPerPage] = useState(10); // You can make this configurable
 	const [filterStatus, setFilterStatus] = useState("all");
 	const [searchTerm, setSearchTerm] = useState("");
 
-	// Filter sessions
+	// Filter sessions based on status
 	const filteredSessions = exampleSessions.filter((session) => {
-		const matchesStatus = filterStatus === "all" || session.status.toLowerCase() === filterStatus.toLowerCase();
-		const matchesSearch = searchTerm === "" || 
-			session.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			session.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			session.description.toLowerCase().includes(searchTerm.toLowerCase());
-		
-		return matchesStatus && matchesSearch;
+		if (filterStatus === "all") return true;
+		return session.status.toLowerCase() === filterStatus.toLowerCase();
 	});
 
-	// Pagination
+	// Calculate pagination
 	const totalItems = filteredSessions.length;
 	const totalPages = Math.ceil(totalItems / itemsPerPage);
 	const startIndex = (currentPage - 1) * itemsPerPage;
@@ -335,31 +341,43 @@ function SessionTable() {
 				onSearchChange={handleSearchChange}
 			/>
 
-			<div className='bg-white rounded-xl border shadow-sm overflow-hidden'>
-				<table className='min-w-full divide-y divide-gray-100'>
-					<thead className='bg-gray-50/80'>
+			<div className='mt-7 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden'>
+				<table className='min-w-full divide-y divide-gray-200'>
+					<thead className='bg-gray-50'>
 						<tr>
-							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
-								Date
+							<th
+								scope='col'
+								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+								Created
 							</th>
-							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
+							<th
+								scope='col'
+								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
 								Tutor
 							</th>
-							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
-								Session
-							</th>
-							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
+							<th
+								scope='col'
+								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
 								Status
 							</th>
-							<th className='px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider'>
+							<th
+								scope='col'
+								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+								Title
+							</th>
+							<th
+								scope='col'
+								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
 								Link
 							</th>
-							<th className='relative px-6 py-4'>
+							<th
+								scope='col'
+								className='relative px-6 py-3'>
 								<span className='sr-only'>Actions</span>
 							</th>
 						</tr>
 					</thead>
-					<tbody className='bg-white divide-y divide-gray-50'>
+					<tbody className='bg-white divide-y divide-gray-200'>
 						{currentSessions.map((session) => (
 							<SessionTableRow
 								key={session.sessionId}
@@ -370,33 +388,30 @@ function SessionTable() {
 				</table>
 
 				{/* Pagination */}
-				<div className='bg-gray-50/50 px-6 py-4 border-t border-gray-100 flex items-center justify-between'>
-					<div className='text-sm text-gray-600'>
-						Showing <span className='font-medium'>{startIndex + 1}</span> to{" "}
-						<span className='font-medium'>{endIndex}</span> of{" "}
-						<span className='font-medium'>{totalItems}</span> sessions
+				<div className='bg-gray-50 px-6 py-3 border-t border-gray-200 flex items-center justify-between'>
+					<div className='text-sm text-gray-700'>
+						Showing <span className='font-medium'>{startIndex + 1}</span>{" "}
+						to <span className='font-medium'>{endIndex}</span> of{" "}
+						<span className='font-medium'>{totalItems}</span> session(s)
 					</div>
 					<div className='flex items-center gap-2'>
 						<button
 							onClick={goToPreviousPage}
 							disabled={currentPage === 1}
-							className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
+							className={`px-4 py-2 border border-gray-200 rounded-md text-sm ${
 								currentPage === 1
-									? "text-gray-400 bg-gray-50 border-gray-200 cursor-not-allowed"
-									: "text-gray-700 bg-white border-gray-300 hover:bg-gray-50"
+									? "text-gray-400 bg-gray-50 cursor-not-allowed"
+									: "text-gray-700 bg-white hover:bg-gray-50"
 							}`}>
 							Previous
 						</button>
-						<span className='text-sm text-gray-600'>
-							Page {currentPage} of {totalPages}
-						</span>
 						<button
 							onClick={goToNextPage}
 							disabled={currentPage === totalPages || totalPages === 0}
-							className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
+							className={`px-4 py-2 border border-gray-200 rounded-md text-sm ${
 								currentPage === totalPages || totalPages === 0
-									? "text-gray-400 bg-gray-50 border-gray-200 cursor-not-allowed"
-									: "text-gray-700 bg-white border-gray-300 hover:bg-gray-50"
+									? "text-gray-400 bg-gray-50 cursor-not-allowed"
+									: "text-gray-700 bg-white hover:bg-gray-50"
 							}`}>
 							Next
 						</button>
