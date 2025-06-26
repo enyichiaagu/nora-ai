@@ -24,7 +24,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
-  const audioTrack = useAudioTrack(localSessionId)
+  const audioTrack = remoteParticipantIds[0] && useAudioTrack(localSessionId)
   const { 
     isRecording, 
     transcript, 
