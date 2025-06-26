@@ -144,14 +144,14 @@ const PricingCard: React.FC<PricingCardProps> = ({
 					isPopular ? "border-blue-500 bg-blue-50/30" : "border-gray-200"
 				}`}
 				initial={{ opacity: 0, y: 50 }}
-				whileInView={{ opacity: 1, y: 0 }}
+				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6, delay: index * 0.2 }}
 				whileHover={{ y: -5 }}>
 				{isPopular && (
 					<motion.div
 						className='absolute -top-3 left-1/2 transform -translate-x-1/2'
 						initial={{ opacity: 0 }}
-						whileInView={{ opacity: 1 }}
+						animate={{ opacity: 1 }}
 						transition={{ duration: 0.5 }}>
 						<span className='bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium'>
 							Most Popular
@@ -216,7 +216,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
 									}`}
 									key={featureIndex}
 									initial={{ opacity: 0 }}
-									whileInView={{ opacity: 1 }}
+									animate={{ opacity: 1 }}
 									transition={{
 										duration: 0.4,
 									}}>
@@ -273,33 +273,30 @@ const Pricing: React.FC = (): JSX.Element => {
 		<section className='max-w-7xl mx-auto flex flex-col items-center my-[8rem] px-4'>
 			<motion.p
 				className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'
-				initial={{ opacity: 0, scale: 0.8 }}
-				whileInView={{ opacity: 1, scale: 1 }}
-				viewport={{ once: true, margin: "-100px" }}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
 				transition={{ duration: 0.5 }}>
 				Pricing
 			</motion.p>
 
 			<motion.h1
-				className='font-marlin text-gray-700 text-[3rem] font-semibold mt-3 text-center'
-				initial={{ opacity: 0, y: 30 }}
-				whileInView={{ opacity: 1, y: 0 }}
-				viewport={{ once: true, margin: "-100px" }}
-				transition={{ duration: 0.8, delay: 0.2 }}>
-				Choose Your Learning Plan
+				className='font-marlin text-gray-700 text-[1.8rem] md:text-[3rem] font-semibold mt-3 text-center'
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 0.8 }}>
+				Choose Your Plan
 			</motion.h1>
 
 			<motion.p
-				className='text-gray-600 text-lg mt-4 text-center max-w-2xl'
+				className='text-gray-600 text-md md:text-lg mt-4 text-center max-w-2xl'
 				initial={{ opacity: 0, y: 20 }}
-				whileInView={{ opacity: 1, y: 0 }}
-				viewport={{ once: true, margin: "-100px" }}
-				transition={{ duration: 0.8, delay: 0.4 }}>
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.8, delay: 0.5 }}>
 				Start learning with Nora for free, or upgrade for the complete
 				experience with transcription, notes, and study planning.
 			</motion.p>
 
-			<div className='grid md:grid-cols-3 gap-6 mt-12 w-full max-w-6xl'>
+			<div className='grid md:grid-cols-3 gap-6 mt-12 w-full max-w-6xl px-1 md:px-0'>
 				<PricingCard
 					plan='free'
 					price='Free'
@@ -339,8 +336,7 @@ const Pricing: React.FC = (): JSX.Element => {
 			<motion.div
 				className='mt-8 text-center'
 				initial={{ opacity: 0 }}
-				whileInView={{ opacity: 1 }}
-				viewport={{ once: true, margin: "-100px" }}
+				animate={{ opacity: 1 }}
 				transition={{ duration: 0.8, delay: 1.2 }}>
 				<p className='text-gray-500 text-sm'>
 					All plans include unlimited video conversations with Nora. Cancel
