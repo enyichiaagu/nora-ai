@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Dashboard from "./pages/Dashboard";
 import AuthCallback from "./pages/AuthCallBack";
-import AuthDialog from "./components/landing-page/AuthDialog";
+import AuthDialog from "./pages/AuthDialog";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 import CreateSession from "./pages/CreateSession";
 import SessionHistory from "./pages/SessionHistory";
