@@ -23,6 +23,7 @@ export default function useTranscript(
   };
 
   const stopTranscribing = (): void => {
+    stopTranscription()
     setIsRecording(false)
   };
 
