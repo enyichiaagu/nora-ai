@@ -1,73 +1,58 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { ArrowRight, BookOpen } from "lucide-react";
 
 function Hero() {
 	return (
-		<section className='bg-app-primary noice md:min-h-[40rem] h-[90vh] flex items-center justify-center '>
-			<div>
-				<motion.div 
-					className='mx-auto w-fit mb-4'
-					initial={{ opacity: 0, y: -20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.6, delay: 0.2 }}
-				>
-					<img
-						src='/icons/award.svg'
-						className='w-16'
-						alt=''
-					/>
-				</motion.div>
-				
-				<motion.h1 
-					className='text-[3rem] font-marlin font-semibold text-center text-white'
-					initial={{ opacity: 0, y: 30 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.8, delay: 0.4 }}
-				>
-					Learn Like You're Chatting <br className='hidden md:block' />
-					with a Smart Friend.
-				</motion.h1>
-				
-				<motion.p 
-					className='font-bricolage text-gray-100 w-[55%] mx-auto text-center mt-3 text-lg'
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.8, delay: 0.6 }}
-				>
-					AI-powered video calls, real-time transcription, and personalized
-					support that makes learning experience more relaxed and
-					enjoyable.
-				</motion.p>
-				
-				<motion.div 
-					className='flex justify-center items-center gap-4 mt-9 font-montserrat'
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.8, delay: 0.8 }}
-				>
-					<motion.button 
-						className='flex justify-center items-center gap-2 bg-white text-gray-800 px-5 py-3 rounded-md shadow-md'
-						whileHover={{ scale: 1.05 }}
-						whileTap={{ scale: 0.95 }}
-						transition={{ type: "spring", stiffness: 400, damping: 17 }}
-					>
-						Get Started{" "}
-						<img
-							src='/icons/right-arrow.svg'
-							alt=''
-							className='w-5'
+		<section className='bg-app-primary noice md:min-h-[45rem] md:h-[90vh] h-[87vh] flex items-center  px-4 md:px-2  relative overflow-hidden w-full  '>
+			<img
+				className=' md:w-[22rem] w-[18rem] absolute md:-bottom-20 -bottom-[10rem] right-[10%] .rotate-45 '
+				src='/icons/bolt.svg'
+				alt=''
+			/>
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				className='w-full max-w-6xl mx-auto mt-10 relative md:bottom-0 bottom-10 '>
+				<img
+					src='/icons/wavy-line.svg'
+					alt=''
+					className=' w-[7rem] md:w-[10rem] mb-4'
+				/>
+				<h1 className='hidden md:block text-[2rem] md:text-[3rem] leading-8 md:leading-snug  mb-3  font-marlin text-app-offwhite font-medium'>
+					Learn Like You are Chatting
+					<br className='md:block hidden' /> With A Smart Friend
+				</h1>
+				<h1 className='text-[2rem] md:text-[3rem] leading-10 md:leading-snug  mb-3  font-marlin text-app-offwhite font-medium md:hidden '>
+					Learn Like Chatting With A Friend.
+				</h1>
+				<p className='text-sm md:text-lg mb-9  text-app-offwhite w-[%] font-bricolage md:min-w-[35rem] md:max-w-[38rem]  '>
+					Transform your learning through AI-powered video conversations:
+					from real-time transcription to personalized study plans .
+				</p>
+				<div className='flex items-center gap-4'>
+					<motion.button
+						whileHover={{ scale: 1.02 }}
+						whileTap={{ scale: 0.98 }}
+						className='px-5 md:px-8 py-2 md:py-3 bg-white text-zinc-700 rounded-full transition-colors flex items-center gap-2 shadow-lg  text-[.8rem] md:text-[1rem] '>
+						Get Started
+						<ArrowRight className='h-5 w-5' />
+					</motion.button>
+					<motion.button
+						whileHover={{
+							scale: 1.05,
+							backgroundColor: "rgba(255, 255, 255, 0.1)",
+							borderColor: "rgba(255, 255, 255, 0.5)",
+						}}
+						whileTap={{ scale: 0.98 }}
+						className='px-5 md:px-8 py-2 md:py-3  border-[.1rem] border-zinc-200 bg-transparent  rounded-full hover:bg-blue-50 transition-colors flex items-center gap-2 text-zinc-200 text-[.8rem] md:text-[1rem] '>
+						Learn More
+						<BookOpen
+							className='h-5 w-5 '
+							color='white'
 						/>
 					</motion.button>
-					
-					<motion.button 
-						className='border  px-8 py-3 rounded-md text-white flex justify-center items-center gap-2'
-						whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-						whileTap={{ scale: 0.95 }}
-						transition={{ type: "spring", stiffness: 400, damping: 17 }}
-					>
-						Learn More
-					</motion.button>
-				</motion.div>
-			</div>
+				</div>
+			</motion.div>
 		</section>
 	);
 }
