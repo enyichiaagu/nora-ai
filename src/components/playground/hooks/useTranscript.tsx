@@ -1,54 +1,98 @@
-import { useState, useRef } from 'react'
+import { useState, useRef } from 'react';
 
-export default function useTranscript(audioTrack) {
-  const [transcript, setTranscript] = useState('Transcripts will be displayed here')
-  const [isRecording, setIsRecording] = useState(false)
-  const websockRef = useRef()
-  const refCorder = useRef()
+interface UseTranscriptReturn {
+  transcript: string;
+  isRecording: boolean;
+  startTranscribing: () => Promise<void>;
+  stopTranscribing: () => void;
+}
 
-  const startTranscribing = async () => {
+export default function useTranscript(
+  audioTrack: MediaStreamTrack | undefined
+): UseTranscriptReturn {
+  const [transcript, setTranscript] = useState<string>(
+    'Transcripts will be displayed here'
+  );
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const websockRef = useRef<WebSocket | null>(null);
+  const intervalIdRef = useRef<ReturnType<typeof setInterval>>();
+  const bufferQueue = useRef<Uint8Array[]>([]);
+  const bufferSize = useRef(0);
+
+  const startTranscribing = async (): Promise<void> => {
     try {
-      if (!audioTrack) throw new Error('Cannot start transcription without remote audio')
-      setTranscript('Transcription Starting ...')
+      if (!audioTrack)
+        throw new Error('Cannot start transcription without remote audio');
+      setTranscript('Transcription Starting ...');
 
-      const websocket = new WebSocket('wss://4de3-102-90-103-120.ngrok-free.app');
+      // Will soon set up Backend to have a permanent ws endpoint
+      const websocket = new WebSocket(
+        'wss://f387-102-90-118-78.ngrok-free.app'
+      );
       websockRef.current = websocket;
-      const stream = new MediaStream([audioTrack])
-      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
-      refCorder.current = recorder;
-      
-      websocket.onmessage = (event) => {
-        console.log('received something')
-        const data = JSON.parse(event.data);
-        setTranscript(data.transcript)
-      }
-      websocket.onerror = (event) => {
-        setIsRecording(false)
-        recorder.stop()
-        setTranscript('Transcription Error. Try again.')
-        throw new Error(event)
-      }
 
-      recorder.ondataavailable = async (event) => {
-        console.log('Websocket.readyStae', websocket.readyState)
-        console.log('event.data?.size', event.data?.size)
-        if (event.data?.size > 0 && websocket.readyState === WebSocket.OPEN) {
-          const buffer = await event.data.arrayBuffer()
-          websocket.send(buffer);
+      const ctx = new AudioContext({ sampleRate: 16_000 });
+      await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
+      const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]));
+      const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor');
+      source.connect(pcmNode);
+      pcmNode.connect(ctx.destination);
+
+      pcmNode.port.onmessage = (e) => {
+        if (e.data) {
+          bufferQueue.current.push(new Uint8Array(e.data));
+          bufferSize.current += e.data.byteLength;
         }
       };
-      recorder.start(3000)
+
+      const intervalId = setInterval(() => {
+        if (websocket.readyState !== WebSocket.OPEN || bufferSize.current === 0)
+          return;
+
+        // Combine buffers
+        const combined = new Uint8Array(bufferSize.current);
+        let offset = 0;
+        for (const buf of bufferQueue.current) {
+          combined.set(buf, offset);
+          offset += buf.length;
+        }
+
+        websocket.send(combined.buffer);
+
+        // Clear buffers
+        bufferQueue.current = [];
+        bufferSize.current = 0;
+      }, 100);
+      intervalIdRef.current = intervalId;
+
+      websocket.onmessage = (event: MessageEvent) => {
+        console.log('received something');
+        const data = JSON.parse(event.data);
+        setTranscript(data.transcript);
+      };
+
+      websocket.onclose = async () => {
+        console.log('Clearing interval');
+        clearInterval(intervalId);
+        setIsRecording(false);
+        setTranscript('Transcripts will be displayed here');
+        await ctx.close();
+      };
+
+      websocket.onerror = async () => {
+        setIsRecording(false);
+        clearInterval(intervalId);
+        setTranscript('Transcription Error. Try again.');
+      };
+      setIsRecording(true);
     } catch (error) {
-      console.error('Error Starting Transcription:', error)
+      console.error('Error Starting Transcription:', error);
     }
-  }
+  };
 
-  const stopTranscribing = () => {
-    if (websockRef.current) websockRef.current.close()
-    if (refCorder.current) refCorder.current.stop()
-    setIsRecording(false)
-    setTranscript('Transcripts will be displayed here')
-  }
+  const stopTranscribing = (): void => {
+    if (websockRef.current) websockRef.current.close();
+  };
 
-  return { transcript, isRecording, startTranscribing, stopTranscribing }
+  return { transcript, isRecording, startTranscribing, stopTranscribing };
 }

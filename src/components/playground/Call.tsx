@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { 
+import {
   DailyAudio,
-  DailyVideo, 
-  useParticipantIds, 
-  useLocalSessionId, 
+  DailyVideo,
+  useParticipantIds,
+  useLocalSessionId,
   useDaily,
   useMeetingState,
-  useAudioTrack
+  useAudioTrack,
 } from '@daily-co/daily-react';
 import { ConversationData } from './types/conversation';
-import useTranscript from './hooks/useTranscript'
-import Transcriptions from './Transcriptions'
-import Dock from './Dock'
+import useTranscript from './hooks/useTranscript';
+import Transcriptions from './Transcriptions';
+import Dock from './Dock';
 
 interface CallProps {
   data: ConversationData | null;
@@ -24,13 +24,9 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
-  const audioTrack = useAudioTrack(localSessionId)
-  const { 
-    isRecording, 
-    transcript, 
-    startTranscribing, 
-    stopTranscribing 
-  } = useTranscript(audioTrack?.persistentTrack)
+  const audioTrack = useAudioTrack(localSessionId);
+  const { isRecording, transcript, startTranscribing, stopTranscribing } =
+    useTranscript(audioTrack?.persistentTrack);
 
   useEffect(() => {
     if (!callObject || !data?.conversation_url || isEnding) return;
@@ -50,7 +46,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   }, [callObject, callState, data, isEnding]);
 
   const handleEndCall = async () => {
-    stopTranscribing()
+    stopTranscribing();
     setIsEnding(true);
     if (callObject) {
       try {
@@ -64,15 +60,14 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   };
 
   if (!callObject) {
-    return (
-      <p className="text-white">Loading call...</p>
-    );
+    return <p className='text-white'>Loading call...</p>;
   }
-  
+
   return (
     <>
       {localSessionId && (
-        <DailyVideo 
+        <DailyVideo
+          type='video'
           sessionId={localSessionId}
           automirror
           style={{
@@ -81,36 +76,42 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
             position: 'absolute',
             zIndex: 10,
             top: '20px',
-            left: '20px'
+            left: '20px',
           }}
         />
       )}
-      
+
       {remoteParticipantIds.length === 1 ? (
-        <div className="w-full h-full">
-          <DailyVideo  
+        <div className='w-full h-full'>
+          <DailyVideo
+            type='video'
             sessionId={remoteParticipantIds[0]}
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover'
+              objectFit: 'cover',
             }}
           />
         </div>
       ) : (
-        <div className="text-center text-white">
-          <p className="text-lg mb-2">
-            {callState === 'joining-meeting' ? 'Joining call...' : 
-             callState === 'joined-meeting' ? 'Waiting for participants...' : callState === 'new' ? 'Created meeting' :`Call state: ${callState}`}
+        <div className='text-center text-white'>
+          <p className='text-lg mb-2'>
+            {callState === 'joining-meeting'
+              ? 'Joining call...'
+              : callState === 'joined-meeting'
+              ? 'Waiting for participants...'
+              : callState === 'new'
+              ? 'Created meeting'
+              : `Call state: ${callState}`}
           </p>
         </div>
       )}
 
-      <Transcriptions transcript={transcript}/>
-      <Dock 
+      <Transcriptions transcript={transcript} />
+      <Dock
         endCall={handleEndCall}
         isRecording={isRecording}
-        startTranscribing={startTranscribing} 
+        startTranscribing={startTranscribing}
         stopTranscribing={stopTranscribing}
       />
       <DailyAudio />
