@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
-import { ChevronRight, Info, Video, Play, Pause, Calendar, Clock } from "lucide-react";
+import { ChevronRight, Info, Video, Play, Pause } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 
 const availabletutors = [
 	{
@@ -24,43 +23,16 @@ const availabletutors = [
 	},
 ];
 
-const subjects = [
-	'Mathematics',
-	'Physics', 
-	'Chemistry',
-	'Biology',
-	'English',
-	'History',
-	'Computer Science',
-	'Economics'
-];
-
-const durations = [
-	{ value: '30', label: '30 minutes' },
-	{ value: '45', label: '45 minutes' },
-	{ value: '60', label: '1 hour' },
-	{ value: '90', label: '1.5 hours' },
-	{ value: '120', label: '2 hours' }
-];
-
 const CreateSession = () => {
 	const [conversationContext, setConversationContext] = useState("");
 	const [selectedTutorIndex, setSelectedTutorIndex] = useState(0);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [showControls, setShowControls] = useState(true);
-	const [isLoading, setIsLoading] = useState(false);
 	const videoRef = useRef<HTMLVideoElement>(null);
-
-	const [formData, setFormData] = useState({
-		title: '',
-		subject: '',
-		date: '',
-		time: '',
-		duration: '60',
-	});
 
 	const handleTutorSelected = (index: number) => {
 		setSelectedTutorIndex(index);
+		// Pause video when switching tutors
 		setIsPlaying(false);
 		if (videoRef.current) {
 			videoRef.current.pause();
@@ -79,24 +51,6 @@ const CreateSession = () => {
 		}
 	};
 
-	const handleInputChange = (field: string, value: string) => {
-		setFormData(prev => ({ ...prev, [field]: value }));
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setIsLoading(true);
-		
-		await new Promise(resolve => setTimeout(resolve, 2000));
-		
-		console.log('Creating session:', {
-			...formData,
-			tutor: availabletutors[selectedTutorIndex],
-			context: conversationContext
-		});
-		setIsLoading(false);
-	};
-
 	return (
 		<div className='w-[98%] mx-auto px-10 py-9 space-y-7 flex flex-col h-full'>
 			{/* Header */}
@@ -107,98 +61,14 @@ const CreateSession = () => {
 				</h2>
 			</div>
 
-			<form onSubmit={handleSubmit} className='flex flex-1 gap-10 h-full'>
+			<form className='flex flex-1 gap-10 h-full'>
 				{/* Left Panel */}
 				<div className='w-1/2 bg-white px-5 py-4 border rounded-2xl h-full flex flex-col justify-between gap-6'>
-					{/* Session Details */}
-					<div className='space-y-4'>
-						<div>
-							<Label htmlFor="title">Session Title</Label>
-							<Input
-								id="title"
-								value={formData.title}
-								onChange={(e) => handleInputChange('title', e.target.value)}
-								placeholder="e.g., Algebra Fundamentals"
-								className="mt-1"
-								required
-							/>
-						</div>
-
-						<div className='grid grid-cols-2 gap-4'>
-							<div>
-								<Label htmlFor="subject">Subject</Label>
-								<select
-									id="subject"
-									value={formData.subject}
-									onChange={(e) => handleInputChange('subject', e.target.value)}
-									className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-									required
-								>
-									<option value="">Select subject</option>
-									{subjects.map((subject) => (
-										<option key={subject} value={subject}>
-											{subject}
-										</option>
-									))}
-								</select>
-							</div>
-
-							<div>
-								<Label htmlFor="duration">Duration</Label>
-								<select
-									id="duration"
-									value={formData.duration}
-									onChange={(e) => handleInputChange('duration', e.target.value)}
-									className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-									required
-								>
-									{durations.map((duration) => (
-										<option key={duration.value} value={duration.value}>
-											{duration.label}
-										</option>
-									))}
-								</select>
-							</div>
-						</div>
-
-						<div className='grid grid-cols-2 gap-4'>
-							<div>
-								<Label htmlFor="date" className="flex items-center gap-2">
-									<Calendar className="w-4 h-4" />
-									Date
-								</Label>
-								<Input
-									id="date"
-									type="date"
-									value={formData.date}
-									onChange={(e) => handleInputChange('date', e.target.value)}
-									className="mt-1"
-									min={new Date().toISOString().split('T')[0]}
-									required
-								/>
-							</div>
-
-							<div>
-								<Label htmlFor="time" className="flex items-center gap-2">
-									<Clock className="w-4 h-4" />
-									Time
-								</Label>
-								<Input
-									id="time"
-									type="time"
-									value={formData.time}
-									onChange={(e) => handleInputChange('time', e.target.value)}
-									className="mt-1"
-									required
-								/>
-							</div>
-						</div>
-					</div>
-
-					{/* Tutors */}
 					<div>
-						<Label className='block text-md font-medium text-gray-700 mb-3'>
-							Select Tutor
+						<Label
+							className='block text-md font-medium text-gray-700 mb-3'
+							htmlFor=''>
+							Tutors
 						</Label>
 						<div className='flex flex-wrap gap-4'>
 							{availabletutors.map((tutor, i) => (
@@ -222,7 +92,6 @@ const CreateSession = () => {
 						</div>
 					</div>
 
-					{/* Context */}
 					<div className='flex-1 mb-8'>
 						<div className='flex items-center mb-2'>
 							<label className='text-md font-medium text-gray-700 mr-2'>
@@ -233,27 +102,17 @@ const CreateSession = () => {
 						<textarea
 							value={conversationContext}
 							onChange={(e) => setConversationContext(e.target.value)}
-							placeholder='What would you like to focus on in this session?'
-							rows={6}
-							className='w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none'
+							placeholder='Enter context for your conversation'
+							rows={12}
+							className='w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none h-full'
 						/>
 					</div>
 
 					<button
-						type='submit'
-						disabled={isLoading}
-						className='w-fit text-md bg-blue-400 hover:bg-blue-500 disabled:bg-blue-300 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mt-auto ml-auto'>
-						{isLoading ? (
-							<>
-								<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-								Creating...
-							</>
-						) : (
-							<>
-								Create Session
-								<ChevronRight className='w-4 h-4 ml-2' />
-							</>
-						)}
+						type='button'
+						className='w-fit text-md bg-blue-400 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mt-auto ml-auto'>
+						Create Session
+						<ChevronRight className='w-4 h-4 ml-2' />
 					</button>
 				</div>
 
