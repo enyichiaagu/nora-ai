@@ -53,6 +53,7 @@ export default function useTranscript(
   };
 
   const stopTranscribing = (): void => {
+    setIsRecording(false)
     setTranscript('Cannot start transcription without remote audio')
   };
 
