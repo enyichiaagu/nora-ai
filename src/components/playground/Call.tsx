@@ -29,7 +29,7 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const { 
     isRecording, 
     transcript, 
-    startTranscribing, 
+    startTranscribing,
     stopTranscribing 
   } = useTranscript(audioTrack?.persistentTrack)
 
