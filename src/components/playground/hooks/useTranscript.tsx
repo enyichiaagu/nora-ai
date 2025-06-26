@@ -13,11 +13,7 @@ export default function useTranscript(
   const [transcript, setTranscript] = useState<string>(
     'Transcripts will be displayed here'
   );
-  const [isRecording, setIsRecording] = useState<boolean>(false);
-  const websockRef = useRef<WebSocket | null>(null);
-  const intervalIdRef = useRef<ReturnType<typeof setInterval>>();
-  const bufferQueue = useRef<Uint8Array[]>([]);
-  const bufferSize = useRef(0);
+  const [isRecording, setIsRecording] = useState<boolean>(false)
 
   const startTranscribing = async (): Promise<void> => {
       
