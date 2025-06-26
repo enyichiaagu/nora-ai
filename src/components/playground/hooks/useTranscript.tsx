@@ -66,8 +66,9 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       websocket.onclose = (event) => {
         console.log('Clearing interval')
         clearInterval(intervalId)
-        ctx.close()
         setIsRecording(false)
+        setTranscript('Transcripts will be displayed here')
+        await ctx.close()
       }
       
       websocket.onerror = async (event: Event) => {
@@ -85,7 +86,6 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
 
   const stopTranscribing = (): void => {
     if (websockRef.current) websockRef.current.close()
-    setTranscript('Transcripts will be displayed here')
   }
 
   return { transcript, isRecording, startTranscribing, stopTranscribing }
