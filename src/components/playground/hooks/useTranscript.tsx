@@ -45,45 +45,7 @@ export default function useTranscript(
         }
       };
 
-      const intervalId = setInterval(() => {
-        if (websocket.readyState !== WebSocket.OPEN || bufferSize.current === 0)
-          return;
-
-        // Combine buffers
-        const combined = new Uint8Array(bufferSize.current);
-        let offset = 0;
-        for (const buf of bufferQueue.current) {
-          combined.set(buf, offset);
-          offset += buf.length;
-        }
-
-        websocket.send(combined.buffer);
-
-        // Clear buffers
-        bufferQueue.current = [];
-        bufferSize.current = 0;
-      }, 100);
-      intervalIdRef.current = intervalId;
-
-      websocket.onmessage = (event: MessageEvent) => {
-        console.log('received something');
-        const data = JSON.parse(event.data);
-        setTranscript(data.transcript);
-      };
-
-      websocket.onclose = async () => {
-        console.log('Clearing interval');
-        clearInterval(intervalId);
-        setIsRecording(false);
-        setTranscript('Transcripts will be displayed here');
-        await ctx.close();
-      };
-
-      websocket.onerror = async () => {
-        setIsRecording(false);
-        clearInterval(intervalId);
-        setTranscript('Transcription Error. Try again.');
-      };
+      
       setIsRecording(true);
     } catch (error) {
       console.error('Error Starting Transcription:', error);
@@ -91,7 +53,7 @@ export default function useTranscript(
   };
 
   const stopTranscribing = (): void => {
-    if (websockRef.current) websockRef.current.close();
+    setTranscript('Cannot start transcription without remote audio')
   };
 
   return { transcript, isRecording, startTranscribing, stopTranscribing };
