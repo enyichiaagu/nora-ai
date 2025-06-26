@@ -252,7 +252,6 @@ const CreateSession = () => {
 									<div className='w-2 h-2 bg-green-500 rounded-full'></div>
 									Available Now
 								</span>
-								<span>AI-Powered</span>
 							</div>
 						</div>
 					</div>
