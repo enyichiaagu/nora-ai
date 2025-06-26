@@ -25,7 +25,6 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       websockRef.current = websocket;
 
       const ctx = new AudioContext({sampleRate: 16_000 })
-      contReft.current = ctx;
       await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
       const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]))
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor')
