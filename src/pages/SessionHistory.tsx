@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 const SessionHistory: React.FC = () => {
   return (
     <motion.div 
-      className="max-w-7xl mx-auto p-6"
+      className="max-w-7xl mx-auto p-6 pt-10"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
