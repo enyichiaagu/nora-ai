@@ -69,7 +69,7 @@ const CreateSession = () => {
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5, delay: 0.1 }}
 			>
-				<div className='flex items-center gap-3 text-blue-600 mb-2'>
+				<div className='flex items-center gap-3 text-blue-500 mb-2'>
 					<Video size={45} />
 					<h1 className='font-marlin font-bold text-3xl text-gray-600'>
 						Create New Session
