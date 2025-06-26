@@ -113,7 +113,7 @@ const CreateSession = () => {
 									</div>
 									<div className='p-3 bg-white'>
 										<p className='font-semibold text-gray-800 text-sm'>{tutor.name}</p>
-										<p className='text-xs text-gray-500 mt-1'>{tutor.specialty}</p>
+										<p className='text-xs text-gray-500 mt-1'>{tutor.id}</p>
 									</div>
 									{selectedTutorIndex === i && (
 										<div className='absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center'>
