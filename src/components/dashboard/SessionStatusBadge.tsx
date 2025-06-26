@@ -1,45 +1,72 @@
-import React from 'react';
+import React from "react";
+import {
+	CheckCircle,
+	XCircle,
+	Clock,
+	AlertTriangle,
+	Calendar,
+} from "lucide-react";
 
-interface SessionStatusBadgeProps {
-  status: 'completed' | 'upcoming' | 'in-progress' | 'cancelled';
+export type SessionStatus =
+	| "COMPLETED"
+	| "IN_PROGRESS"
+	| "CANCELLED"
+	| "SCHEDULED"
+	| "MISSED";
+
+interface StatusBadgeProps {
+	status: SessionStatus;
 }
 
-const SessionStatusBadge: React.FC<SessionStatusBadgeProps> = ({ status }) => {
-  const getStatusStyles = () => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'upcoming':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'in-progress':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800 border-red-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
+export const SessionStatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
+	const getStatusConfig = (status: SessionStatus) => {
+		switch (status) {
+			case "COMPLETED":
+				return {
+					icon: CheckCircle,
+					bgColor: "bg-green-100",
+					textColor: "text-green-600",
+				};
+			case "IN_PROGRESS":
+				return {
+					icon: Clock,
+					bgColor: "bg-blue-100",
+					textColor: "text-blue-600",
+				};
+			case "SCHEDULED":
+				return {
+					icon: Calendar,
+					bgColor: "bg-yellow-100",
+					textColor: "text-yellow-600",
+				};
+			case "CANCELLED":
+				return {
+					icon: XCircle,
+					bgColor: "bg-red-100",
+					textColor: "text-red-600",
+				};
+			case "MISSED":
+				return {
+					icon: AlertTriangle,
+					bgColor: "bg-orange-100",
+					textColor: "text-orange-600",
+				};
+			default:
+				return {
+					icon: Clock,
+					bgColor: "bg-gray-100",
+					textColor: "text-gray-600",
+				};
+		}
+	};
 
-  const getStatusText = () => {
-    switch (status) {
-      case 'completed':
-        return 'Completed';
-      case 'upcoming':
-        return 'Upcoming';
-      case 'in-progress':
-        return 'In Progress';
-      case 'cancelled':
-        return 'Cancelled';
-      default:
-        return 'Unknown';
-    }
-  };
+	const { icon: StatusIcon, bgColor, textColor } = getStatusConfig(status);
 
-  return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusStyles()}`}>
-      {getStatusText()}
-    </span>
-  );
+	return (
+		<div
+			className={`inline-flex items-center px-2 py-1 rounded-full ${bgColor} ${textColor}`}>
+			<StatusIcon className='h-3.5 w-3.5 mr-1' />
+			<span className='text-xs font-medium'>{status.replace("_", " ")}</span>
+		</div>
+	);
 };
-
-export default SessionStatusBadge;
