@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useTranscription } from '@daily-co/daily-react';
 
 interface UseTranscriptReturn {
   transcript: string;
