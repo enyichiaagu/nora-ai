@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { ChevronRight, Info, Video, Play, Pause } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { motion } from "framer-motion";
 
 const availabletutors = [
 	{
@@ -52,18 +53,33 @@ const CreateSession = () => {
 	};
 
 	return (
-		<div className='w-[98%] mx-auto px-10 py-9 space-y-7 flex flex-col h-full'>
+		<motion.div 
+			className='w-[98%] mx-auto px-10 py-9 space-y-7 flex flex-col h-full'
+			initial={{ opacity: 0, y: 30 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.6, ease: "easeOut" }}
+		>
 			{/* Header */}
-			<div className='flex gap-2 items-center text-gray-700'>
+			<motion.div 
+				className='flex gap-2 items-center text-gray-700'
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.5, delay: 0.1 }}
+			>
 				<Video size={40} />
 				<h2 className='font-montserrat font-medium text-3xl'>
 					Create Session
 				</h2>
-			</div>
+			</motion.div>
 
-			<form className='flex flex-1 gap-10 h-full'>
+			<motion.form 
+				className='flex flex-1 gap-10 h-full'
+				initial={{ opacity: 0, y: 25 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.6, delay: 0.2 }}
+			>
 				{/* Left Panel */}
-				<div className='w-1/2 bg-white px-5 py-4 border rounded-2xl h-full  justify-between gap-6'>
+				<div className='w-1/2 bg-white px-5 py-4 border rounded-2xl h-full justify-between gap-6'>
 					<div>
 						<Label
 							className='block text-md font-medium text-gray-700 mb-3'
@@ -110,7 +126,7 @@ const CreateSession = () => {
 
 					<button
 						type='button'
-						className='w-fit text-md bg-blue-400 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center  ml-auto'>
+						className='w-fit text-md bg-blue-400 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center ml-auto'>
 						Create Session
 						<ChevronRight className='w-4 h-4 ml-2' />
 					</button>
@@ -164,8 +180,8 @@ const CreateSession = () => {
 						</div>
 					</div>
 				</div>
-			</form>
-		</div>
+			</motion.form>
+		</motion.div>
 	);
 };
 
