@@ -21,7 +21,7 @@ export default function useTranscript(
 
   const startTranscribing = async (): Promise<void> => {
     try {
-      if (audioTracks.length < 2)
+      if (audioTracks.includes(undefined))
         throw new Error('Cannot start transcription without remote audio');
       setTranscript('Transcription Starting ...');
 
