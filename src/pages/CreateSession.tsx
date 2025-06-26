@@ -71,11 +71,11 @@ const CreateSession = () => {
 			>
 				<div className='flex items-center gap-3 text-blue-600 mb-2'>
 					<Video size={45} />
-					<h1 className='font-marlin font-bold text-3xl text-gray-800'>
+					<h1 className='font-marlin font-bold text-3xl text-gray-600'>
 						Create New Session
 					</h1>
 				</div>
-				<p className='hidden text-gray-600 text-lg text-left'>Choose your AI tutor and start learning</p>
+				<p className='hidden text-gray-600 text-md text-left'>Choose your AI tutor and start learning</p>
 			</motion.div>
 
 			<motion.div 
