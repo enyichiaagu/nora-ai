@@ -71,6 +71,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
       
       websocket.onerror = async (event: Event) => {
         setIsRecording(false)
+        clearInterval(intervalId)
         setTranscript('Transcription Error. Try again.')
         await ctx.close()
         throw new Error(event.toString())
