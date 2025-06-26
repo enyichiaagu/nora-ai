@@ -186,7 +186,7 @@ const CreateSession = () => {
 				</div>
 
 				{/* Right Panel - Preview */}
-				<div className='bg-white p-6 rounded-2xl border shadow-sm'>
+				<div className='bg-white p-6 rounded-2xl border shadow-sm h-fit'>
 					<div className='flex items-center justify-between mb-6'>
 						<h3 className='font-marlin font-bold text-xl text-gray-800'>
 							Tutor Preview
