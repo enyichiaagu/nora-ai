@@ -60,7 +60,7 @@ export default function useTranscript(
         // Clear buffers
         bufferQueue.current = [];
         bufferSize.current = 0;
-      }, 70);
+      }, 100);
       intervalIdRef.current = intervalId;
 
       websocket.onmessage = (event: MessageEvent) => {
