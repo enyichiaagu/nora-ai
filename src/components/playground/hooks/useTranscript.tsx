@@ -54,7 +54,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
         // Clear buffers
         bufferQueue.current = [];
         bufferSize.current = 0;
-      }, 300)
+      }, 50)
       intervalIdRef.current = intervalId
 
       websocket.onmessage = (event: MessageEvent) => {
