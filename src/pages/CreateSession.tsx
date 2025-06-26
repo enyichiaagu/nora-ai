@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { ChevronRight, Info, Video, Play, Pause } from "lucide-react";
+import { ChevronRight, Info, Video, Play, Pause, Clock, Calendar } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 
@@ -9,18 +9,21 @@ const availabletutors = [
 		image: "/images/avatar-1_thumbnail.jpg",
 		video: "/videos/avatars/avatar-1.mp4",
 		name: "Nora",
+		specialty: "Mathematics & Science",
 	},
 	{
 		id: "r6ca16dbe104",
 		image: "/images/avatar-2_thumbnail.jpg",
 		video: "/videos/avatars/avatar-2.mp4",
 		name: "Mary",
+		specialty: "Languages & Literature",
 	},
 	{
 		id: "r3a47ce45e68",
 		image: "/images/avatar-3_thumbnail.jpg",
 		video: "/videos/avatars/avatar-3.mp4",
 		name: "Carter",
+		specialty: "History & Social Studies",
 	},
 ];
 
@@ -29,11 +32,11 @@ const CreateSession = () => {
 	const [selectedTutorIndex, setSelectedTutorIndex] = useState(0);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [showControls, setShowControls] = useState(true);
+	const [sessionDuration, setSessionDuration] = useState("30");
 	const videoRef = useRef<HTMLVideoElement>(null);
 
 	const handleTutorSelected = (index: number) => {
 		setSelectedTutorIndex(index);
-		// Pause video when switching tutors
 		setIsPlaying(false);
 		if (videoRef.current) {
 			videoRef.current.pause();
@@ -54,94 +57,153 @@ const CreateSession = () => {
 
 	return (
 		<motion.div 
-			className='w-[98%] mx-auto px-10 py-9 space-y-7 flex flex-col h-full'
+			className='max-w-7xl mx-auto px-6 py-8 space-y-8'
 			initial={{ opacity: 0, y: 30 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.6, ease: "easeOut" }}
 		>
 			{/* Header */}
 			<motion.div 
-				className='flex gap-2 items-center text-gray-700'
+				className='text-center space-y-2'
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5, delay: 0.1 }}
 			>
-				<Video size={40} />
-				<h2 className='font-montserrat font-medium text-3xl'>
-					Create Session
-				</h2>
+				<div className='flex items-center justify-center gap-3 text-blue-600 mb-2'>
+					<Video size={32} />
+					<h1 className='font-marlin font-bold text-3xl text-gray-800'>
+						Create New Session
+					</h1>
+				</div>
+				<p className='text-gray-600 text-lg'>Choose your AI tutor and start learning</p>
 			</motion.div>
 
-			<motion.form 
-				className='flex flex-1 gap-10 h-full'
+			<motion.div 
+				className='grid lg:grid-cols-2 gap-8'
 				initial={{ opacity: 0, y: 25 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6, delay: 0.2 }}
 			>
 				{/* Left Panel */}
-				<div className='w-1/2 bg-white px-5 py-4 border rounded-2xl h-full justify-between gap-6'>
-					<div>
-						<Label
-							className='block text-md font-medium text-gray-700 mb-3'
-							htmlFor=''>
-							Tutors
+				<div className='space-y-6'>
+					{/* Tutor Selection */}
+					<div className='bg-white p-6 rounded-2xl border shadow-sm'>
+						<Label className='block text-lg font-semibold text-gray-800 mb-4'>
+							Select Your Tutor
 						</Label>
-						<div className='flex flex-wrap gap-4'>
+						<div className='grid grid-cols-3 gap-4'>
 							{availabletutors.map((tutor, i) => (
-								<div
+								<motion.div
 									key={tutor.id}
-									className={`w-[8rem] h-[7rem] relative border rounded-xl overflow-hidden cursor-pointer brightness-90 ${
-										selectedTutorIndex === i &&
-										"ring-2 ring-blue-400 brightness-95"
+									className={`relative border-2 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ${
+										selectedTutorIndex === i
+											? "ring-2 ring-blue-500 border-blue-500 shadow-lg"
+											: "border-gray-200 hover:border-gray-300 hover:shadow-md"
 									}`}
-									onClick={() => handleTutorSelected(i)}>
-									<img
-										src={tutor.image}
-										alt={tutor.name}
-										className='w-full h-full object-cover'
-									/>
-									<p className='absolute text-white px-3 py-1 rounded-md font-semibold font-marlin text-sm bottom-2 left-1/2 -translate-x-1/2 bg-[#ffffff6c] backdrop-blur-md shadow-md'>
-										{tutor.name}
-									</p>
-								</div>
+									onClick={() => handleTutorSelected(i)}
+									whileHover={{ scale: 1.02 }}
+									whileTap={{ scale: 0.98 }}
+								>
+									<div className='aspect-square'>
+										<img
+											src={tutor.image}
+											alt={tutor.name}
+											className='w-full h-full object-cover'
+										/>
+									</div>
+									<div className='p-3 bg-white'>
+										<p className='font-semibold text-gray-800 text-sm'>{tutor.name}</p>
+										<p className='text-xs text-gray-500 mt-1'>{tutor.specialty}</p>
+									</div>
+									{selectedTutorIndex === i && (
+										<div className='absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center'>
+											<div className='w-2 h-2 bg-white rounded-full'></div>
+										</div>
+									)}
+								</motion.div>
 							))}
 						</div>
 					</div>
 
-					<div className='flex-1 mb-5 mt-7'>
-						<div className='flex items-center mb-2'>
-							<label className='text-md font-medium text-gray-700 mr-2'>
-								Conversation Context (optional)
-							</label>
+					{/* Session Settings */}
+					<div className='bg-white p-6 rounded-2xl border shadow-sm'>
+						<Label className='block text-lg font-semibold text-gray-800 mb-4'>
+							Session Settings
+						</Label>
+						<div className='space-y-4'>
+							<div>
+								<label className='block text-sm font-medium text-gray-700 mb-2'>
+									Duration
+								</label>
+								<div className='flex gap-2'>
+									{["15", "30", "45", "60"].map((duration) => (
+										<button
+											key={duration}
+											type='button'
+											onClick={() => setSessionDuration(duration)}
+											className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+												sessionDuration === duration
+													? "bg-blue-500 text-white"
+													: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+											}`}
+										>
+											{duration} min
+										</button>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					{/* Context Input */}
+					<div className='bg-white p-6 rounded-2xl border shadow-sm'>
+						<div className='flex items-center gap-2 mb-4'>
+							<Label className='text-lg font-semibold text-gray-800'>
+								Learning Context
+							</Label>
 							<Info className='w-4 h-4 text-gray-400' />
 						</div>
 						<textarea
 							value={conversationContext}
 							onChange={(e) => setConversationContext(e.target.value)}
-							placeholder='Enter context for your conversation'
-							rows={12}
-							className='w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none h-full'
+							placeholder='What would you like to learn today? (e.g., "Help me understand calculus derivatives" or "Practice Spanish conversation")'
+							rows={6}
+							className='w-full p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-700 placeholder-gray-400'
 						/>
 					</div>
 
-					<button
+					{/* Create Button */}
+					<motion.button
 						type='button'
-						className='w-fit text-md bg-blue-400 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center ml-auto'>
+						className='w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl'
+						whileHover={{ scale: 1.02 }}
+						whileTap={{ scale: 0.98 }}
+					>
+						<Calendar className='w-5 h-5' />
 						Create Session
-						<ChevronRight className='w-4 h-4 ml-2' />
-					</button>
+						<ChevronRight className='w-5 h-5' />
+					</motion.button>
 				</div>
 
-				{/* Right Panel */}
-				<div className='w-1/2 space-y-6 h-full'>
-					<div className='bg-white px-5 py-5 rounded-2xl border'>
-						<p className='font-marlin font-bold text-xl text-gray-800 border-b py-3 mb-7'>
+				{/* Right Panel - Preview */}
+				<div className='bg-white p-6 rounded-2xl border shadow-sm'>
+					<div className='flex items-center justify-between mb-6'>
+						<h3 className='font-marlin font-bold text-xl text-gray-800'>
 							Tutor Preview
-						</p>
+						</h3>
+						<div className='flex items-center gap-2 text-sm text-gray-500'>
+							<Clock className='w-4 h-4' />
+							{sessionDuration} minutes
+						</div>
+					</div>
+					
+					<div className='space-y-4'>
+						{/* Video Preview */}
 						<div
-							className='rounded-xl overflow-hidden flex justify-center items-center relative cursor-pointer'
+							className='relative rounded-xl overflow-hidden bg-gray-100 cursor-pointer group'
 							onMouseEnter={() => setShowControls(true)}
-							onMouseLeave={() => setShowControls(false)}>
+							onMouseLeave={() => setShowControls(false)}
+						>
 							<video
 								ref={videoRef}
 								loop
@@ -149,38 +211,53 @@ const CreateSession = () => {
 								controls={false}
 								src={availabletutors[selectedTutorIndex].video}
 								poster={availabletutors[selectedTutorIndex].image}
-								className='w-full rounded-xl'
+								className='w-full aspect-video object-cover'
 							/>
 
-							{/* Play/Pause Button Overlay */}
+							{/* Play/Pause Overlay */}
 							<div
 								className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
-									showControls || !isPlaying
-										? "opacity-100"
-										: "opacity-0"
-								}`}>
+									showControls || !isPlaying ? "opacity-100" : "opacity-0"
+								}`}
+							>
 								<button
 									onClick={togglePlayPause}
 									type='button'
-									className='bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-4 rounded-full transition-all duration-200 hover:scale-110'>
+									className='bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-200 hover:scale-110 group-hover:scale-105'
+								>
 									{isPlaying ? (
-										<Pause className='w-8 h-8' />
+										<Pause className='w-6 h-6' />
 									) : (
-										<Play className='w-8 h-8 ml-1' />
+										<Play className='w-6 h-6 ml-1' />
 									)}
 								</button>
 							</div>
 
-							{/* Status Text */}
-							<p className='absolute text-white px-3 py-1 rounded-md font-bricolage text-md bottom-4 left-1/2 -translate-x-1/2 bg-[#ffffff2b] backdrop-blur-xl shadow-md'>
-								{isPlaying
-									? "Playing In Preview mode"
-									: "Video Paused - Click to Play"}
+							{/* Status Badge */}
+							<div className='absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm'>
+								{isPlaying ? "Preview Playing" : "Click to Preview"}
+							</div>
+						</div>
+
+						{/* Tutor Info */}
+						<div className='bg-gray-50 p-4 rounded-xl'>
+							<h4 className='font-semibold text-gray-800 mb-1'>
+								{availabletutors[selectedTutorIndex].name}
+							</h4>
+							<p className='text-gray-600 text-sm mb-3'>
+								{availabletutors[selectedTutorIndex].specialty}
 							</p>
+							<div className='flex items-center gap-4 text-sm text-gray-500'>
+								<span className='flex items-center gap-1'>
+									<div className='w-2 h-2 bg-green-500 rounded-full'></div>
+									Available Now
+								</span>
+								<span>AI-Powered</span>
+							</div>
 						</div>
 					</div>
 				</div>
-			</motion.form>
+			</motion.div>
 		</motion.div>
 	);
 };
