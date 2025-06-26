@@ -57,7 +57,7 @@ export default function useTranscript(audioTrack: MediaStreamTrack | undefined):
         bufferSize.current = 0;
       }, 500)
       intervalIdRef.current = intervalId
-      
+
       websocket.onmessage = (event: MessageEvent) => {
         console.log('received something')
         const data = JSON.parse(event.data);
