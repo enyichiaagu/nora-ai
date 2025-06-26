@@ -63,7 +63,7 @@ const CreateSession = () => {
 
 			<form className='flex flex-1 gap-10 h-full'>
 				{/* Left Panel */}
-				<div className='w-1/2 bg-white px-5 py-4 border rounded-2xl h-full flex flex-col justify-between gap-6'>
+				<div className='w-1/2 bg-white px-5 py-4 border rounded-2xl h-full  justify-between gap-6'>
 					<div>
 						<Label
 							className='block text-md font-medium text-gray-700 mb-3'
@@ -92,7 +92,7 @@ const CreateSession = () => {
 						</div>
 					</div>
 
-					<div className='flex-1 mb-8'>
+					<div className='flex-1 mb-5 mt-7'>
 						<div className='flex items-center mb-2'>
 							<label className='text-md font-medium text-gray-700 mr-2'>
 								Conversation Context (optional)
@@ -110,7 +110,7 @@ const CreateSession = () => {
 
 					<button
 						type='button'
-						className='w-fit text-md bg-blue-400 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mt-auto ml-auto'>
+						className='w-fit text-md bg-blue-400 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center  ml-auto'>
 						Create Session
 						<ChevronRight className='w-4 h-4 ml-2' />
 					</button>
