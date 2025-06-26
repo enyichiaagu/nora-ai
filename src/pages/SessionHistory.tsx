@@ -30,12 +30,7 @@ const SessionHistory: React.FC = () => {
           </p>
         </div>
         
-        <Link to="/dashboard/session/create">
-          <Button className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600">
-            <Plus className="w-4 h-4" />
-            New Session
-          </Button>
-        </Link>
+     
       </motion.div>
 
       {/* Session Table */}
