@@ -8,7 +8,7 @@ interface UseTranscriptReturn {
 }
 
 export default function useTranscript(
-  audioTrack: MediaStreamTrack | undefined
+  audioTracks: MediaStreamTrack[] | undefined[]
 ): UseTranscriptReturn {
   const [transcript, setTranscript] = useState<string>(
     'Transcripts will be displayed here'
@@ -21,7 +21,7 @@ export default function useTranscript(
 
   const startTranscribing = async (): Promise<void> => {
     try {
-      if (!audioTrack)
+      if (!audioTracks)
         throw new Error('Cannot start transcription without remote audio');
       setTranscript('Transcription Starting ...');
 
