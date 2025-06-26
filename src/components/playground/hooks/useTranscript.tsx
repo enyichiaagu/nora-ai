@@ -11,19 +11,17 @@ interface UseTranscriptReturn {
 export default function useTranscript(
   audioTrack: MediaStreamTrack | undefined
 ): UseTranscriptReturn {
-  const [transcript, setTranscript] = useState<string>(
-    'Transcripts will be displayed here'
-  );
   const [isRecording, setIsRecording] = useState<boolean>(false)
+  const {startTranscription, stopTranscription, transcript} = useTranscription({
+    onTranscriptionStarted: () => console.log('Started!')
+  })
 
   const startTranscribing = async (): Promise<void> => {
-      
       setIsRecording(true);
   };
 
   const stopTranscribing = (): void => {
     setIsRecording(false)
-    setTranscript('Cannot start transcription without remote audio')
   };
 
   return { transcript, isRecording, startTranscribing, stopTranscribing };
