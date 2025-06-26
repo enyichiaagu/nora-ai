@@ -9,19 +9,20 @@ import Footer from '@/components/landing-page/Footer';
 import BoltBadge from '@/components/common/BoltBadge';
 
 const LandingPage: React.FC = () => {
-  return (
-    <div>
-      <Header />
-      <Hero />
-      <Mission />
-      <Features />
-      <Pricing />
-      <Faq />
-      <Cta />
-      <Footer />
-      <BoltBadge />
-    </div>
-  );
+	return (
+		<div className='relative '>
+			<Header />
+			{/* <Hero /> */}
+			<Mission />
+			<Features />
+			<Pricing />
+			<Faq />
+			<Cta />
+			<Footer />
+			<BoltBadge />
+			<Outlet />
+		</div>
+	);
 };
 
 export default LandingPage;
