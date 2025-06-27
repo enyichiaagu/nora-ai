@@ -8,7 +8,7 @@ interface UseTranscriptReturn {
 }
 
 export default function useTranscript(
-  audioTracks: MediaStreamTrack[] | undefined[]
+  audioTracks: (MediaStreamTrack | undefined)[]
 ): UseTranscriptReturn {
   const [transcript, setTranscript] = useState<string>(
     'Transcripts will be displayed here'
@@ -26,17 +26,21 @@ export default function useTranscript(
       setTranscript('Transcription Starting ...');
 
       // Will soon set up Backend to have a permanent ws endpoint
-      const websocket = new WebSocket('wss://4cf2-102-90-103-240.ngrok-free.app');
+      const websocket = new WebSocket(
+        'wss://nora-backend-kjwh.onrender.com/transcript'
+      );
       websockRef.current = websocket;
 
       const ctx = new AudioContext({ sampleRate: 16_000 });
       await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
-      
+
       const dest = ctx.createMediaStreamDestination();
-      const sources = audioTracks.map(track => {
-        ctx.createMediaStreamSource(new MediaStream([track])).connect(dest)
-      })
-      
+      audioTracks
+        .filter((track) => track !== undefined)
+        .map((track) => {
+          ctx.createMediaStreamSource(new MediaStream([track])).connect(dest);
+        });
+
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor');
       ctx.createMediaStreamSource(dest.stream).connect(pcmNode);
       pcmNode.connect(ctx.destination);

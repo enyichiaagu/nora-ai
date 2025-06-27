@@ -48,11 +48,11 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
   const handleEndCall = async () => {
     if (isRecording) stopTranscribing();
-    setIsEnding(true);
     if (callObject) {
       try {
         await callObject.leave();
         await callObject.destroy();
+        setIsEnding(true);
       } catch (error) {
         console.error('Error ending call:', error);
       }
