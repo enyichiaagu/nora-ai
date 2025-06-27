@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DailyAudio,
   DailyVideo,
@@ -20,6 +20,7 @@ interface SessionCallProps {
 
 const SessionCallContent: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
@@ -28,6 +29,40 @@ const SessionCallContent: React.FC = () => {
   const localTrack = useAudioTrack(localSessionId);
   const { isRecording, transcript, startTranscribing, stopTranscribing } =
     useTranscript([localTrack?.persistentTrack, remoteTrack?.persistentTrack]);
+
+  // Auto-join the call when component mounts
+  useEffect(() => {
+    const joinCall = async () => {
+      if (!callObject || isJoining) return;
+      
+      try {
+        setIsJoining(true);
+        console.log('Attempting to join call...');
+        
+        // Join the call
+        await callObject.join();
+        console.log('Successfully joined call');
+        
+        // Enable camera and microphone
+        await callObject.setLocalVideo(true);
+        await callObject.setLocalAudio(true);
+        
+      } catch (error) {
+        console.error('Failed to join call:', error);
+      } finally {
+        setIsJoining(false);
+      }
+    };
+
+    if (callState === 'new' && callObject) {
+      joinCall();
+    }
+  }, [callObject, callState, isJoining]);
+
+  // Log call state changes for debugging
+  useEffect(() => {
+    console.log('Call state changed:', callState);
+  }, [callState]);
 
   const toggleMute = () => {
     if (callObject) {
@@ -50,9 +85,28 @@ const SessionCallContent: React.FC = () => {
       try {
         await callObject.leave();
         await callObject.destroy();
+        // Navigate back to dashboard
+        window.location.href = '/dashboard';
       } catch (error) {
         console.error('Error ending call:', error);
       }
+    }
+  };
+
+  const getCallStatusMessage = () => {
+    switch (callState) {
+      case 'new':
+        return isJoining ? 'Joining call...' : 'Initializing...';
+      case 'joining-meeting':
+        return 'Connecting to session...';
+      case 'joined-meeting':
+        return remoteParticipantIds.length > 0 ? 'Connected' : 'Waiting for AI tutor...';
+      case 'left-meeting':
+        return 'Call ended';
+      case 'error':
+        return 'Connection error';
+      default:
+        return `Status: ${callState}`;
     }
   };
 
@@ -60,7 +114,7 @@ const SessionCallContent: React.FC = () => {
     <div className='flex flex-col px-6 pt-6 bg-zinc-950 min-h-screen gap-2'>
       <div className='flex-1 rounded-2xl relative overflow-hidden'>
         {/* Remote participant video */}
-        <div className='absolute h-full inset-0 w-full bg-blue-600 z-10'>
+        <div className='absolute h-full inset-0 w-full bg-gradient-to-br from-blue-600 to-blue-800 z-10'>
           {remoteParticipantIds.length > 0 ? (
             <DailyVideo
               type='video'
@@ -72,19 +126,23 @@ const SessionCallContent: React.FC = () => {
               }}
             />
           ) : (
-            <div className='flex items-center justify-center h-full text-white text-xl'>
-              {callState === 'joining-meeting'
-                ? 'Joining call...'
-                : callState === 'joined-meeting'
-                ? 'Waiting for participants...'
-                : 'Connecting...'}
+            <div className='flex flex-col items-center justify-center h-full text-white'>
+              <div className='text-center'>
+                <div className='w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mb-4'></div>
+                <p className='text-xl mb-2'>{getCallStatusMessage()}</p>
+                <p className='text-sm opacity-70'>
+                  {callState === 'joined-meeting' && remoteParticipantIds.length === 0 
+                    ? 'Your AI tutor will join shortly...' 
+                    : 'Please wait while we establish the connection'}
+                </p>
+              </div>
             </div>
           )}
         </div>
 
         {/* Local participant video */}
         {localSessionId && (
-          <div className='absolute h-[30%] w-[25%] right-7 bottom-20 bg-yellow-600 z-10 rounded-2xl overflow-hidden border-2 border-gray-300 shadow-2xl'>
+          <div className='absolute h-[30%] w-[25%] right-7 bottom-20 bg-gray-800 z-20 rounded-2xl overflow-hidden border-2 border-gray-300 shadow-2xl'>
             <DailyVideo
               type='video'
               sessionId={localSessionId}
@@ -93,20 +151,31 @@ const SessionCallContent: React.FC = () => {
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                objectPosition: 'top',
               }}
             />
           </div>
         )}
 
         {/* Transcription display */}
-        {isRecording && transcript && (
-          <div className='absolute bottom-10 left-1/2 bg-slate-200/30 -translate-x-1/2 z-20 rounded-xl backdrop-blur-lg max-w-[80%]'>
+        {isRecording && transcript && transcript !== 'Starting transcription...' && (
+          <div className='absolute bottom-10 left-1/2 bg-black/60 -translate-x-1/2 z-20 rounded-xl backdrop-blur-lg max-w-[80%]'>
             <p className='px-4 py-2 text-white text-lg'>
               {transcript}
             </p>
           </div>
         )}
+
+        {/* Call info overlay */}
+        <div className='absolute top-4 left-4 z-20 bg-black/50 rounded-lg px-3 py-2'>
+          <p className='text-white text-sm'>
+            Status: <span className='text-green-400'>{getCallStatusMessage()}</span>
+          </p>
+          {remoteParticipantIds.length > 0 && (
+            <p className='text-white text-xs opacity-70'>
+              Participants: {remoteParticipantIds.length + 1}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Controls */}
@@ -121,11 +190,12 @@ const SessionCallContent: React.FC = () => {
           {/* Mute button */}
           <button
             onClick={toggleMute}
+            disabled={callState !== 'joined-meeting'}
             className={`p-4 rounded-full transition-all ${
               isMuted
                 ? 'bg-red-600 hover:bg-red-700'
                 : 'bg-gray-700 hover:bg-gray-600'
-            }`}
+            } ${callState !== 'joined-meeting' ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {isMuted ? (
               <MicOff className='w-6 h-6 text-white' />
@@ -137,11 +207,12 @@ const SessionCallContent: React.FC = () => {
           {/* Transcription button */}
           <button
             onClick={handleTranscriptionToggle}
+            disabled={callState !== 'joined-meeting' || remoteParticipantIds.length === 0}
             className={`p-4 rounded-full transition-all ${
               isRecording
                 ? 'bg-blue-600 hover:bg-blue-700'
                 : 'bg-gray-700 hover:bg-gray-600'
-            }`}
+            } ${callState !== 'joined-meeting' || remoteParticipantIds.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <TranslateIcon
               color='white'
@@ -163,7 +234,7 @@ const SessionCallContent: React.FC = () => {
           <CopyButton
             buttonStyle='p-4 rounded-full transition-all bg-zinc-900'
             iconStyle='w-6 h-6'
-            textToCopy='session-link'
+            textToCopy={window.location.href}
           />
           <div className='bg-zinc-900 p-4 noice flex items-center justify-center rounded-full relative'>
             <img
@@ -185,10 +256,20 @@ const SessionCall: React.FC<SessionCallProps> = ({ conversationUrl }) => {
   if (!conversationUrl) {
     return (
       <div className='flex items-center justify-center min-h-screen bg-zinc-950 text-white'>
-        <p>No conversation URL provided</p>
+        <div className='text-center'>
+          <p className='text-xl mb-2'>No conversation URL provided</p>
+          <button 
+            onClick={() => window.location.href = '/dashboard'}
+            className='px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors'
+          >
+            Return to Dashboard
+          </button>
+        </div>
       </div>
     );
   }
+
+  console.log('SessionCall rendering with URL:', conversationUrl);
 
   return (
     <DailyProvider url={conversationUrl}>
