@@ -69,13 +69,13 @@ const CreateSession = () => {
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5, delay: 0.1 }}
 			>
-				<div className='flex items-center justify-center gap-3 text-blue-600 mb-2'>
-					<Video size={32} />
-					<h1 className='font-marlin font-bold text-3xl text-gray-800'>
+				<div className='flex items-center gap-3 text-blue-500 mb-2'>
+					<Video size={46} />
+					<h1 className='font-marlin font-bold text-3xl text-gray-600'>
 						Create New Session
 					</h1>
 				</div>
-				<p className='text-gray-600 text-lg'>Choose your AI tutor and start learning</p>
+				<p className='hidden text-gray-600 text-md text-left'>Choose your AI tutor and start learning</p>
 			</motion.div>
 
 			<motion.div 
@@ -113,7 +113,7 @@ const CreateSession = () => {
 									</div>
 									<div className='p-3 bg-white'>
 										<p className='font-semibold text-gray-800 text-sm'>{tutor.name}</p>
-										<p className='text-xs text-gray-500 mt-1'>{tutor.specialty}</p>
+										<p className='hidden text-xs text-gray-500 mt-1'>{tutor.id}</p>
 									</div>
 									{selectedTutorIndex === i && (
 										<div className='absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center'>
@@ -186,7 +186,7 @@ const CreateSession = () => {
 				</div>
 
 				{/* Right Panel - Preview */}
-				<div className='bg-white p-6 rounded-2xl border shadow-sm'>
+				<div className='bg-white p-6 rounded-2xl border shadow-sm h-fit'>
 					<div className='flex items-center justify-between mb-6'>
 						<h3 className='font-marlin font-bold text-xl text-gray-800'>
 							Tutor Preview
@@ -244,7 +244,7 @@ const CreateSession = () => {
 							<h4 className='font-semibold text-gray-800 mb-1'>
 								{availabletutors[selectedTutorIndex].name}
 							</h4>
-							<p className='text-gray-600 text-sm mb-3'>
+							<p className='text-gray-600 text-sm mb-3 hidden'>
 								{availabletutors[selectedTutorIndex].specialty}
 							</p>
 							<div className='flex items-center gap-4 text-sm text-gray-500'>
@@ -252,7 +252,6 @@ const CreateSession = () => {
 									<div className='w-2 h-2 bg-green-500 rounded-full'></div>
 									Available Now
 								</span>
-								<span>AI-Powered</span>
 							</div>
 						</div>
 					</div>
