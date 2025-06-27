@@ -32,8 +32,8 @@ export default function useTranscript(
       const ctx = new AudioContext({ sampleRate: 16_000 });
       const dest = ctx.createMediaStreamDestination();
       const sources = audioTracks.map(track => ctx.createMediaStreamSource(new MediaStream([track])))
+      sources.map((source) => source.connect(dest))
       await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
-      const source = ctx.createMediaStreamSource(new MediaStream(audioTracks));
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor');
       source.connect(pcmNode);
       pcmNode.connect(ctx.destination);
