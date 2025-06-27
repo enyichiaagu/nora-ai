@@ -26,7 +26,7 @@ export default function useTranscript(
       setTranscript('Transcription Starting ...');
 
       // Will soon set up Backend to have a permanent ws endpoint
-      const websocket = new WebSocket('wss://5ae1-102-90-100-6.ngrok-free.app');
+      const websocket = new WebSocket('wss://4cf2-102-90-103-240.ngrok-free.app');
       websockRef.current = websocket;
 
       const ctx = new AudioContext({ sampleRate: 16_000 });
@@ -39,6 +39,7 @@ export default function useTranscript(
       
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor');
       ctx.createMediaStreamSource(dest.stream).connect(pcmNode);
+      pcmNode.connect(ctx.destination);
 
       pcmNode.port.onmessage = (e) => {
         if (e.data) {
