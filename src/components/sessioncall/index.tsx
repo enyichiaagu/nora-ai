@@ -21,6 +21,7 @@ interface SessionCallProps {
 const SessionCallContent: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
+  const [isEnding, setIsEnding] = useState(false);
   const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
@@ -80,6 +81,7 @@ const SessionCallContent: React.FC = () => {
   };
 
   const handleEndCall = async () => {
+    setIsEnding(true);
     if (isRecording) stopTranscribing();
     if (callObject) {
       try {
@@ -94,21 +96,25 @@ const SessionCallContent: React.FC = () => {
   };
 
   const getCallStatusMessage = () => {
+    if (isEnding) return 'Ending call...';
+    
     switch (callState) {
       case 'new':
-        return isJoining ? 'Joining call...' : 'Initializing...';
+        return 'Joining...';
       case 'joining-meeting':
-        return 'Connecting to session...';
+        return 'Joining...';
       case 'joined-meeting':
-        return remoteParticipantIds.length > 0 ? 'Connected' : 'Waiting for AI tutor...';
+        return remoteParticipantIds.length > 0 ? null : 'Waiting for tutor...';
       case 'left-meeting':
         return 'Call ended';
       case 'error':
         return 'Connection error';
       default:
-        return `Status: ${callState}`;
+        return 'Joining...';
     }
   };
+
+  const statusMessage = getCallStatusMessage();
 
   return (
     <div className='flex flex-col px-6 pt-6 bg-zinc-950 min-h-screen gap-2'>
@@ -126,17 +132,11 @@ const SessionCallContent: React.FC = () => {
               }}
             />
           ) : (
-            <div className='flex flex-col items-center justify-center h-full text-white'>
-              <div className='text-center'>
-                <div className='w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mb-4'></div>
-                <p className='text-xl mb-2'>{getCallStatusMessage()}</p>
-                <p className='text-sm opacity-70'>
-                  {callState === 'joined-meeting' && remoteParticipantIds.length === 0 
-                    ? 'Your AI tutor will join shortly...' 
-                    : 'Please wait while we establish the connection'}
-                </p>
+            statusMessage && (
+              <div className='flex items-center justify-center h-full text-white'>
+                <p className='text-2xl font-light'>{statusMessage}</p>
               </div>
-            </div>
+            )
           )}
         </div>
 
@@ -164,18 +164,6 @@ const SessionCallContent: React.FC = () => {
             </p>
           </div>
         )}
-
-        {/* Call info overlay */}
-        <div className='absolute top-4 left-4 z-20 bg-black/50 rounded-lg px-3 py-2'>
-          <p className='text-white text-sm'>
-            Status: <span className='text-green-400'>{getCallStatusMessage()}</span>
-          </p>
-          {remoteParticipantIds.length > 0 && (
-            <p className='text-white text-xs opacity-70'>
-              Participants: {remoteParticipantIds.length + 1}
-            </p>
-          )}
-        </div>
       </div>
 
       {/* Controls */}
@@ -224,7 +212,8 @@ const SessionCallContent: React.FC = () => {
           {/* End call button */}
           <button 
             onClick={handleEndCall}
-            className='p-4 px-7 rounded-full bg-red-600 hover:bg-red-700 transition-all ml-2'
+            disabled={isEnding}
+            className='p-4 px-7 rounded-full bg-red-600 hover:bg-red-700 transition-all ml-2 disabled:opacity-50'
           >
             <img src='/icons/end-call.svg' className='w-6 h-6 text-white' alt='End call' />
           </button>
