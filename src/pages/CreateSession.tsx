@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChevronRight, Info, Video, Play, Pause, Clock, Calendar } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
@@ -73,17 +73,21 @@ const CreateSession = () => {
 		}
 	};
 
-	// Navigate to session call when data is available
-	if (data?.conversation_url) {
-		navigate(`/session/call/${data.conversation_id}`, {
-			state: { conversationUrl: data.conversation_url }
-		});
-	}
+	// Use useEffect to handle navigation when data changes
+	useEffect(() => {
+		if (data?.conversation_url) {
+			navigate(`/session/call/${data.conversation_id}`, {
+				state: { conversationUrl: data.conversation_url }
+			});
+		}
+	}, [data, navigate]);
 
-	// Show error if any
-	if (error) {
-		showToast.error(error);
-	}
+	// Use useEffect to handle error display
+	useEffect(() => {
+		if (error) {
+			showToast.error(error);
+		}
+	}, [error]);
 
 	return (
 		<motion.div 
