@@ -2,6 +2,9 @@ import { useState, useRef } from "react";
 import { ChevronRight, Info, Video, Play, Pause, Clock, Calendar } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
+import useCall from "@/hooks/dashboard/useCall";
+import showToast from "@/utils/toast.utils";
 
 const availabletutors = [
 	{
@@ -34,6 +37,8 @@ const CreateSession = () => {
 	const [showControls, setShowControls] = useState(true);
 	const [sessionDuration, setSessionDuration] = useState("30");
 	const videoRef = useRef<HTMLVideoElement>(null);
+	const navigate = useNavigate();
+	const { data, loading, error, makeCall } = useCall();
 
 	const handleTutorSelected = (index: number) => {
 		setSelectedTutorIndex(index);
@@ -54,6 +59,31 @@ const CreateSession = () => {
 			}
 		}
 	};
+
+	const handleCreateSession = async () => {
+		if (!conversationContext.trim()) {
+			showToast.error("Please provide a learning context");
+			return;
+		}
+
+		try {
+			await makeCall(conversationContext);
+		} catch (err) {
+			console.error("Failed to create session:", err);
+		}
+	};
+
+	// Navigate to session call when data is available
+	if (data?.conversation_url) {
+		navigate(`/session/call/${data.conversation_id}`, {
+			state: { conversationUrl: data.conversation_url }
+		});
+	}
+
+	// Show error if any
+	if (error) {
+		showToast.error(error);
+	}
 
 	return (
 		<motion.div 
@@ -175,12 +205,14 @@ const CreateSession = () => {
 					{/* Create Button */}
 					<motion.button
 						type='button'
-						className='w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl'
-						whileHover={{ scale: 1.02 }}
-						whileTap={{ scale: 0.98 }}
+						onClick={handleCreateSession}
+						disabled={loading || !conversationContext.trim()}
+						className='w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed'
+						whileHover={{ scale: loading ? 1 : 1.02 }}
+						whileTap={{ scale: loading ? 1 : 0.98 }}
 					>
 						<Calendar className='w-5 h-5' />
-						Create Session
+						{loading ? 'Creating Session...' : 'Create Session'}
 						<ChevronRight className='w-5 h-5' />
 					</motion.button>
 				</div>
