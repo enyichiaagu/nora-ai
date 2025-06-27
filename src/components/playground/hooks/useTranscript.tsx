@@ -30,11 +30,14 @@ export default function useTranscript(
       websockRef.current = websocket;
 
       const ctx = new AudioContext({ sampleRate: 16_000 });
-      const dest = ctx.createMediaStreamDestination();
-      const sources = audioTracks.map(track => ctx.createMediaStreamSource(new MediaStream([track])))
-      sources.map((source) => source.connect(dest))
-      const mixedTrack = dest.stream.getAudioTracks()[0]
       await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
+      
+      const dest = ctx.createMediaStreamDestination();
+      const sources = audioTracks.map(track => {
+        ctx.createMediaStreamSource(new MediaStream([track]))
+          .connect(dest)
+      })
+      const mixedTrack = dest.stream.getAudioTracks()[0]
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor');
       source.connect(pcmNode);
       pcmNode.connect(ctx.destination);
