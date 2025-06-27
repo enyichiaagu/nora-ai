@@ -24,9 +24,10 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
-  const audioTrack = useAudioTrack(localSessionId);
+  const remoteTrack = useAudioTrack(remoteParticipantIds?.[0]);
+  const localTrack = useAudioTrack(localSessionId);
   const { isRecording, transcript, startTranscribing, stopTranscribing } =
-    useTranscript(audioTrack?.persistentTrack);
+    useTranscript([localTrack?.persistentTrack, remoteTrack?.persistentTrack]);
 
   useEffect(() => {
     if (!callObject || !data?.conversation_url || isEnding) return;
@@ -47,11 +48,11 @@ const Call: React.FC<CallProps> = ({ data, onCallEnd }) => {
 
   const handleEndCall = async () => {
     if (isRecording) stopTranscribing();
-    setIsEnding(true);
     if (callObject) {
       try {
         await callObject.leave();
         await callObject.destroy();
+        setIsEnding(true);
       } catch (error) {
         console.error('Error ending call:', error);
       }
