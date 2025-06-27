@@ -8,7 +8,7 @@ interface UseTranscriptReturn {
 }
 
 export default function useTranscript(
-  audioTrack: MediaStreamTrack | undefined
+  audioTracks: (MediaStreamTrack | undefined)[]
 ): UseTranscriptReturn {
   const [transcript, setTranscript] = useState<string>(
     'Transcripts will be displayed here'
@@ -21,21 +21,28 @@ export default function useTranscript(
 
   const startTranscribing = async (): Promise<void> => {
     try {
-      if (!audioTrack)
+      if (audioTracks.includes(undefined))
         throw new Error('Cannot start transcription without remote audio');
       setTranscript('Transcription Starting ...');
 
       // Will soon set up Backend to have a permanent ws endpoint
       const websocket = new WebSocket(
-        'wss://f387-102-90-118-78.ngrok-free.app'
+        'wss://nora-backend-kjwh.onrender.com/transcript'
       );
       websockRef.current = websocket;
 
       const ctx = new AudioContext({ sampleRate: 16_000 });
       await ctx.audioWorklet.addModule('/scripts/audioworklet.js');
-      const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]));
+
+      const dest = ctx.createMediaStreamDestination();
+      audioTracks
+        .filter((track) => track !== undefined)
+        .map((track) => {
+          ctx.createMediaStreamSource(new MediaStream([track])).connect(dest);
+        });
+
       const pcmNode = new AudioWorkletNode(ctx, 'pcm-processor');
-      source.connect(pcmNode);
+      ctx.createMediaStreamSource(dest.stream).connect(pcmNode);
       pcmNode.connect(ctx.destination);
 
       pcmNode.port.onmessage = (e) => {

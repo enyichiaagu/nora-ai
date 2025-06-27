@@ -9,12 +9,15 @@ import useCall from './hooks/useCall';
 const Playground: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
   const { data, loading, error, makeCall, resetCall } = useCall();
+  const [isCallFinished, setIsCallFinished] = useState(false);
 
-  const handleStart = () => {
-    makeCall(apiKey);
+  const handleStart = async () => {
+    setIsCallFinished(false);
+    await makeCall(apiKey);
   };
 
   const handleCallEnd = async () => {
+    setIsCallFinished(true);
     await resetCall(apiKey);
   };
 
@@ -32,7 +35,7 @@ const Playground: React.FC = () => {
       )}
 
       <div className='w-full h-[600px] bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 relative'>
-        {!data ? (
+        {!data || isCallFinished ? (
           <Static />
         ) : (
           <DailyProvider url={data.conversation_url}>

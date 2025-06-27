@@ -40,6 +40,7 @@ const useCall = (): UseCallReturn => {
           participant_left_timeout: 5,
           participant_absent_timeout: 10,
           enable_closed_captions: true,
+          enable_recording: true,
           language: 'english'
         }
       })
