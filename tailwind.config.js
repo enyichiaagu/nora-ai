@@ -19,6 +19,7 @@ export default {
         app: {
           primary: "#0052ff",
           secondary: "#FFBE00",
+          offwhite: "#FFFCEC",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
