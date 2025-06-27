@@ -1,12 +1,20 @@
 import { useState } from 'react';
-import { ConversationData } from '../types/conversation';
+
+interface ConversationData {
+  conversation_id: string;
+  conversation_name: string;
+  conversation_url: string;
+  status: string;
+  callback_url: string;
+  created_at: string;
+}
 
 interface UseCallReturn {
   data: ConversationData | null;
   loading: boolean;
   error: string | null;
-  makeCall: (apiKey: string) => Promise<void>;
-  resetCall: (apiKey?: string) => Promise<void>;
+  makeCall: (conversationContext: string) => Promise<void>;
+  resetCall: () => Promise<void>;
 }
 
 const API_BASE_URL = 'https://tavusapi.com/v2/conversations';
@@ -16,9 +24,16 @@ const useCall = (): UseCallReturn => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const makeCall = async (apiKey: string) => {
-    if (!apiKey.trim()) {
-      setError('API key is required');
+  const makeCall = async (conversationContext: string) => {
+    const apiKey = import.meta.env.VITE_TAVUS_API_KEY;
+    
+    if (!apiKey) {
+      setError('API key not configured');
+      return;
+    }
+
+    if (!conversationContext.trim()) {
+      setError('Conversation context is required');
       return;
     }
 
@@ -35,8 +50,7 @@ const useCall = (): UseCallReturn => {
       body: JSON.stringify({
         replica_id: 'rc2146c13e81',
         persona_id: 'p28ff60873c3',
-        conversational_context:
-          "You're about to talk to a friend about Atoms in chemistry",
+        conversational_context: conversationContext,
         custom_greeting: "What's going on?",
         properties: {
           max_call_duration: 120,
@@ -52,7 +66,7 @@ const useCall = (): UseCallReturn => {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message);
+        throw new Error(result.message || 'Failed to create session');
       }
 
       setData(result);
@@ -64,7 +78,9 @@ const useCall = (): UseCallReturn => {
     }
   };
 
-  const resetCall = async (apiKey?: string) => {
+  const resetCall = async () => {
+    const apiKey = import.meta.env.VITE_TAVUS_API_KEY;
+    
     if (data?.conversation_id && apiKey) {
       try {
         const options = {
