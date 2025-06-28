@@ -9,8 +9,7 @@ import {
   useAudioTrack,
   DailyProvider,
 } from '@daily-co/daily-react';
-import { MicOff, Mic } from 'lucide-react';
-import TranslateIcon from '@/assets/TranslateIcon';
+import { MicOff, Mic, ClosedCaptioning } from 'lucide-react';
 import CopyButton from '@/components/common/CopyButton';
 import useTranscript from './hooks/useTranscript';
 
@@ -31,6 +30,9 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [isEnding, setIsEnding] = useState(false);
+  const [showSubtitles, setShowSubtitles] = useState(false);
+  const [hasAutoStarted, setHasAutoStarted] = useState(false);
+  
   const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
@@ -48,7 +50,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
         setIsJoining(true);
         console.log('Attempting to join call...');
 
-        await callObject.join({ url: conversationUrl }); // Don't rewrite this line. This is correct syntax
+        await callObject.join({ url: conversationUrl });
         console.log('Successfully joined call');
 
         await callObject.setLocalVideo(true);
@@ -65,6 +67,20 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     }
   }, [callObject, callState, isJoining]);
 
+  // Auto-start transcription when tutor joins
+  useEffect(() => {
+    if (
+      remoteParticipantIds.length > 0 && 
+      !hasAutoStarted && 
+      !isRecording &&
+      callState === 'joined-meeting'
+    ) {
+      console.log('Tutor joined - auto-starting transcription');
+      startTranscribing(conversationId);
+      setHasAutoStarted(true);
+    }
+  }, [remoteParticipantIds.length, hasAutoStarted, isRecording, callState, conversationId, startTranscribing]);
+
   useEffect(() => {
     console.log('Call state changed:', callState);
   }, [callState]);
@@ -76,12 +92,8 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     }
   };
 
-  const handleTranscriptionToggle = () => {
-    if (isRecording) {
-      stopTranscribing();
-    } else {
-      startTranscribing(conversationId);
-    }
+  const toggleSubtitles = () => {
+    setShowSubtitles(!showSubtitles);
   };
 
   const handleEndCall = async () => {
@@ -157,7 +169,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
           </div>
         )}
 
-        {isRecording &&
+        {showSubtitles &&
           transcript &&
           transcript !== 'Starting transcription...' && (
             <div className='absolute bottom-10 left-1/2 bg-black/60 -translate-x-1/2 z-20 rounded-xl backdrop-blur-lg max-w-[80%]'>
@@ -195,13 +207,13 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
           </button>
 
           <button
-            onClick={handleTranscriptionToggle}
+            onClick={toggleSubtitles}
             disabled={
               callState !== 'joined-meeting' ||
               remoteParticipantIds.length === 0
             }
             className={`p-4 rounded-full transition-all ${
-              isRecording
+              showSubtitles
                 ? 'bg-blue-600 hover:bg-blue-700'
                 : 'bg-gray-700 hover:bg-gray-600'
             } ${
@@ -211,11 +223,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
                 : ''
             }`}
           >
-            <TranslateIcon
-              color='white'
-              size={24}
-              className='w-6 h-6 text-white'
-            />
+            <ClosedCaptioning className='w-6 h-6 text-white' />
           </button>
 
           <button
