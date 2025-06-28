@@ -1,4 +1,3 @@
-import { sessionService } from "@/services/session.service";
 import { LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
