@@ -9,7 +9,8 @@ import {
   useAudioTrack,
   DailyProvider,
 } from '@daily-co/daily-react';
-import { MicOff, Mic, Subtitles } from 'lucide-react';
+import { MicOff, Mic } from 'lucide-react';
+import { RiClosedCaptioningFill } from '@remixicon/react';
 import CopyButton from '@/components/common/CopyButton';
 import useTranscript from './hooks/useTranscript';
 
@@ -232,7 +233,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
                 : ''
             }`}
           >
-            <Subtitles className='w-6 h-6 text-white' />
+            <RiClosedCaptioningFill className='w-6 h-6 text-white' />
           </button>
 
           <button
