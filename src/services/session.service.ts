@@ -83,10 +83,6 @@ class SessionService {
     return data;
   }
 
-  async pingServer() {
-    fetch(`${this.API_BASE_URL}/ping`);
-  }
-
   async getSessionsByUserId(userId: string): Promise<Session[]> {
     const { data, error } = await this.supabase
       .from('sessions')
