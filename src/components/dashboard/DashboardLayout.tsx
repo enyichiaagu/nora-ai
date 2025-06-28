@@ -1,8 +1,24 @@
+import { useProfileStore } from "@/hooks/dashboard/useProfileStore";
 import Header from "./Header";
 import SideBar from "./SideBar";
-import { Outlet } from "react-router";
+import { Outlet, useLoaderData } from "react-router";
+import { useEffect } from "react";
 
 function DashboardLayout() {
+	const loaderData = useLoaderData();
+	const { setProfile } = useProfileStore();
+
+	useEffect(() => {
+		console.log(loaderData);
+		setProfile({
+			authenticated: true,
+			id: "dcb6b811-4cfb-4e37-8c09-8c74863ce432",
+			email: "aniokechukwudi7@gmail.com",
+			name: "Sebastian",
+			avatar: "/icons/avatar.svg",
+		});
+	}, []);
+
 	return (
 		<div className='min-h-screen grid grid-cols-[250px_1fr] grid-rows-[auto_1fr] h-screen'>
 			{/* Sidebar - spans full height */}

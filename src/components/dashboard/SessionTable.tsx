@@ -7,11 +7,12 @@ import {
 	List,
 	ExternalLink,
 	Search,
+	User,
 } from "lucide-react";
-import React, { useState } from "react";
-import { exampleSessions } from "./sessionExample";
+import React, { useEffect, useState } from "react";
+
 import { formatDateTime } from "@/utils/date.utils";
-import { SessionStatus, SessionStatusBadge } from "./SessionStatusBadge";
+import { SessionStatusBadge } from "./SessionStatusBadge";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -19,19 +20,13 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "../ui/input";
-
-type Session = {
-	name: string;
-	tutorId: string;
-	image: string;
-	sessionId: string;
-	status: SessionStatus;
-	created_at: string;
-	title: string;
-	description: string;
-	link: string;
-	note: string;
-};
+import { motion } from "framer-motion";
+import { sessionService } from "@/services/session.service";
+import { useProfileStore } from "@/hooks/dashboard/useProfileStore";
+import showToast from "@/utils/toast.utils";
+// Import the skeleton components
+import SessionTableSkeleton from "./SessionTableSkeletons";
+import { Session } from "@/services/session.service";
 
 const SessionLink: React.FC<{ link: string }> = ({ link }) => {
 	if (!link) {
@@ -51,13 +46,135 @@ const SessionLink: React.FC<{ link: string }> = ({ link }) => {
 	);
 };
 
-const SessionTableRow: React.FC<Session> = (props) => {
+const SessionCard: React.FC<Required<Session> & { index: number }> = (
+	props
+) => {
 	const created = formatDateTime(props.created_at);
 
 	const handleCopyLink = () => {
-		if (props.link) {
-			navigator.clipboard.writeText(props.link);
-			// You might want to show a toast notification here
+		if (props.url) {
+			navigator.clipboard.writeText(props.url);
+			showToast.success("Link copied to clipboard!");
+		}
+	};
+
+	const handleDownloadNote = () => {
+		if (props.title) {
+			const blob = new Blob([props.context], { type: "text/plain" });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = `${props.title}-note.txt`;
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+			showToast.success("Note downloaded successfully!");
+		}
+	};
+
+	return (
+		<motion.div
+			key={props.id}
+			initial={{ opacity: 0, y: 20 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: props.index * 0.1 }}
+			className='bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-zinc-100 hover:border-blue-200 group cursor-pointer'>
+			{/* Session Header */}
+			<div className='p-8'>
+				<div className='flex items-center gap-4 mb-6'>
+					<div className='p-1 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-full transition-colors'>
+						<img
+							src={props.tutor_image}
+							alt={`${props.tutor} avatar`}
+							className='w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm'
+							onError={(e) => {
+								e.currentTarget.src = "/images/default-avatar.jpg";
+							}}
+						/>
+					</div>
+					<div className='flex-1'>
+						<h3 className='text-lg font-semibold text-zinc-800'>
+							{props.tutor}
+						</h3>
+						<p className='text-sm text-zinc-500'>{props.replica_id}</p>
+					</div>
+				</div>
+				<h3 className='text-xl font-semibold font-marlin text-zinc-600 mb-3 group-hover:text-blue-600 transition-colors'>
+					{props.title}
+				</h3>
+				<p className='text-zinc-400 leading-relaxed md:text-[1rem] text-sm'>
+					{props.description ||
+						"No description available for this session."}
+				</p>
+			</div>
+
+			{/* Session Details */}
+			<div className='px-8 py-6 bg-zinc-50 border-t border-zinc-100'>
+				<div className='flex flex-wrap gap-2 mb-6'>
+					<span className='px-3 py-1.5 bg-white border border-zinc-200 rounded-full text-[.78rem] md:text-sm font-medium text-zinc-600 flex items-center gap-2'>
+						{/* <Calendar className='h-4 w-4' /> */}
+						{created.date}
+					</span>
+					<span className='px-3 py-1.5 bg-white border border-zinc-200 rounded-full text-[.78rem] md:text-sm font-medium text-zinc-600 flex items-center gap-2'>
+						{/* <Clock className='h-4 w-4' /> */}
+						{created.time}
+					</span>
+				</div>
+				<div className='flex justify-between items-center'>
+					<div className='flex gap-3'>
+						<motion.button
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+							onClick={(e) => {
+								e.stopPropagation();
+								handleCopyLink();
+							}}
+							disabled={!props.url}
+							className='p-2.5 bg-white border border-zinc-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed'>
+							<ExternalLink className='h-5 w-5 text-zinc-600 hover:text-blue-600' />
+						</motion.button>
+						<motion.button
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+							onClick={(e) => {
+								e.stopPropagation();
+								handleDownloadNote();
+							}}
+							disabled={!props.note}
+							className='p-2.5 bg-white border border-zinc-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed'>
+							<Download className='h-5 w-5 text-zinc-600 hover:text-blue-600' />
+						</motion.button>
+					</div>
+					<div className='flex items-center'>
+						<SessionStatusBadge status={props.status} />
+					</div>
+				</div>
+			</div>
+		</motion.div>
+	);
+};
+const SessionGrid: React.FC<{ sessions: Session[] }> = ({ sessions }) => {
+	return (
+		<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+			{sessions.map((session, index) => (
+				<SessionCard
+					key={session.id}
+					{...(session as Required<Session>)}
+					index={index}
+				/>
+			))}
+		</div>
+	);
+};
+
+const SessionTableRow: React.FC<Required<Session>> = (props) => {
+	const created = formatDateTime(props.created_at);
+
+	const handleCopyLink = () => {
+		if (props.url) {
+			navigator.clipboard.writeText(props.url);
+			showToast.success("Link copied to clipboard!");
 		}
 	};
 
@@ -72,6 +189,7 @@ const SessionTableRow: React.FC<Session> = (props) => {
 			a.click();
 			document.body.removeChild(a);
 			URL.revokeObjectURL(url);
+			showToast.success("Note downloaded successfully!");
 		}
 	};
 
@@ -89,8 +207,8 @@ const SessionTableRow: React.FC<Session> = (props) => {
 			<td className='px-6 py-4'>
 				<div className='flex items-center gap-3'>
 					<img
-						src={props.image}
-						alt={`${props.name} avatar`}
+						src={props.tutor_image}
+						alt={`${props.tutor} avatar`}
 						className='w-14 h-14 rounded-full object-cover border-4 border-gray-200 '
 						onError={(e) => {
 							e.currentTarget.src = "/images/default-avatar.jpg";
@@ -98,9 +216,9 @@ const SessionTableRow: React.FC<Session> = (props) => {
 					/>
 					<div>
 						<p className='text-sm font-medium text-gray-900 mb-1'>
-							{props.name}
+							{props.tutor}
 						</p>
-						<p className='text-xs text-gray-500'>{props.tutorId}</p>
+						<p className='text-xs text-gray-500'>{props.replica_id}</p>
 					</div>
 				</div>
 			</td>
@@ -117,7 +235,7 @@ const SessionTableRow: React.FC<Session> = (props) => {
 
 			{/* Session Link */}
 			<td className='px-6 py-4'>
-				<SessionLink link={props.link} />
+				<SessionLink link={props.url} />
 			</td>
 
 			{/* Actions */}
@@ -143,7 +261,7 @@ const SessionTableRow: React.FC<Session> = (props) => {
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={handleCopyLink}
-								disabled={!props.link}
+								disabled={!props.url}
 								className='flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
 								<ExternalLink className='w-4 h-4 mr-3' />
 								Copy Link
@@ -161,9 +279,17 @@ const SessionTableFilters: React.FC<{
 	onFilterChange: (status: string) => void;
 	searchTerm: string;
 	onSearchChange: (term: string) => void;
-}> = ({ filterStatus, onFilterChange, searchTerm, onSearchChange }) => {
+	viewMode: "grid" | "list";
+	onViewModeChange: (mode: "grid" | "list") => void;
+}> = ({
+	filterStatus,
+	onFilterChange,
+	searchTerm,
+	onSearchChange,
+	viewMode,
+	onViewModeChange,
+}) => {
 	const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
-	const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
 	return (
 		<div className='bg-white rounded-xl border p-4 mb-6 shadow-sm'>
@@ -241,7 +367,7 @@ const SessionTableFilters: React.FC<{
 									? "bg-white text-gray-900 shadow-sm"
 									: "text-gray-500 hover:text-gray-700"
 							}`}
-							onClick={() => setViewMode("list")}>
+							onClick={() => onViewModeChange("list")}>
 							<List className='w-4 h-4' />
 						</button>
 						<button
@@ -251,7 +377,7 @@ const SessionTableFilters: React.FC<{
 									? "bg-white text-gray-900 shadow-sm"
 									: "text-gray-500 hover:text-gray-700"
 							}`}
-							onClick={() => setViewMode("grid")}>
+							onClick={() => onViewModeChange("grid")}>
 							<LayoutGrid className='w-4 h-4' />
 						</button>
 					</div>
@@ -297,14 +423,56 @@ const SessionTableFilters: React.FC<{
 
 function SessionTable() {
 	const [currentPage, setCurrentPage] = useState(1);
-	const [itemsPerPage] = useState(10); // You can make this configurable
+	const { profile } = useProfileStore();
+	const [itemsPerPage] = useState(12); // Increased for grid view
 	const [filterStatus, setFilterStatus] = useState("all");
 	const [searchTerm, setSearchTerm] = useState("");
+	const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
-	// Filter sessions based on status
-	const filteredSessions = exampleSessions.filter((session) => {
-		if (filterStatus === "all") return true;
-		return session.status.toLowerCase() === filterStatus.toLowerCase();
+	// Loading and data states
+	const [isLoading, setIsLoading] = useState(true);
+	const [sessions, setSessions] = useState<Session[]>([]);
+
+	useEffect(() => {
+		const getUserSession = async () => {
+			if (!profile) {
+				showToast.error("Unauthorized Request");
+				setIsLoading(false);
+				return;
+			}
+
+			try {
+				setIsLoading(true);
+
+				const fetchedSessions = await sessionService.getSessionsByUserId(
+					profile.id
+				);
+
+				// If API returns data, use it, otherwise fall back to example data
+				setSessions(fetchedSessions);
+			} catch (error) {
+				console.error("Error fetching sessions:", error);
+				showToast.error("Failed to load sessions");
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		getUserSession();
+	}, []);
+
+	// Filter sessions based on status and search term
+	const filteredSessions = sessions.filter((session) => {
+		const matchesStatus =
+			filterStatus === "all" ||
+			session.status.toLowerCase() === filterStatus.toLowerCase();
+		const matchesSearch =
+			searchTerm === "" ||
+			session.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			session.tutor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			session.description?.toLowerCase().includes(searchTerm.toLowerCase());
+
+		return matchesStatus && matchesSearch;
 	});
 
 	// Calculate pagination
@@ -332,6 +500,21 @@ function SessionTable() {
 		setCurrentPage(1);
 	};
 
+	const handleViewModeChange = (mode: "grid" | "list") => {
+		setViewMode(mode);
+		setCurrentPage(1);
+	};
+
+	// Show loading skeleton
+	if (isLoading) {
+		return (
+			<SessionTableSkeleton
+				viewMode={viewMode}
+				itemCount={itemsPerPage}
+			/>
+		);
+	}
+
 	return (
 		<div>
 			<SessionTableFilters
@@ -339,85 +522,125 @@ function SessionTable() {
 				onFilterChange={handleFilterChange}
 				searchTerm={searchTerm}
 				onSearchChange={handleSearchChange}
+				viewMode={viewMode}
+				onViewModeChange={handleViewModeChange}
 			/>
 
-			<div className='mt-7 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden'>
-				<table className='min-w-full divide-y divide-gray-200'>
-					<thead className='bg-gray-50'>
-						<tr>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-								Created
-							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-								Tutor
-							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-								Status
-							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-								Title
-							</th>
-							<th
-								scope='col'
-								className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-								Link
-							</th>
-							<th
-								scope='col'
-								className='relative px-6 py-3'>
-								<span className='sr-only'>Actions</span>
-							</th>
-						</tr>
-					</thead>
-					<tbody className='bg-white divide-y divide-gray-200'>
-						{currentSessions.map((session) => (
-							<SessionTableRow
-								key={session.sessionId}
-								{...session}
-							/>
-						))}
-					</tbody>
-				</table>
-
-				{/* Pagination */}
-				<div className='bg-gray-50 px-6 py-3 border-t border-gray-200 flex items-center justify-between'>
-					<div className='text-sm text-gray-700'>
-						Showing <span className='font-medium'>{startIndex + 1}</span>{" "}
-						to <span className='font-medium'>{endIndex}</span> of{" "}
-						<span className='font-medium'>{totalItems}</span> session(s)
+			{currentSessions.length === 0 ? (
+				<div className='bg-white rounded-lg border border-gray-200 shadow-sm p-12 text-center'>
+					<div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
+						<User className='w-8 h-8 text-gray-400' />
 					</div>
-					<div className='flex items-center gap-2'>
-						<button
-							onClick={goToPreviousPage}
-							disabled={currentPage === 1}
-							className={`px-4 py-2 border border-gray-200 rounded-md text-sm ${
-								currentPage === 1
-									? "text-gray-400 bg-gray-50 cursor-not-allowed"
-									: "text-gray-700 bg-white hover:bg-gray-50"
-							}`}>
-							Previous
-						</button>
-						<button
-							onClick={goToNextPage}
-							disabled={currentPage === totalPages || totalPages === 0}
-							className={`px-4 py-2 border border-gray-200 rounded-md text-sm ${
-								currentPage === totalPages || totalPages === 0
-									? "text-gray-400 bg-gray-50 cursor-not-allowed"
-									: "text-gray-700 bg-white hover:bg-gray-50"
-							}`}>
-							Next
-						</button>
-					</div>
+					<h3 className='text-lg font-medium text-gray-900 mb-2'>
+						No sessions found
+					</h3>
+					<p className='text-gray-500 mb-4'>
+						{searchTerm || filterStatus !== "all"
+							? "Try adjusting your search or filters to find what you're looking for."
+							: "You haven't had any tutoring sessions yet. Start learning today!"}
+					</p>
 				</div>
-			</div>
+			) : (
+				<>
+					{viewMode === "grid" ? (
+						<motion.div
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ duration: 0.3 }}>
+							<SessionGrid sessions={currentSessions} />
+						</motion.div>
+					) : (
+						<motion.div
+							className='bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden'
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ duration: 0.3 }}>
+							<table className='min-w-full divide-y divide-gray-200'>
+								<thead className='bg-gray-50'>
+									<tr>
+										<th
+											scope='col'
+											className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+											Created
+										</th>
+										<th
+											scope='col'
+											className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+											Tutor
+										</th>
+										<th
+											scope='col'
+											className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+											Status
+										</th>
+										<th
+											scope='col'
+											className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+											Title
+										</th>
+										<th
+											scope='col'
+											className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+											Link
+										</th>
+										<th
+											scope='col'
+											className='relative px-6 py-3'>
+											<span className='sr-only'>Actions</span>
+										</th>
+									</tr>
+								</thead>
+								<tbody className='bg-white divide-y divide-gray-200'>
+									{currentSessions.map((session) => (
+										<SessionTableRow
+											key={session.id}
+											{...(session as Required<Session>)}
+										/>
+									))}
+								</tbody>
+							</table>
+						</motion.div>
+					)}
+
+					{/* Pagination */}
+					<div className='bg-white rounded-lg border border-gray-200 shadow-sm mt-6 px-6 py-3 flex items-center justify-between'>
+						<div className='text-sm text-gray-700'>
+							Showing{" "}
+							<span className='font-medium'>{startIndex + 1}</span> to{" "}
+							<span className='font-medium'>{endIndex}</span> of{" "}
+							<span className='font-medium'>{totalItems}</span>{" "}
+							session(s)
+						</div>
+						<div className='flex items-center gap-2'>
+							<button
+								onClick={goToPreviousPage}
+								disabled={currentPage === 1}
+								className={`px-4 py-2 border border-gray-200 rounded-md text-sm transition-colors ${
+									currentPage === 1
+										? "text-gray-400 bg-gray-50 cursor-not-allowed"
+										: "text-gray-700 bg-white hover:bg-gray-50"
+								}`}>
+								Previous
+							</button>
+							<span className='px-4 py-2 text-sm text-gray-700'>
+								Page {currentPage} of {totalPages}
+							</span>
+							<button
+								onClick={goToNextPage}
+								disabled={
+									currentPage === totalPages || totalPages === 0
+								}
+								className={`px-4 py-2 border border-gray-200 rounded-md text-sm transition-colors ${
+									currentPage === totalPages || totalPages === 0
+										? "text-gray-400 bg-gray-50 cursor-not-allowed"
+										: "text-gray-700 bg-white hover:bg-gray-50"
+								}`}>
+								Next
+							</button>
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	);
 }

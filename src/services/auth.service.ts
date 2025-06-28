@@ -193,7 +193,6 @@ class AuthService {
 			return {
 				success: true,
 				authenticated: true,
-				isAdmin,
 				data: {
 					user: profile,
 				},
