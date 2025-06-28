@@ -27,7 +27,7 @@ export default function useTranscript(
       setTranscript('Starting transcription...');
 
       const websocket = new WebSocket(
-        'wss://nora-backend-kjwh.onrender.com/transcript'
+        `wss://${import.meta.env.VITE_API_BASE_URL}/transcript`
       );
       websockRef.current = websocket;
 
