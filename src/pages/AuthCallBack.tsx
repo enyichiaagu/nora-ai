@@ -1,47 +1,55 @@
-// src/pages/AuthCallback.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { authService } from "@/services/auth.service";
 
 export default function AuthCallback() {
 	const [status, setStatus] = useState("Processing your sign-in...");
 	const navigate = useNavigate();
+	const hasProcessed = useRef(false); // Prevent duplicate processing
+	const isProcessing = useRef(false); // Prevent concurrent calls
 
 	useEffect(() => {
 		const handleCallback = async () => {
+			// Prevent multiple calls
+			if (hasProcessed.current || isProcessing.current) {
+				console.log("Callback already processed or in progress");
+				return;
+			}
+
+			isProcessing.current = true;
+
 			try {
-				// Process the OAuth callback
-				console.log("processing auth callback");
+				console.log("Processing auth callback (once)");
 				const result = await authService.handleOAuthCallback();
 
 				if (result.success) {
+					hasProcessed.current = true;
 					setStatus("Sign-in successful! Redirecting...");
 
-					// Redirect to dashboard after successful login
 					setTimeout(() => {
-						navigate("/dashboard");
+						navigate("/dashboard", { replace: true });
 					}, 1000);
 				} else {
 					setStatus(`Sign-in failed: ${result.error}`);
 
-					// Redirect to login page on error
 					setTimeout(() => {
-						navigate("/auth");
+						navigate("/auth", { replace: true });
 					}, 2000);
 				}
 			} catch (error) {
 				console.error("Error handling OAuth callback:", error);
 				setStatus("An error occurred during sign-in. Please try again.");
 
-				// Redirect to login page on error
 				setTimeout(() => {
-					navigate("/auth");
+					navigate("/auth", { replace: true });
 				}, 2000);
+			} finally {
+				isProcessing.current = false;
 			}
 		};
 
 		handleCallback();
-	}, [navigate]);
+	}, []); // Empty dependency array
 
 	return (
 		<div className='flex min-h-screen flex-col items-center justify-center p-4 h-full bg-app-primary noice'>

@@ -9,14 +9,10 @@ function DashboardLayout() {
 	const { setProfile } = useProfileStore();
 
 	useEffect(() => {
-		console.log(loaderData);
-		setProfile({
-			authenticated: true,
-			id: "dcb6b811-4cfb-4e37-8c09-8c74863ce432",
-			email: "aniokechukwudi7@gmail.com",
-			name: "Sebastian",
-			avatar: "/icons/avatar.svg",
-		});
+		console.log("User", loaderData.user);
+		if (loaderData.user) {
+			setProfile(loaderData.user);
+		}
 	}, []);
 
 	return (
