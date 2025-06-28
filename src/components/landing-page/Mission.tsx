@@ -6,7 +6,7 @@ function Mission() {
 			<motion.p
 				className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'
 				initial={{ opacity: 0, scale: 0.8 }}
-				animate={{ opacity: 1, scale: 1 }}
+				whileInView={{ opacity: 1, scale: 1 }}
 				transition={{ duration: 0.5 }}>
 				Our Mission
 			</motion.p>
@@ -14,7 +14,7 @@ function Mission() {
 			<motion.h1
 				className='font-marlin text-[1.4rem] md:text-[2.9rem] font-semibold mt-7 text-center md:w-[70%] text-gray-700 md:px-0 px-7'
 				initial={{ opacity: 0, y: 30 }}
-				animate={{ opacity: 1, y: 0 }}
+				whileInView={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.8, delay: 0.2 }}>
 				Nora makes learning easy and personal through video calls that feels
 				like chatting with a friend.
@@ -25,8 +25,7 @@ function Mission() {
 				alt=''
 				className='md:w-[50%] w-[80%] mt-8'
 				initial={{ opacity: 0, y: 40, scale: 0.9 }}
-				animate={{ opacity: 1, y: 0, scale: 1 }}
-				viewport={{ once: true, margin: "-100px" }}
+				whileInView={{ opacity: 1, y: 0, scale: 1 }}
 				transition={{ duration: 0.8, delay: 0.4 }}
 				whileHover={{ scale: 1.02 }}
 			/>

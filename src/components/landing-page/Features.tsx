@@ -27,7 +27,7 @@ function Features() {
 			<motion.p
 				className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'
 				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
+				whileInView={{ opacity: 1 }}
 				transition={{ duration: 0.8 }}>
 				Features
 			</motion.p>
@@ -35,7 +35,7 @@ function Features() {
 			<motion.h1
 				className='font-marlin text-gray-700 text-[1.8rem] md:text-[3rem] font-semibold mt-3 text-center'
 				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
+				whileInView={{ opacity: 1 }}
 				transition={{ duration: 0.8 }}>
 				Our Key Features
 			</motion.h1>
@@ -44,7 +44,7 @@ function Features() {
 				<motion.div
 					className='bg-[rgba(26,81,245,0.02)] border-2 shadow-sm border-[rgba(26,95,245,0.08)] h-[100%] flex items-center justify-center p-5 md:p-16 rounded-2xl'
 					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
+					whileInView={{ opacity: 1 }}
 					transition={{ duration: 0.8 }}>
 					<img
 						src='/images/all-feature.svg'
@@ -57,7 +57,7 @@ function Features() {
 						<motion.div
 							key={index}
 							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
+							whileInView={{ opacity: 1 }}
 							transition={{ duration: 0.8 }}>
 							<motion.img
 								src={feature.icon}
