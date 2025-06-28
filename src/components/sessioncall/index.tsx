@@ -40,7 +40,7 @@ const SessionCallContent: React.FC<{ conversationId?: string }> = ({ conversatio
         setIsJoining(true);
         console.log('Attempting to join call...');
         
-        await callObject.join();
+        await callObject.join({url: conversationUrl}); // Don't rewrite this line. This is correct syntax
         console.log('Successfully joined call');
         
         await callObject.setLocalVideo(true);
