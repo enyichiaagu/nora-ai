@@ -9,7 +9,7 @@ import {
   useAudioTrack,
   DailyProvider,
 } from '@daily-co/daily-react';
-import { MicOff, Mic, Captions as ClosedCaptioning } from 'lucide-react';
+import { MicOff, Mic, Subtitles } from 'lucide-react';
 import CopyButton from '@/components/common/CopyButton';
 import useTranscript from './hooks/useTranscript';
 
@@ -67,19 +67,28 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     }
   }, [callObject, callState, isJoining]);
 
-  // Auto-start transcription when tutor joins
+  // Auto-start transcription when remote audio is available
   useEffect(() => {
     if (
       remoteParticipantIds.length > 0 && 
+      remoteTrack?.persistentTrack && // Ensure remote audio track exists
       !hasAutoStarted && 
       !isRecording &&
       callState === 'joined-meeting'
     ) {
-      console.log('Tutor joined - auto-starting transcription');
+      console.log('Remote audio available - auto-starting transcription');
       startTranscribing(conversationId);
       setHasAutoStarted(true);
     }
-  }, [remoteParticipantIds.length, hasAutoStarted, isRecording, callState, conversationId, startTranscribing]);
+  }, [
+    remoteParticipantIds.length, 
+    remoteTrack?.persistentTrack, 
+    hasAutoStarted, 
+    isRecording, 
+    callState, 
+    conversationId, 
+    startTranscribing
+  ]);
 
   useEffect(() => {
     console.log('Call state changed:', callState);
@@ -223,7 +232,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
                 : ''
             }`}
           >
-            <ClosedCaptioning className='w-6 h-6 text-white' />
+            <Subtitles className='w-6 h-6 text-white' />
           </button>
 
           <button
