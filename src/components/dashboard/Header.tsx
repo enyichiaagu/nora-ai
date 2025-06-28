@@ -3,30 +3,18 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-	Search,
-	Bell,
-	Settings,
-	LogOut,
-	User,
-	HelpCircle,
-	ChevronDown,
-} from "lucide-react";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Search, LogOut, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useProfileStore } from "@/hooks/dashboard/useProfileStore";
+import { authService } from "@/services/auth.service";
+import { useNavigate } from "react-router";
 
 interface HeaderProps {
 	className?: string;
@@ -35,14 +23,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = (props) => {
 	// Internal state
 	const [searchQuery, setSearchQuery] = useState("");
-	const [notificationCount] = useState(3);
-
-	// User data (could be fetched from context/API)
-	const [userData] = useState({
-		name: "Sarah Johnson",
-		email: "sarah.johnson@example.com",
-		avatar: "",
-	});
+	const { profile, clearProfile } = useProfileStore();
+	const navigate = useNavigate();
 
 	// Internal handlers
 	const handleSearch = () => {
@@ -62,32 +44,17 @@ const Header: React.FC<HeaderProps> = (props) => {
 		}
 	};
 
-	const handleLogout = () => {
+	const handleLogout = async () => {
 		console.log("Logging out...");
+		await authService.signOut();
+		clearProfile();
+		navigate("/");
+
 		// Add your logout logic here
 	};
 
-	const handleSettings = () => {
-		console.log("Opening settings...");
-		// Add your settings navigation logic here
-	};
-
-	const handleProfile = () => {
-		console.log("Opening profile...");
-		// Add your profile navigation logic here
-	};
-
-	const handleHelp = () => {
-		console.log("Opening help...");
-		// Add your help logic here
-	};
-
-	const handleNotifications = () => {
-		console.log("Opening notifications...");
-		// Add your notifications logic here
-	};
-
 	const getInitials = (name: string) => {
+		if (!name) return "";
 		return name
 			.split(" ")
 			.map((part) => part.charAt(0))
@@ -96,127 +63,95 @@ const Header: React.FC<HeaderProps> = (props) => {
 			.slice(0, 2);
 	};
 
+	const image = profile?.avatar;
+
 	return (
-		<TooltipProvider>
-			<header
-				className={cn(
-					"h-16 bg-white border-b border-gray-200   flex items-center justify-between .w-[94%] w-full px-[3%] mx-auto",
-					props.className
-				)}>
-				{/* Center Section - Search */}
-				<div className='flex-1 max-w-lg '>
-					<div className='relative'>
-						<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4' />
-						<Input
-							type='text'
-							placeholder='Search sessions, notes, or topics...'
-							value={searchQuery}
-							onChange={handleSearchChange}
-							onKeyPress={handleKeyPress}
-							className='pl-10 pr-4 py-2 w-full bg-gray-50 border-gray-200 focus:bg-white  transition-all focus-visible:ring-blue-500'
-						/>
+		profile && (
+			<TooltipProvider>
+				<header
+					className={cn(
+						"h-16 bg-white border-b border-gray-200 flex items-center justify-between w-full px-[3%] mx-auto",
+						props.className
+					)}>
+					{/* Center Section - Search */}
+					<div className='flex-1 max-w-lg'>
+						<div className='relative'>
+							<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4' />
+							<Input
+								type='text'
+								placeholder='Search sessions, notes, or topics...'
+								value={searchQuery}
+								onChange={handleSearchChange}
+								onKeyPress={handleKeyPress}
+								className='pl-10 pr-4 py-2 w-full bg-gray-50 border-gray-200 focus:bg-white transition-all focus-visible:ring-blue-500'
+							/>
+						</div>
 					</div>
-				</div>
 
-				{/* Right Section - Actions & User */}
-				<div className='flex items-center space-x-3'>
-					{/* Theme Toggle */}
+					{/* Right Section - User */}
+					<div className='flex items-center'>
+						{/* User Dropdown */}
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button
+									variant='ghost'
+									className='flex items-center px-3 py-2 h-auto bg-white border border-gray-200 rounded-full hover:border-gray-300 transition-all duration-200'>
+									<Avatar className='w-8 h-8'>
+										<AvatarImage
+											src={image}
+											alt={profile?.username}
+										/>
+										<AvatarFallback className='bg-blue-500 text-white text-sm'>
+											{getInitials(profile?.username)}
+										</AvatarFallback>
+									</Avatar>
+									<span className='text-sm font-medium text-gray-700 hidden sm:block'>
+										{profile?.username.split(" ")[0]}
+									</span>
+									<ChevronDown className='w-4 h-4 text-gray-500' />
+								</Button>
+							</DropdownMenuTrigger>
 
-					{/* Notifications */}
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<button
-								onClick={handleNotifications}
-								className=' p-1 relative  flex items-center justify-center'>
-								<Bell className=' w-8 text-gray-600' />
-								{notificationCount > 0 && (
-									<Badge
-										variant='destructive'
-										className='absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs flex items-center justify-center p-0'>
-										{notificationCount > 9 ? "9+" : notificationCount}
-									</Badge>
-								)}
-							</button>
-						</TooltipTrigger>
-						<TooltipContent>
-							<p>
-								Notifications{" "}
-								{notificationCount > 0 && `(${notificationCount})`}
-							</p>
-						</TooltipContent>
-					</Tooltip>
-
-					{/* User Dropdown */}
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant='ghost'
-								className='flex items-center space-x-1 px-2 py-1 h-auto bg-white border border-2 rounded-3xl'>
-								<Avatar className='w-8 h-8'>
-									<AvatarImage
-										src='/icons/avatar.svg'
-										// src={userData.avatar}
-										alt={userData.name}
-									/>
-									<AvatarFallback className='bg-blue-500 text-white text-sm'>
-										{getInitials(userData.name)}
-									</AvatarFallback>
-								</Avatar>
-
-								<ChevronDown className='w-5 h-5 text-gray-500' />
-							</Button>
-						</DropdownMenuTrigger>
-
-						<DropdownMenuContent
-							align='end'
-							className='w-56'>
-							<DropdownMenuLabel>
-								<div className='flex flex-col space-y-1'>
-									<p className='text-sm font-medium leading-none'>
-										{userData.name}
-									</p>
-									<p className='text-xs leading-none text-muted-foreground'>
-										{userData.email}
-									</p>
+							<DropdownMenuContent
+								align='end'
+								className='w-64 bg-white/95 backdrop-blur-md shadow-xl ring-1 ring-black/5 border-0 rounded-xl p-2'>
+								{/* User Info Section with Centered Avatar */}
+								<div className='flex flex-col items-center py-4 px-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg mb-2'>
+									<Avatar className='w-16 h-16 mb-3 ring-2 ring-white shadow-md'>
+										<AvatarImage
+											src={image}
+											alt={profile.username}
+										/>
+										<AvatarFallback className='bg-blue-500 text-white text-lg font-semibold'>
+											{getInitials(profile.username)}
+										</AvatarFallback>
+									</Avatar>
+									<div className='text-center'>
+										<p className='text-sm font-semibold text-gray-900 mb-1'>
+											{profile.username}
+										</p>
+										<p className='text-xs text-gray-600'>
+											{profile.email}
+										</p>
+									</div>
 								</div>
-							</DropdownMenuLabel>
 
-							<DropdownMenuSeparator />
+								<DropdownMenuSeparator className='my-2' />
 
-							<DropdownMenuItem
-								className='cursor-pointer'
-								onClick={handleProfile}>
-								<User className='mr-2 h-4 w-4' />
-								<span>Profile</span>
-							</DropdownMenuItem>
+								<DropdownMenuSeparator className='my-2' />
 
-							<DropdownMenuItem
-								className='cursor-pointer'
-								onClick={handleSettings}>
-								<Settings className='mr-2 h-4 w-4' />
-								<span>Settings</span>
-							</DropdownMenuItem>
-
-							<DropdownMenuItem
-								className='cursor-pointer'
-								onClick={handleHelp}>
-								<HelpCircle className='mr-2 h-4 w-4' />
-								<span>Help & Support</span>
-							</DropdownMenuItem>
-
-							<DropdownMenuSeparator />
-
-							<DropdownMenuItem
-								className='cursor-pointer text-red-600 focus:text-red-600'
-								onClick={handleLogout}>
-								<LogOut className='mr-2 h-4 w-4' />
-								<span>Log out</span>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-			</header>
-		</TooltipProvider>
+								<DropdownMenuItem
+									className='cursor-pointer flex items-center px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 focus:bg-red-50 rounded-lg transition-colors'
+									onClick={handleLogout}>
+									<LogOut className='mr-3 h-4 w-4' />
+									<span>Sign Out</span>
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+				</header>
+			</TooltipProvider>
+		)
 	);
 };
 

@@ -4,7 +4,7 @@ import { create } from "zustand";
 export interface Profile {
 	id: string;
 	email: string;
-	name: string;
+	username: string;
 	avatar?: string;
 	authenticated: boolean;
 	// Add other profile properties as needed

@@ -26,8 +26,9 @@ function Footer() {
 						<p className='font-montserrat text-2xl font-semibold '>
 							Got Suggestions?
 						</p>
-						<motion.button
-							className='bg-app-primary text-white font-montserrat px-4 py-2 rounded-lg block mx-auto'
+						<motion.a
+							href='mailto:noraaitutor@gmail.com'
+							className='bg-app-primary text-white font-montserrat px-4 py-2 rounded-lg  mx-auto no-underline inline-flex justify-center'
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 							transition={{
@@ -36,7 +37,7 @@ function Footer() {
 								damping: 17,
 							}}>
 							Email Us
-						</motion.button>
+						</motion.a>
 					</div>
 				</motion.div>
 
@@ -61,7 +62,9 @@ function Footer() {
 						<p className='font-montserrat text-2xl font-semibold'>
 							Want More Info?
 						</p>
-						<motion.button
+						<motion.a
+							href='https://x.com/noratutor'
+							target='_blank'
 							className='bg-app-primary text-white font-montserrat px-4 py-2 rounded-lg block mx-auto'
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
@@ -71,7 +74,7 @@ function Footer() {
 								damping: 17,
 							}}>
 							Check Our Page
-						</motion.button>
+						</motion.a>
 					</div>
 				</motion.div>
 			</motion.div>
@@ -85,13 +88,13 @@ function Footer() {
 						</p>
 						<div className='flex items-center gap-5'>
 							<a
-								href='https://x.com/noratutor'
+								href='https://github.com/chucks1093/nora-ai'
 								target='_blank'
 								className='p-2 bg-white bg-opacity-20 backdrop-blur-sm rounded-full hover:bg-opacity-30 transition-all duration-200 flex'>
 								<Github className='w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200' />
 							</a>
 							<a
-								href='https://x.com/noratutor'
+								href='mailto:noraaitutor@gmail.com'
 								target='_blank'
 								className='p-2 bg-white bg-opacity-20 backdrop-blur-sm rounded-full hover:bg-opacity-30 transition-all duration-200 flex'>
 								<AtSign className='w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200' />

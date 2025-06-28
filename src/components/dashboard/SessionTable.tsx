@@ -436,7 +436,6 @@ function SessionTable() {
 	useEffect(() => {
 		const getUserSession = async () => {
 			if (!profile) {
-				showToast.error("Unauthorized Request");
 				setIsLoading(false);
 				return;
 			}

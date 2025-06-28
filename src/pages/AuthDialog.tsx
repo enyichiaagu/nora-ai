@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -52,13 +52,17 @@ const NoraLogo = () => (
 
 const AuthDialog: React.FC = () => {
 	const navigate = useNavigate();
+	const [loading, setIsLoading] = useState(false);
 
 	const handleGoogleAuth = async () => {
 		try {
+			setIsLoading(true);
 			const response = await authService.signInWithGoogle();
 			console.log(response);
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -96,8 +100,9 @@ const AuthDialog: React.FC = () => {
 
 						{/* Google Sign In Button */}
 						<Button
+							disabled={loading}
 							onClick={handleGoogleAuth}
-							className='w-full bg-app-offwhite hover:bg-gray-100 text-gray-900 font-medium py-5 px-6 rounded-lg flex items-center justify-center gap-3 transition-all duration-200 hover:shadow-lg mt-4'>
+							className='w-full disabled:bg-app-offwhite/90 bg-app-offwhite hover:bg-gray-100 text-gray-900 font-medium py-5 px-6 rounded-lg flex items-center justify-center gap-3 transition-all duration-200 hover:shadow-lg mt-4'>
 							<GoogleIcon />
 							Continue with Google
 						</Button>

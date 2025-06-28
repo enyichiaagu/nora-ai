@@ -13,7 +13,10 @@ import {
 	LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+import { authService } from "@/services/auth.service";
+import { useProfileStore } from "@/hooks/dashboard/useProfileStore";
+import showToast from "@/utils/toast.utils";
 
 interface NavigationItem {
 	icon: React.ComponentType<{ className?: string }>;
@@ -181,9 +184,14 @@ interface SideBarProps {
 }
 
 const SideBar: React.FC<SideBarProps> = (props) => {
-	const handleLogout = () => {
-		console.log("Logging out...");
-		// Add your logout logic here
+	const { clearProfile } = useProfileStore();
+	const navigate = useNavigate();
+
+	const handleLogout = async () => {
+		showToast.loading("Logging out...");
+		await authService.signOut();
+		clearProfile();
+		navigate("/");
 	};
 
 	return (
