@@ -9,7 +9,7 @@ import {
   useAudioTrack,
   DailyProvider,
 } from '@daily-co/daily-react';
-import { MicOff, Mic, ClosedCaptioning } from 'lucide-react';
+import { MicOff, Mic, Captions as ClosedCaptioning } from 'lucide-react';
 import CopyButton from '@/components/common/CopyButton';
 import useTranscript from './hooks/useTranscript';
 
