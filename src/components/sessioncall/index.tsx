@@ -19,7 +19,12 @@ interface SessionCallProps {
   conversationId?: string;
 }
 
-const SessionCallContent: React.FC<{ conversationId?: string }> = ({ conversationId, conversationUrl }) => {
+interface SessionCallContentProps {
+  conversationId?: string;
+  conversationUrl?: string;
+}
+
+const SessionCallContent: React.FC<SessionCallContentProps> = ({ conversationId, conversationUrl }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [isEnding, setIsEnding] = useState(false);
