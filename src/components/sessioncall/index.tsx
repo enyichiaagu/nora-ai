@@ -16,11 +16,11 @@ import useTranscript from './hooks/useTranscript';
 
 interface SessionCallProps {
   conversationUrl?: string;
-  conversationId?: string;
+  conversationId: string;
 }
 
 interface SessionCallContentProps {
-  conversationId?: string;
+  conversationId: string;
   conversationUrl?: string;
 }
 
