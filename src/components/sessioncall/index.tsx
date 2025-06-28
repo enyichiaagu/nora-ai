@@ -73,9 +73,8 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     if (
       remoteParticipantIds.length > 0 && 
       remoteTrack?.persistentTrack && // Ensure remote audio track exists
-      !hasAutoStarted && 
-      !isRecording &&
-      callState === 'joined-meeting'
+      !hasAutoStarted &&
+      !isRecording
     ) {
       console.log('Remote audio available - auto-starting transcription');
       startTranscribing(conversationId);
@@ -86,7 +85,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     remoteTrack?.persistentTrack, 
     hasAutoStarted, 
     isRecording, 
-    callState, 
     conversationId, 
     startTranscribing
   ]);
