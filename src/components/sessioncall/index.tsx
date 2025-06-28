@@ -16,6 +16,7 @@ import useTranscript from './hooks/useTranscript';
 
 interface SessionCallProps {
   conversationUrl?: string;
+  conversationId?: string;
 }
 
 interface SessionCallContentProps {
@@ -39,7 +40,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
   const { isRecording, transcript, startTranscribing, stopTranscribing } =
     useTranscript([localTrack?.persistentTrack, remoteTrack?.persistentTrack]);
 
-  // Auto-join the call when component mounts
   useEffect(() => {
     const joinCall = async () => {
       if (!callObject || isJoining) return;
@@ -48,11 +48,9 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
         setIsJoining(true);
         console.log('Attempting to join call...');
 
-        // Join the call
-        await callObject.join();
+        await callObject.join({ url: conversationUrl }); // Don't rewrite this line. This is correct syntax
         console.log('Successfully joined call');
 
-        // Enable camera and microphone
         await callObject.setLocalVideo(true);
         await callObject.setLocalAudio(true);
       } catch (error) {
@@ -67,7 +65,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     }
   }, [callObject, callState, isJoining]);
 
-  // Log call state changes for debugging
   useEffect(() => {
     console.log('Call state changed:', callState);
   }, [callState]);
@@ -83,7 +80,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     if (isRecording) {
       stopTranscribing();
     } else {
-      startTranscribing();
+      startTranscribing(conversationId);
     }
   };
 
@@ -94,7 +91,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
       try {
         await callObject.leave();
         await callObject.destroy();
-        // Navigate back to dashboard
         window.location.href = '/dashboard';
       } catch (error) {
         console.error('Error ending call:', error);
@@ -126,7 +122,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
   return (
     <div className='flex flex-col px-6 pt-6 bg-zinc-950 min-h-screen gap-2'>
       <div className='flex-1 rounded-2xl relative overflow-hidden'>
-        {/* Remote participant video */}
         <div className='absolute h-full inset-0 w-full bg-gradient-to-br from-blue-600 to-blue-800 z-10'>
           {remoteParticipantIds.length > 0 ? (
             <DailyVideo
@@ -147,7 +142,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
           )}
         </div>
 
-        {/* Local participant video */}
         {localSessionId && (
           <div className='absolute h-[30%] w-[25%] right-7 bottom-20 bg-gray-800 z-20 rounded-2xl overflow-hidden border-2 border-gray-300 shadow-2xl'>
             <DailyVideo
@@ -163,7 +157,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
           </div>
         )}
 
-        {/* Transcription display */}
         {isRecording &&
           transcript &&
           transcript !== 'Starting transcription...' && (
@@ -173,7 +166,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
           )}
       </div>
 
-      {/* Controls */}
       <div className='flex h-[8vh] my-1 justify-between items-center relative'>
         <div className='flex items-center gap-1 text-md'>
           <span className='text-white'>{new Date().toLocaleTimeString()}</span>
@@ -182,7 +174,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
         </div>
 
         <div className='flex items-center gap-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
-          {/* Mute button */}
           <button
             onClick={toggleMute}
             disabled={callState !== 'joined-meeting'}
@@ -203,7 +194,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
             )}
           </button>
 
-          {/* Transcription button */}
           <button
             onClick={handleTranscriptionToggle}
             disabled={
@@ -228,7 +218,6 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
             />
           </button>
 
-          {/* End call button */}
           <button
             onClick={handleEndCall}
             disabled={isEnding}
@@ -264,7 +253,10 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
   );
 };
 
-const SessionCall: React.FC<SessionCallProps> = ({ conversationUrl }) => {
+const SessionCall: React.FC<SessionCallProps> = ({
+  conversationUrl,
+  conversationId,
+}) => {
   if (!conversationUrl) {
     return (
       <div className='flex items-center justify-center min-h-screen bg-zinc-950 text-white'>
@@ -285,7 +277,10 @@ const SessionCall: React.FC<SessionCallProps> = ({ conversationUrl }) => {
 
   return (
     <DailyProvider url={conversationUrl}>
-      <SessionCallContent />
+      <SessionCallContent
+        conversationId={conversationId}
+        conversationUrl={conversationUrl}
+      />
     </DailyProvider>
   );
 };
