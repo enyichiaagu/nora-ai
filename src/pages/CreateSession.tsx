@@ -73,16 +73,17 @@ const CreateSession = () => {
 		}
 	};
 
-	// Use useEffect to handle navigation when data changes
 	useEffect(() => {
 		if (data?.conversation_url) {
 			navigate(`/session/call/${data.conversation_id}`, {
-				state: { conversationUrl: data.conversation_url }
+				state: { 
+					conversationUrl: data.conversation_url,
+					conversationId: data.conversation_id
+				}
 			});
 		}
 	}, [data, navigate]);
 
-	// Use useEffect to handle error display
 	useEffect(() => {
 		if (error) {
 			showToast.error(error);
@@ -96,7 +97,6 @@ const CreateSession = () => {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.6, ease: "easeOut" }}
 		>
-			{/* Header */}
 			<motion.div 
 				className='text-center space-y-2'
 				initial={{ opacity: 0, y: 20 }}
@@ -118,9 +118,7 @@ const CreateSession = () => {
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6, delay: 0.2 }}
 			>
-				{/* Left Panel */}
 				<div className='space-y-6'>
-					{/* Tutor Selection */}
 					<div className='bg-white p-6 rounded-2xl border shadow-sm'>
 						<Label className='block text-lg font-semibold text-gray-800 mb-4'>
 							Select Your Tutor
@@ -159,7 +157,6 @@ const CreateSession = () => {
 						</div>
 					</div>
 
-					{/* Session Settings */}
 					<div className='bg-white p-6 rounded-2xl border shadow-sm'>
 						<Label className='block text-lg font-semibold text-gray-800 mb-4'>
 							Session Settings
@@ -189,7 +186,6 @@ const CreateSession = () => {
 						</div>
 					</div>
 
-					{/* Context Input */}
 					<div className='bg-white p-6 rounded-2xl border shadow-sm'>
 						<div className='flex items-center gap-2 mb-4'>
 							<Label className='text-lg font-semibold text-gray-800'>
@@ -206,7 +202,6 @@ const CreateSession = () => {
 						/>
 					</div>
 
-					{/* Create Button */}
 					<motion.button
 						type='button'
 						onClick={handleCreateSession}
@@ -221,7 +216,6 @@ const CreateSession = () => {
 					</motion.button>
 				</div>
 
-				{/* Right Panel - Preview */}
 				<div className='bg-white p-6 rounded-2xl border shadow-sm h-fit'>
 					<div className='flex items-center justify-between mb-6'>
 						<h3 className='font-marlin font-bold text-xl text-gray-800'>
@@ -234,7 +228,6 @@ const CreateSession = () => {
 					</div>
 					
 					<div className='space-y-4'>
-						{/* Video Preview */}
 						<div
 							className='relative rounded-xl overflow-hidden bg-gray-100 cursor-pointer group'
 							onMouseEnter={() => setShowControls(true)}
@@ -250,7 +243,6 @@ const CreateSession = () => {
 								className='w-full aspect-video object-cover'
 							/>
 
-							{/* Play/Pause Overlay */}
 							<div
 								className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
 									showControls || !isPlaying ? "opacity-100" : "opacity-0"
@@ -269,13 +261,11 @@ const CreateSession = () => {
 								</button>
 							</div>
 
-							{/* Status Badge */}
 							<div className='absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm'>
 								{isPlaying ? "Preview Playing" : "Click to Preview"}
 							</div>
 						</div>
 
-						{/* Tutor Info */}
 						<div className='bg-gray-50 p-4 rounded-xl'>
 							<h4 className='font-semibold text-gray-800 mb-1'>
 								{availabletutors[selectedTutorIndex].name}

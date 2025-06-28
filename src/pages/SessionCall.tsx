@@ -3,6 +3,7 @@ import SessionCall from '@/components/sessioncall';
 
 interface LocationState {
   conversationUrl?: string;
+  conversationId?: string;
 }
 
 function SessionCallPage() {
@@ -11,6 +12,7 @@ function SessionCallPage() {
   const state = location.state as LocationState;
   
   const conversationUrl = state?.conversationUrl;
+  const conversationId = state?.conversationId || id;
 
   if (!conversationUrl) {
     return (
@@ -23,7 +25,7 @@ function SessionCallPage() {
     );
   }
 
-  return <SessionCall conversationUrl={conversationUrl} />;
+  return <SessionCall conversationUrl={conversationUrl} conversationId={conversationId} />;
 }
 
 export default SessionCallPage;
