@@ -251,7 +251,7 @@ const SessionCall: React.FC<SessionCallProps> = ({ conversationUrl, conversation
 
   return (
     <DailyProvider url={conversationUrl}>
-      <SessionCallContent conversationId={conversationId} url={conversationUrl}/>
+      <SessionCallContent conversationId={conversationId} conversationUrl={conversationUrl}/>
     </DailyProvider>
   );
 };
