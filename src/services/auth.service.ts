@@ -30,10 +30,11 @@ class AuthService {
 	private async handleOAuthSignIn(user: User) {
 		try {
 			// Check if profile already exists
+			console.log(user);
 			const { data: existingProfile } = await this.supabase
 				.from("profile")
 				.select("*")
-				.eq("id", user.id)
+				.eq("email", user.email)
 				.single();
 
 			console.log(existingProfile);
@@ -46,6 +47,7 @@ class AuthService {
 				if (session) {
 					this.saveSessionToCookies(session);
 				}
+				console.log("I am an existing user");
 				return;
 			}
 
@@ -68,9 +70,12 @@ class AuthService {
 			const { error: profileError } = await this.supabase
 				.from("profile")
 				.insert({
+					id: user.id,
 					username: username,
 					email: email,
-					avatar: user.user_metadata?.avatar_url || null,
+					avatar:
+						user.user_metadata?.avatar_url ||
+						`${env.VITE_SUPABASE_URL}/storage/v1/object/public/content/avatars/avatar.png`,
 					updated_at: new Date().toISOString(),
 				});
 
@@ -186,16 +191,11 @@ class AuthService {
 			if (session) {
 				this.saveSessionToCookies(session);
 			}
-			//CHECK IS USER IS ADMIN
-			const isAdmin = profile.role === "ADMIN";
-			this.isAdmin = isAdmin;
 
 			return {
 				success: true,
 				authenticated: true,
-				data: {
-					user: profile,
-				},
+				...profile,
 			};
 		} catch (error) {
 			console.error("Error in getCurrentUser:", error);
