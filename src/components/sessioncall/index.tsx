@@ -18,7 +18,15 @@ interface SessionCallProps {
   conversationUrl?: string;
 }
 
-const SessionCallContent: React.FC = () => {
+interface SessionCallContentProps {
+  conversationId?: string;
+  conversationUrl?: string;
+}
+
+const SessionCallContent: React.FC<SessionCallContentProps> = ({
+  conversationId,
+  conversationUrl,
+}) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [isEnding, setIsEnding] = useState(false);
@@ -35,19 +43,18 @@ const SessionCallContent: React.FC = () => {
   useEffect(() => {
     const joinCall = async () => {
       if (!callObject || isJoining) return;
-      
+
       try {
         setIsJoining(true);
         console.log('Attempting to join call...');
-        
+
         // Join the call
         await callObject.join();
         console.log('Successfully joined call');
-        
+
         // Enable camera and microphone
         await callObject.setLocalVideo(true);
         await callObject.setLocalAudio(true);
-        
       } catch (error) {
         console.error('Failed to join call:', error);
       } finally {
@@ -97,7 +104,7 @@ const SessionCallContent: React.FC = () => {
 
   const getCallStatusMessage = () => {
     if (isEnding) return 'Ending call...';
-    
+
     switch (callState) {
       case 'new':
         return 'Joining...';
@@ -157,13 +164,13 @@ const SessionCallContent: React.FC = () => {
         )}
 
         {/* Transcription display */}
-        {isRecording && transcript && transcript !== 'Starting transcription...' && (
-          <div className='absolute bottom-10 left-1/2 bg-black/60 -translate-x-1/2 z-20 rounded-xl backdrop-blur-lg max-w-[80%]'>
-            <p className='px-4 py-2 text-white text-lg'>
-              {transcript}
-            </p>
-          </div>
-        )}
+        {isRecording &&
+          transcript &&
+          transcript !== 'Starting transcription...' && (
+            <div className='absolute bottom-10 left-1/2 bg-black/60 -translate-x-1/2 z-20 rounded-xl backdrop-blur-lg max-w-[80%]'>
+              <p className='px-4 py-2 text-white text-lg'>{transcript}</p>
+            </div>
+          )}
       </div>
 
       {/* Controls */}
@@ -183,7 +190,11 @@ const SessionCallContent: React.FC = () => {
               isMuted
                 ? 'bg-red-600 hover:bg-red-700'
                 : 'bg-gray-700 hover:bg-gray-600'
-            } ${callState !== 'joined-meeting' ? 'opacity-50 cursor-not-allowed' : ''}`}
+            } ${
+              callState !== 'joined-meeting'
+                ? 'opacity-50 cursor-not-allowed'
+                : ''
+            }`}
           >
             {isMuted ? (
               <MicOff className='w-6 h-6 text-white' />
@@ -195,12 +206,20 @@ const SessionCallContent: React.FC = () => {
           {/* Transcription button */}
           <button
             onClick={handleTranscriptionToggle}
-            disabled={callState !== 'joined-meeting' || remoteParticipantIds.length === 0}
+            disabled={
+              callState !== 'joined-meeting' ||
+              remoteParticipantIds.length === 0
+            }
             className={`p-4 rounded-full transition-all ${
               isRecording
                 ? 'bg-blue-600 hover:bg-blue-700'
                 : 'bg-gray-700 hover:bg-gray-600'
-            } ${callState !== 'joined-meeting' || remoteParticipantIds.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            } ${
+              callState !== 'joined-meeting' ||
+              remoteParticipantIds.length === 0
+                ? 'opacity-50 cursor-not-allowed'
+                : ''
+            }`}
           >
             <TranslateIcon
               color='white'
@@ -210,12 +229,16 @@ const SessionCallContent: React.FC = () => {
           </button>
 
           {/* End call button */}
-          <button 
+          <button
             onClick={handleEndCall}
             disabled={isEnding}
             className='p-4 px-7 rounded-full bg-red-600 hover:bg-red-700 transition-all ml-2 disabled:opacity-50'
           >
-            <img src='/icons/end-call.svg' className='w-6 h-6 text-white' alt='End call' />
+            <img
+              src='/icons/end-call.svg'
+              className='w-6 h-6 text-white'
+              alt='End call'
+            />
           </button>
         </div>
 
@@ -247,8 +270,8 @@ const SessionCall: React.FC<SessionCallProps> = ({ conversationUrl }) => {
       <div className='flex items-center justify-center min-h-screen bg-zinc-950 text-white'>
         <div className='text-center'>
           <p className='text-xl mb-2'>No conversation URL provided</p>
-          <button 
-            onClick={() => window.location.href = '/dashboard'}
+          <button
+            onClick={() => (window.location.href = '/dashboard')}
             className='px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors'
           >
             Return to Dashboard
