@@ -30,30 +30,31 @@ const useCall = (): UseCallReturn => {
       method: 'POST',
       headers: {
         'x-api-key': apiKey,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        replica_id: 'r9d30b0e55ac',
-        persona_id: 'pe13ed370726',
+        replica_id: 'rc2146c13e81',
+        persona_id: 'p28ff60873c3',
+        conversational_context:
+          "You're about to talk to a friend about Atoms in chemistry",
+        custom_greeting: "What's going on?",
         properties: {
           max_call_duration: 120,
           participant_left_timeout: 5,
-          participant_absent_timeout: 10,
-          enable_closed_captions: true,
-          enable_recording: true,
-          language: 'english'
-        }
-      })
+          participant_absent_timeout: 5,
+          language: 'english',
+        },
+      }),
     };
 
     try {
       const response = await fetch(API_BASE_URL, options);
       const result = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(result.message);
       }
-      
+
       setData(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -69,8 +70,8 @@ const useCall = (): UseCallReturn => {
         const options = {
           method: 'POST',
           headers: {
-            'x-api-key': apiKey
-          }
+            'x-api-key': apiKey,
+          },
         };
 
         await fetch(`${API_BASE_URL}/${data.conversation_id}/end`, options);
@@ -79,7 +80,7 @@ const useCall = (): UseCallReturn => {
         console.error('Failed to end conversation on server:', err);
       }
     }
-    
+
     setData(null);
     setError(null);
   };

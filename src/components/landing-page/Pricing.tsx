@@ -143,9 +143,9 @@ const PricingCard: React.FC<PricingCardProps> = ({
 				className={`relative border rounded-lg p-6 shadow-sm transition-all hover:shadow-md ${
 					isPopular ? "border-blue-500 bg-blue-50/30" : "border-gray-200"
 				}`}
-				initial={{ opacity: 0, y: 50 }}
+				initial={{ opacity: 0, y: 30 }}
 				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.6, delay: index * 0.2 }}
+				transition={{ duration: 0.25, delay: index * 0.1 }} // Faster animation
 				whileHover={{ y: -5 }}>
 				{isPopular && (
 					<motion.div
@@ -275,7 +275,7 @@ const Pricing: React.FC = (): JSX.Element => {
 				className='font-marlin px-4 py-2 rounded-lg bg-blue-50 text-blue-500'
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				transition={{ duration: 0.5 }}>
+				transition={{ duration: 0.24 }}>
 				Pricing
 			</motion.p>
 
@@ -283,7 +283,7 @@ const Pricing: React.FC = (): JSX.Element => {
 				className='font-marlin text-gray-700 text-[1.8rem] md:text-[3rem] font-semibold mt-3 text-center'
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				transition={{ duration: 0.8 }}>
+				transition={{ duration: 0.24 }}>
 				Choose Your Plan
 			</motion.h1>
 

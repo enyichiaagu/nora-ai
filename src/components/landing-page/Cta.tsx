@@ -1,7 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
 
 const Cta: React.FC = () => {
+	const navigate = useNavigate();
 	return (
 		<section className='max-w-6xl mx-auto my-[8rem] px-4 '>
 			<motion.div
@@ -117,17 +119,18 @@ const Cta: React.FC = () => {
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true }}
 						transition={{ duration: 0.8, delay: 0.8 }}>
-						<motion.a
-							href='/'
+						<motion.button
+							onClick={() => navigate("/auth")}
 							className='group bg-white text-app-primary px-8 py-4 rounded-xl font-montserrat font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3'
 							whileHover={{ scale: 1.05, y: -2 }}
 							whileTap={{ scale: 0.95 }}
 							transition={{
 								type: "spring",
 								stiffness: 400,
+
 								damping: 17,
 							}}>
-							Join the Waitlist
+							Get Started
 							<motion.img
 								src='/icons/right-arrow.svg'
 								alt=''
@@ -135,10 +138,10 @@ const Cta: React.FC = () => {
 								animate={{ x: [0, 3, 0] }}
 								transition={{ duration: 1.5, repeat: Infinity }}
 							/>
-						</motion.a>
+						</motion.button>
 
 						<motion.a
-							href='/demo'
+							href='https://x.com/noratutor/status/1938300106425368580'
 							className='group border-2 border-white/30 text-white px-8 py-4 rounded-xl font-montserrat font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300 flex items-center gap-3'
 							whileHover={{
 								scale: 1.05,
@@ -150,7 +153,7 @@ const Cta: React.FC = () => {
 								stiffness: 400,
 								damping: 17,
 							}}>
-							Try Demo
+							See Demo
 							<motion.svg
 								className='w-5 h-5'
 								fill='currentColor'

@@ -1,7 +1,7 @@
 import "./app.css";
 import Waitlist from "./pages/Waitlist";
 import Demo from "./pages/Demo";
-// import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/LandingPage";
 import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Dashboard from "./pages/Dashboard";
@@ -11,11 +11,12 @@ import DashboardLayout from "./components/dashboard/DashboardLayout";
 import CreateSession from "./pages/CreateSession";
 import SessionHistory from "./pages/SessionHistory";
 import SessionCall from "./pages/SessionCall";
+import { requireAuth } from "./scripts/auth.loaders";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Waitlist />,
+		element: <LandingPage />,
 		children: [
 			{
 				path: "/auth",
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/dashboard",
-		// loader: requireAuth,
+		loader: requireAuth,
 		element: <DashboardLayout />,
 		children: [
 			{

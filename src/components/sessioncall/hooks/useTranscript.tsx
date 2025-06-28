@@ -3,31 +3,36 @@ import { useState, useRef } from 'react';
 interface UseTranscriptReturn {
   transcript: string;
   isRecording: boolean;
-  startTranscribing: () => Promise<void>;
+  startTranscribing: (conversationId: string) => Promise<void>;
   stopTranscribing: () => void;
+}
+
+interface MessageWS {
+  audio: number[];
+  conversationId: string;
 }
 
 export default function useTranscript(
   audioTracks: (MediaStreamTrack | undefined)[]
 ): UseTranscriptReturn {
-  const [transcript, setTranscript] = useState<string>(
-    'Transcripts will be displayed here'
-  );
+  const [transcript, setTranscript] = useState<string>('');
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const websockRef = useRef<WebSocket | null>(null);
   const intervalIdRef = useRef<ReturnType<typeof setInterval>>();
   const bufferQueue = useRef<Uint8Array[]>([]);
   const bufferSize = useRef(0);
 
-  const startTranscribing = async (): Promise<void> => {
+  const startTranscribing = async (conversationId: string): Promise<void> => {
     try {
-      if (audioTracks.includes(undefined))
-        throw new Error('Cannot start transcription without remote audio');
-      setTranscript('Transcription Starting ...');
+      if (audioTracks.includes(undefined)) {
+        console.warn('Cannot start transcription without audio tracks');
+        return;
+      }
 
-      // Will soon set up Backend to have a permanent ws endpoint
+      setTranscript('Starting transcription...');
+
       const websocket = new WebSocket(
-        `wss://${import.meta.env.VITE_API_BASE_URL}/transcript`
+        'wss://nora-backend-production.up.railway.app/transcript'
       );
       websockRef.current = websocket;
 
@@ -56,7 +61,6 @@ export default function useTranscript(
         if (websocket.readyState !== WebSocket.OPEN || bufferSize.current === 0)
           return;
 
-        // Combine buffers
         const combined = new Uint8Array(bufferSize.current);
         let offset = 0;
         for (const buf of bufferQueue.current) {
@@ -64,41 +68,48 @@ export default function useTranscript(
           offset += buf.length;
         }
 
-        websocket.send(combined.buffer);
+        // Create message with audio data and conversation ID
+        const message: MessageWS = {
+          audio: Array.from(combined),
+          conversationId: conversationId,
+        };
 
-        // Clear buffers
+        websocket.send(JSON.stringify(message));
+
         bufferQueue.current = [];
         bufferSize.current = 0;
       }, 100);
       intervalIdRef.current = intervalId;
 
       websocket.onmessage = (event: MessageEvent) => {
-        console.log('received something');
         const data = JSON.parse(event.data);
         setTranscript(data.transcript);
       };
 
       websocket.onclose = async () => {
-        console.log('Clearing interval');
         clearInterval(intervalId);
         setIsRecording(false);
-        setTranscript('Transcripts will be displayed here');
+        setTranscript('');
         await ctx.close();
       };
 
       websocket.onerror = async () => {
         setIsRecording(false);
         clearInterval(intervalId);
-        setTranscript('Transcription Error. Try again.');
+        setTranscript('Transcription error. Try again.');
       };
+
       setIsRecording(true);
     } catch (error) {
-      console.error('Error Starting Transcription:', error);
+      console.error('Error starting transcription:', error);
+      setTranscript('Failed to start transcription');
     }
   };
 
   const stopTranscribing = (): void => {
-    if (websockRef.current) websockRef.current.close();
+    if (websockRef.current) {
+      websockRef.current.close();
+    }
   };
 
   return { transcript, isRecording, startTranscribing, stopTranscribing };
