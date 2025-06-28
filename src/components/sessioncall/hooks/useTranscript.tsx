@@ -3,8 +3,13 @@ import { useState, useRef } from 'react';
 interface UseTranscriptReturn {
   transcript: string;
   isRecording: boolean;
-  startTranscribing: (conversationId?: string) => Promise<void>;
+  startTranscribing: (conversationId: string) => Promise<void>;
   stopTranscribing: () => void;
+}
+
+interface MessageWS {
+  audio: number[];
+  conversationId: string;
 }
 
 export default function useTranscript(
@@ -17,7 +22,7 @@ export default function useTranscript(
   const bufferQueue = useRef<Uint8Array[]>([]);
   const bufferSize = useRef(0);
 
-  const startTranscribing = async (conversationId?: string): Promise<void> => {
+  const startTranscribing = async (conversationId: string): Promise<void> => {
     try {
       if (audioTracks.includes(undefined)) {
         console.warn('Cannot start transcription without audio tracks');
@@ -64,9 +69,9 @@ export default function useTranscript(
         }
 
         // Create message with audio data and conversation ID
-        const message = {
+        const message: MessageWS = {
           audio: Array.from(combined),
-          conversationId: conversationId || null,
+          conversationId: conversationId,
         };
 
         websocket.send(JSON.stringify(message));
