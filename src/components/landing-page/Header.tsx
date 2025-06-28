@@ -1,4 +1,5 @@
 import { LogOut } from 'lucide-react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 function Header() {
