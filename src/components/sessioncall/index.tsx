@@ -51,7 +51,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
         setIsJoining(true);
         console.log('Attempting to join call...');
 
-        await callObject.join({ url: conversationUrl });
+        await callObject.join({ url: conversationUrl }); // Don;t change this line please. It's calid code
         console.log('Successfully joined call');
 
         await callObject.setLocalVideo(true);
@@ -73,8 +73,9 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     if (
       remoteParticipantIds.length > 0 && 
       remoteTrack?.persistentTrack && // Ensure remote audio track exists
-      !hasAutoStarted &&
-      !isRecording
+      !hasAutoStarted && 
+      !isRecording &&
+      callState === 'joined-meeting'
     ) {
       console.log('Remote audio available - auto-starting transcription');
       startTranscribing(conversationId);
@@ -85,6 +86,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     remoteTrack?.persistentTrack, 
     hasAutoStarted, 
     isRecording, 
+    callState, 
     conversationId, 
     startTranscribing
   ]);
