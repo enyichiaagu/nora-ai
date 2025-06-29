@@ -33,7 +33,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
   const [isEnding, setIsEnding] = useState(false);
   const [showSubtitles, setShowSubtitles] = useState(false);
   const [hasAutoStarted, setHasAutoStarted] = useState(false);
-  
+
   const callObject = useDaily();
   const callState = useMeetingState();
   const localSessionId = useLocalSessionId();
@@ -54,8 +54,8 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
         await callObject.join({ url: conversationUrl }); // Don;t change this line please. It's calid code
         console.log('Successfully joined call');
 
-        await callObject.setLocalVideo(true);
-        await callObject.setLocalAudio(true);
+        callObject.setLocalVideo(true);
+        callObject.setLocalAudio(true);
       } catch (error) {
         console.error('Failed to join call:', error);
       } finally {
@@ -68,27 +68,16 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
     }
   }, [callObject, callState, isJoining]);
 
-  // Auto-start transcription when remote audio is available
   useEffect(() => {
-    if (
-      remoteParticipantIds.length > 0 && 
-      remoteTrack?.persistentTrack && // Ensure remote audio track exists
-      !hasAutoStarted && 
-      !isRecording &&
-      callState === 'joined-meeting'
-    ) {
-      console.log('Remote audio available - auto-starting transcription');
+    if (remoteTrack?.persistentTrack && !hasAutoStarted) {
       startTranscribing(conversationId);
       setHasAutoStarted(true);
     }
   }, [
-    remoteParticipantIds.length, 
-    remoteTrack?.persistentTrack, 
-    hasAutoStarted, 
-    isRecording, 
-    callState, 
-    conversationId, 
-    startTranscribing
+    remoteTrack?.persistentTrack,
+    conversationId,
+    startTranscribing,
+    hasAutoStarted,
   ]);
 
   useEffect(() => {
@@ -192,7 +181,7 @@ const SessionCallContent: React.FC<SessionCallContentProps> = ({
         <div className='flex items-center gap-1 text-md'>
           <span className='text-white'>{new Date().toLocaleTimeString()}</span>
           <img className='w-6 opacity-70' src='/icons/divider.svg' alt='' />
-          <span className='text-white opacity-70'>session-call</span>
+          <span className='text-white opacity-70'>{conversationId}</span>
         </div>
 
         <div className='flex items-center gap-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
