@@ -1,12 +1,12 @@
-import Header from '@/components/landing-page/Header';
-import Hero from '@/components/landing-page/Hero';
-import Mission from '@/components/landing-page/Mission';
-import Features from '@/components/landing-page/Features';
-import Pricing from '@/components/landing-page/Pricing';
-import Faq from '@/components/landing-page/Faq';
-import Cta from '@/components/landing-page/Cta';
-import Footer from '@/components/landing-page/Footer';
-import BoltBadge from '@/components/common/BoltBadge';
+import Header from "@/components/landing-page/Header";
+import Hero from "@/components/landing-page/Hero";
+import Mission from "@/components/landing-page/Mission";
+import Features from "@/components/landing-page/Features";
+import Pricing from "@/components/landing-page/Pricing";
+import Faq from "@/components/landing-page/Faq";
+import Cta from "@/components/landing-page/Cta";
+import Footer from "@/components/landing-page/Footer";
+// import BoltBadge from '@/components/common/BoltBadge';
 import { Outlet } from "react-router";
 
 const LandingPage: React.FC = () => {
@@ -20,7 +20,7 @@ const LandingPage: React.FC = () => {
 			<Faq />
 			<Cta />
 			<Footer />
-			<BoltBadge />
+			{/* <BoltBadge /> */}
 			<Outlet />
 		</div>
 	);

@@ -1,6 +1,6 @@
 import { supabase } from "@/utils/supabase.utils";
 import showToast from "@/utils/toast.utils";
-import BoltBadge from "@/components/common/BoltBadge";
+// import BoltBadge from "@/components/common/BoltBadge";
 import { useState } from "react";
 
 const addEmail = async (email: string) => {
@@ -51,13 +51,14 @@ function Waitlist() {
 					Join the Nora AI Waitlist!
 				</h1>
 				<p className='hidden text-md md:text-lg text-[#ffffffd5] text-center mx-4 mt-4 '>
-					Be the first to get exclusive updates, early access, and special
-					offers for Nora <br className='hidden md:block' /> — the AI tutor
-					app that helps you learn smarter.
+					Be the first to get exclusive updates, early access, and
+					special offers for Nora <br className='hidden md:block' /> —
+					the AI tutor app that helps you learn smarter.
 				</p>
 				<form
 					className='flex flex-col md:flex-row gap-4 w-full max-w-lg mt-6 px-4 md:px-0'
-					onSubmit={handleSubmit}>
+					onSubmit={handleSubmit}
+				>
 					<input
 						type='email'
 						value={email}
@@ -89,7 +90,8 @@ function Waitlist() {
 							{[1, 2, 3, 4].map((i) => (
 								<div
 									key={i}
-									className='w-10 h-10 bg-white bg-opacity-30 rounded-full border-[3px] border-white overflow-hidden'>
+									className='w-10 h-10 bg-white bg-opacity-30 rounded-full border-[3px] border-white overflow-hidden'
+								>
 									<img
 										src={`/images/avatar-${i}.jpeg`}
 										alt=''
@@ -106,8 +108,9 @@ function Waitlist() {
 				<div className='flex items-center space-x-4 mt-7 absolute left-1/2 -translate-x-1/2 bottom-[20%] md:bottom-10'>
 					<a
 						href='https://x.com/noratutor'
-            target="_blank"
-						className='p-3 bg-white bg-opacity-20 backdrop-blur-sm rounded-full hover:bg-opacity-30 transition-all duration-200 group'>
+						target='_blank'
+						className='p-3 bg-white bg-opacity-20 backdrop-blur-sm rounded-full hover:bg-opacity-30 transition-all duration-200 group'
+					>
 						<img
 							src='/icons/x.svg'
 							className='w-5 h-5 text-white group-hover:scale-110 transition-transform duration-200'
@@ -121,7 +124,7 @@ function Waitlist() {
 					className='.hidden w-[70%] max-w-[21rem] md:w-[37%] absolute right-0 translate-x-[29%]  md:translate-x-[37%] bottom-0 sm:translate-y-[10%] translate-y-[30%] md:translate-y-[50%]  '
 				/>
 			</div>
-			<BoltBadge />
+			{/* <BoltBadge /> */}
 		</div>
 	);
 }
